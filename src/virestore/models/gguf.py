@@ -12,7 +12,8 @@ class GGUFRestorer:
         from llama_cpp import Llama
 
         self.name = f"gguf:{os.path.basename(path)}"
-        self.llm = Llama(model_path=path, n_ctx=n_ctx, n_threads=n_threads or os.cpu_count(), verbose=False)
+        self.n_threads = n_threads or os.cpu_count()
+        self.llm = Llama(model_path=path, n_ctx=n_ctx, n_threads=self.n_threads, verbose=False)
 
     def restore(self, inputs: list[str]) -> list[str]:
         outs = []

@@ -35,5 +35,5 @@ def load(kind: str, **kwargs) -> Restorer:
     if kind == "gguf":
         from .gguf import GGUFRestorer
 
-        return GGUFRestorer(kwargs["model"])
+        return GGUFRestorer(kwargs["model"], n_threads=kwargs.get("threads"))
     raise ValueError(f"unknown model kind: {kind}")

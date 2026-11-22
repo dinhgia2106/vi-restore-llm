@@ -53,6 +53,7 @@ def machine_info(restorer) -> dict:
         "cpu": _cpu_model(),
         "cpu_count": os.cpu_count(),
         "device": str(getattr(restorer, "device", "cpu")),
+        "threads": getattr(restorer, "n_threads", None),
     }
 
 
@@ -111,6 +112,7 @@ def main() -> None:
     ap.add_argument("--tcn-repo", help="path to the Vietnamese-diacritic-restoration repo")
     ap.add_argument("--tcn-weights", help="TCN checkpoint (.pth)")
     ap.add_argument("--batch-size", type=int, default=8)
+    ap.add_argument("--threads", type=int, default=None, help="CPU threads for GGUF models (default: all)")
     ap.add_argument("--limit", type=int, default=None, help="evaluate on the first N test rows")
     ap.add_argument("--latency-n", type=int, default=100, help="sentences used for latency (0 = skip)")
     ap.add_argument("--tag", help="name of this run (default: derived from model)")
@@ -132,6 +134,7 @@ def main() -> None:
         model=args.hf_model or args.gguf,
         adapter=args.adapter,
         batch_size=args.batch_size,
+        threads=args.threads,
         tcn_repo=args.tcn_repo,
         tcn_weights=args.tcn_weights,
     )
