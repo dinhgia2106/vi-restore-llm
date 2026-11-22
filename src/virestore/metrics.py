@@ -32,6 +32,23 @@ class Scores:
         return {k: round(v, 5) if isinstance(v, float) else v for k, v in asdict(self).items()}
 
 
+def em_at_k(nbest: list[list[str]], references: list[str], ks: tuple[int, ...] = (1, 3, 5)) -> dict[str, float]:
+    """Exact match @k: share of sentences whose reference is among the first k candidates.
+
+    This is what an input method's candidate bar shows: the user can still pick the right
+    sentence if it is in the top k. Candidates and references are Unicode-normalised first.
+    """
+    assert len(nbest) == len(references), "candidate list / reference count mismatch"
+    hits = {k: 0 for k in ks}
+    for cands, ref in zip(nbest, references):
+        ref = normalize(ref)
+        cands = [normalize(c) for c in cands]
+        for k in ks:
+            hits[k] += ref in cands[:k]
+    n = max(len(references), 1)
+    return {f"em@{k}": round(hits[k] / n, 5) for k in ks}
+
+
 def score(predictions: list[str], references: list[str]) -> Scores:
     assert len(predictions) == len(references), "prediction / reference count mismatch"
     char_err = char_tot = word_err = word_tot = 0

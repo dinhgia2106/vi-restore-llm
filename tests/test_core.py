@@ -129,3 +129,19 @@ def test_summary_skips_analysis_files(tmp_path):
     (tmp_path / "t.analysis.json").write_text(json.dumps({"n": 1}), encoding="utf-8")
     text = write_summary(tmp_path).read_text(encoding="utf-8")
     assert "| t | identity | processed/test | 1 |" in text
+    assert "| – / – / – |" in text
+
+
+def test_em_at_k_and_lexicon_nbest(tmp_path):
+    from virestore.metrics import em_at_k
+
+    assert em_at_k([["a", "b", "c"], ["x", "y"]], ["b", "z"], (1, 3)) == {"em@1": 0.0, "em@3": 0.5}
+
+    data = tmp_path / "train.jsonl"
+    rows = [{"input": "", "target": t} for t in ["ma ơi"] * 3 + ["má ơi"] * 2 + ["mà thôi"]]
+    data.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in rows) + "\n", encoding="utf-8")
+    lex = Lexicon.from_jsonl(data)
+    nb = lex.restore_nbest(["ma oi"], k=3)[0]
+    assert nb[0] == lex.restore(["ma oi"])[0] == "ma ơi"
+    assert set(nb) == {"ma ơi", "má ơi", "mà ơi"}
+    assert Identity().restore_nbest(["ma oi"], 3) == [["ma oi"]]

@@ -20,3 +20,6 @@ class GGUFRestorer:
             res = self.llm.create_chat_completion(messages=messages(text), temperature=0.0, max_tokens=len(text) + 32)
             outs.append(res["choices"][0]["message"]["content"].strip().split("\n")[0])
         return outs
+
+    def restore_nbest(self, inputs: list[str], k: int) -> list[list[str]]:
+        raise NotImplementedError("llama-cpp-python has no beam search, so GGUF models have no n-best (EM@k) yet")

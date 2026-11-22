@@ -44,3 +44,24 @@ class HFRestorer:
             new = gen[:, enc["input_ids"].shape[1] :]
             outputs += [t.strip().split("\n")[0] for t in self.tok.batch_decode(new, skip_special_tokens=True)]
         return outputs
+
+    def restore_nbest(self, inputs: list[str], k: int) -> list[list[str]]:
+        """Top-k candidates from beam search (num_beams = k), best first, duplicates removed."""
+        import torch
+
+        results: list[list[str]] = []
+        for i in range(0, len(inputs), self.batch_size):
+            batch = inputs[i : i + self.batch_size]
+            enc = self.tok([self._prompt(t) for t in batch], return_tensors="pt", padding=True).to(self.device)
+            src_tokens = max(len(self.tok(t, add_special_tokens=False)["input_ids"]) for t in batch)
+            limit = self.max_new_tokens or src_tokens * 2 + 16
+            with torch.no_grad():
+                gen = self.model.generate(
+                    **enc, max_new_tokens=limit, do_sample=False, num_beams=k, num_return_sequences=k,
+                    pad_token_id=self.tok.pad_token_id,
+                )
+            texts = self.tok.batch_decode(gen[:, enc["input_ids"].shape[1] :], skip_special_tokens=True)
+            for j in range(len(batch)):
+                cands = [t.strip().split("\n")[0] for t in texts[j * k : (j + 1) * k]]
+                results.append(list(dict.fromkeys(cands)))
+        return results

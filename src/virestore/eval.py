@@ -23,7 +23,7 @@ from pathlib import Path
 
 from . import models, utf8_stdio
 from .data import load_jsonl
-from .metrics import score
+from .metrics import em_at_k, score
 
 
 def _rss_mb() -> float | None:
@@ -84,14 +84,15 @@ def write_summary(results_dir: Path) -> Path:
         r = json.loads(f.read_text(encoding="utf-8"))
         q, lat = r["quality"], r.get("latency", {})
         test = Path(r["test_file"])
+        em = " / ".join(f"{q[f'em@{k}']:.4f}" if f"em@{k}" in q else "–" for k in (1, 3, 5))
         rows.append(
             f"| {r['tag']} | {r['model']} | {test.parent.name}/{test.stem} | {q['n']} | {q['cer']:.4f} | {q['wer']:.4f} | {q['word_acc']:.4f} | "
-            f"{q['sent_acc']:.4f} | {lat.get('p50_ms', '–')} | {lat.get('p95_ms', '–')} | {r.get('rss_mb') or '–'} | "
+            f"{q['sent_acc']:.4f} | {em} | {lat.get('p50_ms', '–')} | {lat.get('p95_ms', '–')} | {r.get('rss_mb') or '–'} | "
             f"{r['machine'].get('device', '–')} |"
         )
     header = (
-        "| run | model | test set | n | CER ↓ | WER ↓ | word acc ↑ | sentence acc ↑ | p50 ms | p95 ms | RSS MB | device |\n"
-        "|---|---|---|---|---|---|---|---|---|---|---|---|"
+        "| run | model | test set | n | CER ↓ | WER ↓ | word acc ↑ | sentence acc ↑ | EM@1 / @3 / @5 ↑ | p50 ms | p95 ms | RSS MB | device |\n"
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|"
     )
     out = results_dir / "summary.md"
     out.write_text("# Results\n\n" + header + "\n" + "\n".join(rows) + "\n", encoding="utf-8")
@@ -115,6 +116,10 @@ def main() -> None:
     ap.add_argument("--tag", help="name of this run (default: derived from model)")
     ap.add_argument("--results", type=Path, default=Path("results"))
     ap.add_argument("--save-predictions", action="store_true")
+    ap.add_argument(
+        "--nbest", type=int, default=0,
+        help="also produce K candidates per sentence and report EM@1/3/5 (k <= K); 0 = off",
+    )
     args = ap.parse_args()
 
     rows = load_jsonl(args.test, args.limit)
@@ -135,6 +140,14 @@ def main() -> None:
     preds = restorer.restore(inputs)
     wall = time.perf_counter() - t0
     quality = score(preds, refs).as_dict()
+    nbest = None
+    if args.nbest:
+        if not hasattr(restorer, "restore_nbest"):
+            raise SystemExit(f"{restorer.name} cannot produce n-best candidates")
+        # EM@1 comes from the n-best search (beam search for LLMs) and can differ from sent_acc,
+        # which scores the default (greedy) output.
+        nbest = restorer.restore_nbest(inputs, args.nbest)
+        quality.update(em_at_k(nbest, refs, tuple(k for k in (1, 3, 5) if k <= args.nbest)))
     latency = measure_latency(restorer, inputs, args.latency_n) if args.latency_n else {}
 
     tag = args.tag or restorer.name.replace("/", "_").replace(":", "-")
@@ -153,8 +166,11 @@ def main() -> None:
     (args.results / f"{tag}.json").write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
     if args.save_predictions:
         with (args.results / f"{tag}.predictions.jsonl").open("w", encoding="utf-8") as fh:
-            for i, p, r in zip(inputs, preds, refs):
-                fh.write(json.dumps({"input": i, "pred": p, "target": r}, ensure_ascii=False) + "\n")
+            for j, (i, p, r) in enumerate(zip(inputs, preds, refs)):
+                row = {"input": i, "pred": p, "target": r}
+                if nbest is not None:
+                    row["nbest"] = nbest[j]
+                fh.write(json.dumps(row, ensure_ascii=False) + "\n")
     summary = write_summary(args.results)
     print(json.dumps(result, indent=2, ensure_ascii=False))
     print(f"\nsummary -> {summary}")

@@ -84,7 +84,8 @@ Splits are assigned by a hash of the sentence, so the same sentence can never ap
 ## Metrics
 
 - **CER / WER** — edit distance over characters / words (robust to the length changes noisy input causes)
-- **Word accuracy** and **sentence exact match**
+- **Word accuracy** and **sentence exact match** (of the default, greedy output)
+- **EM@k** (k = 1, 3, 5, `eval --nbest 5`) — the reference is among the top-k candidates, as in an IME's candidate bar. LLMs use beam search (`num_beams = k`), the lexicon a beam over its bigram scores; EM@1 is the beam's top candidate, so it can differ from sentence exact match. GGUF models have no n-best yet (llama-cpp-python has no beam search)
 - **Latency** — single-sentence p50 / p95, measured the way an IME calls the model (batch size 1, after warm-up)
 - **Memory** — resident set size of the process
 
