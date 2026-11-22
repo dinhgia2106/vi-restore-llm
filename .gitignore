@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# data, checkpoints and models are large; keep only the tiny sample corpus
+data/*
+!data/sample/
+/runs/
+/models/
+*.gguf
+*.safetensors
+*.pth
+
+results/*.predictions.jsonl
+wandb/
+.env

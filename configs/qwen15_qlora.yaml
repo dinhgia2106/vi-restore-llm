@@ -1,0 +1,29 @@
+# Experiment E3: QLoRA on a ~1.5B instruct model, noisy input (Telex leftovers + typos).
+model: Qwen/Qwen2.5-1.5B-Instruct
+output_dir: runs/qwen15-qlora-noisy
+seed: 13
+load_in_4bit: true
+
+data:
+  train: data/processed_noisy/train.jsonl
+  dev: data/processed_noisy/dev.jsonl
+  train_limit: 200000
+  dev_limit: 1000
+  max_len: 192
+
+lora:
+  r: 32
+  alpha: 64
+  dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+train:
+  batch_size: 8
+  grad_accum: 4
+  lr: 1.5e-4
+  epochs: 1
+  warmup_ratio: 0.03
+  logging_steps: 25
+  eval_steps: 500
+  gradient_checkpointing: true
+  report_to: none

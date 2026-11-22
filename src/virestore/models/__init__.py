@@ -1,0 +1,39 @@
+"""Restorers share one interface: ``restore(list[str]) -> list[str]``.
+
+Heavy back-ends (torch, transformers, llama.cpp) are imported lazily so the
+baselines and the evaluation harness run without them.
+"""
+
+from __future__ import annotations
+
+from typing import Protocol
+
+
+class Restorer(Protocol):
+    name: str
+
+    def restore(self, inputs: list[str]) -> list[str]: ...
+
+
+def load(kind: str, **kwargs) -> Restorer:
+    if kind == "identity":
+        from .baselines import Identity
+
+        return Identity()
+    if kind == "lexicon":
+        from .baselines import Lexicon
+
+        return Lexicon.from_jsonl(kwargs["train"])
+    if kind == "tcn":
+        from .tcn import TCNRestorer
+
+        return TCNRestorer(kwargs["tcn_repo"], kwargs.get("tcn_weights"))
+    if kind == "hf":
+        from .hf_llm import HFRestorer
+
+        return HFRestorer(kwargs["model"], adapter=kwargs.get("adapter"), batch_size=kwargs.get("batch_size", 8))
+    if kind == "gguf":
+        from .gguf import GGUFRestorer
+
+        return GGUFRestorer(kwargs["model"])
+    raise ValueError(f"unknown model kind: {kind}")

@@ -1,0 +1,29 @@
+# Experiment E2: LoRA on a ~0.5B instruct model, clean diacritic restoration.
+model: Qwen/Qwen2.5-0.5B-Instruct
+output_dir: runs/qwen05-lora
+seed: 13
+load_in_4bit: false
+
+data:
+  train: data/processed/train.jsonl
+  dev: data/processed/dev.jsonl
+  train_limit: 200000   # start small, scale once the curve looks sane
+  dev_limit: 1000
+  max_len: 192
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+train:
+  batch_size: 16
+  grad_accum: 2
+  lr: 2.0e-4
+  epochs: 1
+  warmup_ratio: 0.03
+  logging_steps: 25
+  eval_steps: 500
+  gradient_checkpointing: false
+  report_to: none   # set to "wandb" to track runs
