@@ -167,11 +167,20 @@ def main() -> None:
     utf8_stdio()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", type=Path, required=True)
+    ap.add_argument("--train-limit", type=int, help="override data.train_limit")
+    ap.add_argument("--epochs", type=int, help="override train.epochs")
+    ap.add_argument("--output-dir", help="override output_dir")
     args = ap.parse_args()
     import torch
     import yaml
 
     cfg = yaml.safe_load(args.config.read_text(encoding="utf-8"))
+    if args.train_limit:
+        cfg["data"]["train_limit"] = args.train_limit
+    if args.epochs:
+        cfg["train"]["epochs"] = args.epochs
+    if args.output_dir:
+        cfg["output_dir"] = args.output_dir
     d, m, t = cfg["data"], cfg["model"], cfg["train"]
     rng = random.Random(cfg.get("seed", 13))
     torch.manual_seed(cfg.get("seed", 13))
