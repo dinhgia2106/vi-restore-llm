@@ -18,3 +18,4 @@ results/*.predictions.jsonl
 wandb/
 .env
 /logs/
+AGENTS.md
