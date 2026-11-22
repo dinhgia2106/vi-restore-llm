@@ -104,7 +104,7 @@ def repo(Path, mo, os, subprocess, sys):
 
 
     def launch(name: str, *steps: list) -> str:
-        """Start `python -m <step>` commands one after another in a detached process.
+        """Start `python -m <step>` commands (or raw shell strings) one after another in a detached process.
 
         Long jobs outlive this cell; `logs/<name>.log` has the output and `logs/<name>.exit`
         the exit code. Only a job that was never started is launched, so re-running cells
@@ -113,7 +113,7 @@ def repo(Path, mo, os, subprocess, sys):
         state = job_state(name)
         if state != "not started":
             return state
-        chain = " && ".join(" ".join([sys.executable, "-m", *map(str, s)]) for s in steps)
+        chain = " && ".join(s if isinstance(s, str) else " ".join([sys.executable, "-m", *map(str, s)]) for s in steps)
         cmd = f"({chain}) > {LOGS / name}.log 2>&1; echo $? > {LOGS / name}.exit"
         p = subprocess.Popen(["bash", "-c", cmd], cwd=REPO, env=_ENV, start_new_session=True)
         (LOGS / f"{name}.pid").write_text(str(p.pid))
@@ -301,6 +301,82 @@ def e3(CLEAN, HARD, NOISY, REPO, job_state, launch, mo, refresh):
             ],
         )
     E3_JOBS
+    return (E3_ADAPTER,)
+
+
+@app.cell(hide_code=True)
+def e4_md(mo):
+    mo.md(r"""
+    ## 5. E4: merge, GGUF, quantisation
+
+    The E3 adapter is merged into the base model, converted to GGUF with llama.cpp and quantised to
+    Q8_0 and Q4_K_M; every variant is then evaluated through `llama-cpp-python` on the CPU. Quality
+    numbers are valid here; **latency must be re-measured on the target laptop**. Files go to
+    `models/` (not committed). Adapter: private HF repo `dinhgia2106/vi-restore-llm-qwen05-lora`.
+    """)
+    return
+
+
+@app.cell
+def e4_setup(E3_ADAPTER, Path, REPO, job_state, launch, os, refresh, sys):
+    refresh
+    LLAMA_CPP = Path("/marimo/llama.cpp")
+    MODELS = REPO / "models"
+    MERGED = REPO / "runs/qwen05-lora-merged"
+    E4_JOBS = {
+        "llamacpp_build": launch(
+            "llamacpp_build",
+            f"uv pip install --python {sys.executable} cmake ninja llama-cpp-python sentencepiece",  # the sandbox has gcc but no make
+            f"(test -d {LLAMA_CPP} || git clone --depth 1 https://github.com/ggml-org/llama.cpp {LLAMA_CPP})",
+            f"cmake -S {LLAMA_CPP} -B {LLAMA_CPP}/build -G Ninja -DGGML_CUDA=OFF -DLLAMA_CURL=OFF",
+            f"cmake --build {LLAMA_CPP}/build --target llama-quantize -j {os.cpu_count()}",
+        )
+    }
+    if job_state("e3_train") == "done" and job_state("llamacpp_build") == "done":
+        E4_JOBS["e4_convert"] = launch(
+            "e4_convert",
+            ["virestore.merge", "--base", "Qwen/Qwen2.5-0.5B-Instruct", "--adapter", E3_ADAPTER, "--out", MERGED],
+            f"mkdir -p {MODELS}",
+            # PYTHONSAFEPATH=1 in the sandbox, so the converter's own directory must be on the path
+            f"PYTHONPATH={LLAMA_CPP}:{LLAMA_CPP}/gguf-py {sys.executable} {LLAMA_CPP}/convert_hf_to_gguf.py {MERGED} --outfile {MODELS}/qwen05-lora-f16.gguf --outtype f16",
+            f"{LLAMA_CPP}/build/bin/llama-quantize {MODELS}/qwen05-lora-f16.gguf {MODELS}/qwen05-lora-q8_0.gguf Q8_0",
+            f"{LLAMA_CPP}/build/bin/llama-quantize {MODELS}/qwen05-lora-f16.gguf {MODELS}/qwen05-lora-q4_k_m.gguf Q4_K_M",
+        )
+    E4_JOBS
+    return (MODELS,)
+
+
+@app.cell
+def e4_eval(
+    CLEAN,
+    E3_ADAPTER,
+    HARD,
+    MODELS,
+    REPO,
+    job_state,
+    launch,
+    mo,
+    refresh,
+):
+    refresh
+    mo.stop(job_state("e4_convert") != "done", mo.md("E4 eval waits for the GGUF conversion"))
+    # CPU decoding through llama.cpp is ~0.3 s per sentence here, so E4 uses fixed subsets; the HF model
+    # (E3, GPU) is re-run on the same subsets as the unquantised reference.
+    E4_SUBSETS = {"clean2k": (CLEAN / "test.jsonl", 2000), "hard1k": (HARD, 1000)}
+    E4_VARIANTS = ["f16", "q8_0", "q4_k_m"]
+    _steps = [
+        ["virestore.eval", "--model", "hf", "--hf-model", "Qwen/Qwen2.5-0.5B-Instruct", "--adapter", E3_ADAPTER,
+         "--test", te, "--limit", n, "--batch-size", 64, "--latency-n", 0, "--tag", f"e4-ref-hf-{s}",
+         "--results", REPO / "results", "--save-predictions"]
+        for s, (te, n) in E4_SUBSETS.items()
+    ] + [
+        ["virestore.eval", "--model", "gguf", "--gguf", MODELS / f"qwen05-lora-{v}.gguf", "--test", te, "--limit", n,
+         "--latency-n", 100, "--tag", f"e4-gguf-{v}-{s}", "--results", REPO / "results", "--save-predictions"]
+        for v in E4_VARIANTS
+        for s, (te, n) in E4_SUBSETS.items()
+    ]
+    E4_EVAL_JOB = launch("e4_eval", *_steps)
+    E4_EVAL_JOB
     return
 
 

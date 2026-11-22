@@ -22,3 +22,24 @@
    ```
 
 Record the CPU model and thread count; latency numbers are only comparable on the same machine.
+
+## What it took on the molab sandbox (E4)
+
+The `e4_setup` / `e4_eval` cells of `notebooks/experiments.py` run the steps above. Things that
+were needed beyond the commands:
+
+- `cmake`, `ninja` and `sentencepiece` from PyPI (the sandbox has gcc but no `make`), and
+  `cmake -G Ninja`. Only the `llama-quantize` target is built; `llama-cpp-python` builds its own
+  copy of llama.cpp when installed.
+- The sandbox sets `PYTHONSAFEPATH=1`, so `convert_hf_to_gguf.py` cannot import its own
+  `conversion/` package unless the llama.cpp checkout is on `PYTHONPATH`
+  (`PYTHONPATH=<llama.cpp>:<llama.cpp>/gguf-py`).
+- The Qwen2 converter tries the SentencePiece vocab first and falls back to BPE only on
+  `FileNotFoundError`; without `sentencepiece` installed it fails with `ModuleNotFoundError`.
+- `merge.py` merges in float16 and the converter writes `--outtype f16`; the f16 GGUF is evaluated
+  too, as the unquantised llama.cpp reference.
+
+CPU decoding through llama.cpp is slow on the sandbox (about 0.3 s per sentence for Q4_K_M), so E4
+is evaluated on fixed subsets (first 2 000 clean test sentences, first 1 000 hard sentences), and
+the HF model from E3 is re-run on the same subsets (`e4-ref-hf-*`). The GGUF files are in the
+private HF repo `dinhgia2106/vi-restore-llm-qwen05-lora-gguf`.

@@ -33,7 +33,7 @@ that reference `refresh` (a `mo.ui.refresh`, 30 s) re-check automatically while 
 open in a browser.
 
 Jobs: `data_clean`, `data_noisy`, `hard`, `e0`, `e2`, `e3_train`, `e3_eval`, `analysis`,
-`llamacpp_build`, `e4_convert`, ...
+`llamacpp_build`, `e4_convert`, `e4_eval`, `gguf_upload`, ...
 
 ## Results flow
 
