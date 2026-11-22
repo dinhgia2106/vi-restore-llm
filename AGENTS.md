@@ -1,6 +1,6 @@
 # Handoff: vi-restore-llm
 
-You are continuing a research project for **Tran Dinh Gia (GrazT)**, an AI engineer in Vietnam. This file is local-only (excluded via `.git/info/exclude`) — do not commit it. Reply to the user in **Vietnamese**; code, commits and repo docs stay in English.
+You are continuing a research project for **Tran Dinh Gia (GrazT)**, an AI engineer in Vietnam. The user committed this file to the repo themselves (commit `c684c3b`, 2026-11-23), so it is public: keep it current, and never put tokens, URLs with tokens or other secrets in it. Reply to the user in **Vietnamese**; code, commits and repo docs stay in English.
 
 ## Hard rules (the user was explicit about these)
 
