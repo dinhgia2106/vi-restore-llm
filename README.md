@@ -96,3 +96,7 @@ docs/             experiment plan, quantisation guide
 data/sample/      tiny hand-written corpus for tests
 tests/            unit tests (pytest)
 ```
+
+## License
+
+Code: [MIT](LICENSE). Training data: WanJuan-Vietnamese, CC BY 4.0 — see [data/README.md](data/README.md).

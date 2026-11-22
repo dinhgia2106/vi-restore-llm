@@ -8,6 +8,8 @@ version = "0.1.0"
 description = "Small LLMs for Vietnamese diacritic restoration and typo correction, benchmarked against a TCN baseline and deployed on-device."
 readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Tran Dinh Gia (GrazT)" }]
 dependencies = ["pyyaml>=6", "psutil>=5.9"]
 
 [project.optional-dependencies]
