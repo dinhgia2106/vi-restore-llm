@@ -65,10 +65,14 @@ def test_build_and_baselines(tmp_path):
 
 
 def test_ambiguous_syllables():
-    from virestore.hardset import ambiguous_syllables
+    from virestore.hardset import ambiguous_syllables, is_hard
 
-    rows = [{"target": t} for t in ["ma", "mà", "má", "mả", "mã", "mạ", "hoa"] * 5]
-    assert ambiguous_syllables(rows, min_forms=4, min_count=5) == {"ma"}
+    # 'ma': top form is 1/6 of uses -> ambiguous; 'hoa' always 'hoa'; 'cua': 'của' 90 % -> not ambiguous
+    rows = [{"target": t} for t in ["ma", "mà", "má", "mả", "mã", "mạ", "hoa"] * 5 + ["của"] * 9 + ["cua"]]
+    amb = ambiguous_syllables(rows, max_top_share=0.5, min_total=5)
+    assert amb == {"ma"}
+    assert is_hard("ma ma hoa", amb, min_ratio=0.5, min_hits=2)
+    assert not is_hard("ma hoa hoa hoa", amb, min_ratio=0.3, min_hits=1)
 
 
 def test_jsonl_gz_corpus_and_filters(tmp_path):
