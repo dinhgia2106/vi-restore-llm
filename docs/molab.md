@@ -20,8 +20,9 @@ synced from it after each step.
 Long commands cannot run inside a cell: the connection to the sandbox drops after a while and
 interrupts the cell (a first data build was killed this way). The `repo` cell defines:
 
-- `launch(name, *steps)` — starts `python -m <step> ...` commands one after another in a detached
-  process. Output goes to `logs/<name>.log`, the exit code to `logs/<name>.exit`.
+- `launch(name, *steps)` — runs the steps one after another in a detached process; a list step is
+  `python -m <step> ...`, a string step is a raw shell command (used for building llama.cpp and
+  GGUF conversion). Output goes to `logs/<name>.log`, the exit code to `logs/<name>.exit`.
 - `job_state(name)` — `not started`, `running`, `done` or `failed` (a finished child that was not
   reaped shows up as a zombie; this is reported as `failed`, not `running`).
 - `reset_job(name)` — deletes the job's files so `launch` runs it again.
@@ -31,15 +32,27 @@ never retried silently. Cells that depend on a job call `mo.stop(...)` until it 
 that reference `refresh` (a `mo.ui.refresh`, 30 s) re-check automatically while the notebook is
 open in a browser.
 
-Jobs: `data_clean`, `data_noisy`, `hard`, `e0`, `e2`, `e3_train`, `e3_eval`, ...
+Jobs: `data_clean`, `data_noisy`, `hard`, `e0`, `e2`, `e3_train`, `e3_eval`, `analysis`,
+`llamacpp_build`, `e4_convert`, ...
 
 ## Results flow
 
 Runs write `results/<tag>.json` and regenerate `results/summary.md` in the sandbox checkout. Copy
 them into the local repo and commit there; never edit `results/` by hand. Because the files are
 tracked, a later `git pull` in the sandbox refuses to overwrite the sandbox's own untracked copies
-of the same files: check they are identical (`cmp`), remove them, then pull. `summary.md` can always
-be regenerated from the JSON files.
+of the same files, and a regenerated `summary.md` counts as a local modification. Before pulling
+in the sandbox: for each incoming `results/` file, compare the sandbox copy with
+`git show origin/main:<file>` (`cmp`) and remove it if identical; then
+`git checkout -- results/summary.md` (it is regenerated from the JSON files on the next eval) and
+`git pull --ff-only`. The `repo` cell pulls with `check=True`, so a blocked pull stops the notebook.
+
+## Model files
+
+Checkpoints and GGUF files are not committed. Adapters are pushed to **private** Hugging Face model
+repos under the user's account (only with the user's approval), so they survive a sandbox reset:
+
+- E3 adapter: `dinhgia2106/vi-restore-llm-qwen05-lora` (adapter, tokenizer, `train_config.json`;
+  intermediate checkpoints left out).
 
 ## Secrets
 
