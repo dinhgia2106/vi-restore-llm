@@ -158,3 +158,21 @@ def test_tagger_labels_round_trip():
     assert N_LABELS == 30
     assert apply_label("b", 7) == "b"  # consonants are copied
     assert apply_label("i", char_label("ơ")) == "i"  # a modifier the letter cannot take is dropped
+
+
+def test_serve_restore_and_candidates(tmp_path):
+    import pytest
+
+    pytest.importorskip("fastapi")
+    from fastapi.testclient import TestClient
+
+    from virestore.serve import create_app
+
+    build(SAMPLE, tmp_path, noisy=False, seed=13, min_words=3, max_words=40, limit=None)
+    client = TestClient(create_app(Lexicon.from_jsonl(tmp_path / "train.jsonl")))
+    assert client.get("/health").json()["ok"]
+    r = client.post("/restore", json={"text": "hom nay troi dep qua"}).json()
+    assert r["text"] and r["ms"] >= 0
+    c = client.post("/candidates", json={"text": "hom nay troi dep qua", "k": 3}).json()
+    assert c["candidates"][0] == r["text"] and len(c["candidates"]) <= 3
+    assert TestClient(create_app(Identity())).post("/candidates", json={"text": "a"}).status_code == 200
