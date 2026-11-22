@@ -176,3 +176,22 @@ def test_serve_restore_and_candidates(tmp_path):
     c = client.post("/candidates", json={"text": "hom nay troi dep qua", "k": 3}).json()
     assert c["candidates"][0] == r["text"] and len(c["candidates"]) <= 3
     assert TestClient(create_app(Identity())).post("/candidates", json={"text": "a"}).status_code == 200
+
+
+def test_tagger_restorer_untrained_smoke(tmp_path):
+    import pytest
+
+    pytest.importorskip("torch")
+    from virestore.models.tagger import TaggerRestorer
+    from virestore.tagger import Vocab, build_model, save, valid_labels
+
+    assert len(valid_labels("a")) == 18 and valid_labels("d") == [0, 24] and valid_labels("b") == [0]
+    cfg = {"model": {"d_model": 16, "layers": 1, "heads": 2, "ff": 32, "max_len": 64, "dropout": 0.0}}
+    vocab = Vocab(sorted(set("hom nay troi dep qua")))
+    save(build_model(len(vocab), 16, 1, 2, 32, 64, 0.0), vocab, cfg, tmp_path / "t")
+    r = TaggerRestorer(str(tmp_path / "t"), threads=1)
+    src = "hom nay troi dep qua"
+    out = r.restore([src])[0]
+    assert strip_diacritics(out) == src  # never changes letters
+    nb = r.restore_nbest([src], 3)[0]
+    assert nb[0] == out and len(nb) == 3 and all(strip_diacritics(x) == src for x in nb)

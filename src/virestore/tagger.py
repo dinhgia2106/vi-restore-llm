@@ -56,6 +56,16 @@ def apply_label(base: str, label: int) -> str:
     return unicodedata.normalize("NFC", base + MODIFIERS[mod] + TONES[tone])
 
 
+def valid_labels(base: str) -> list[int]:
+    """Labels that produce a real Vietnamese letter from this plain character."""
+    if base not in TAGGABLE:
+        return [0]
+    low = base.lower()
+    if low == "d":
+        return [0, 4 * len(TONES)]
+    return [m * len(TONES) + t for m in sorted(ALLOWED_MODIFIERS[low]) for t in range(len(TONES))]
+
+
 def labels_for(target: str) -> list[int]:
     return [char_label(c) for c in unicodedata.normalize("NFC", target)]
 
