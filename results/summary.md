@@ -31,6 +31,9 @@
 | e4-laptop-q8_0-t8 | gguf:qwen05-lora-q8_0.gguf | processed/test | 200 | 0.0100 | 0.0387 | 0.9626 | 0.5900 | – / – / – | 373.42 | 665.47 | 621.2 | cpu |
 | e4-ref-hf-clean2k | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora | processed/test | 2000 | 0.0121 | 0.0472 | 0.9532 | 0.5440 | – / – / – | – | – | 3304.1 | cuda |
 | e4-ref-hf-hard1k | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora | processed/test_hard | 1000 | 0.0180 | 0.0697 | 0.9315 | 0.4830 | – / – / – | – | – | 3286.2 | cuda |
+| e5-qwen15-lora-noisy-clean | hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/qwen15-lora-noisy | processed/test | 19956 | 0.0121 | 0.0431 | 0.9581 | 0.5675 | – / – / – | – | – | 3437.7 | cuda |
+| e5-qwen15-lora-noisy-hard | hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/qwen15-lora-noisy | processed/test_hard | 2801 | 0.0173 | 0.0609 | 0.9409 | 0.5223 | – / – / – | – | – | 3418.0 | cuda |
+| e5-qwen15-lora-noisy-noisy | hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/qwen15-lora-noisy | processed_noisy/test | 19956 | 0.0157 | 0.0521 | 0.9497 | 0.5059 | – / – / – | – | – | 3432.8 | cuda |
 | lat-laptop-q4_k_m-t8-lexdraft16 | gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft | processed/test | 200 | 0.0106 | 0.0413 | 0.9590 | 0.5600 | – / – / – | 392.63 | 925.59 | 1246.6 | cpu |
 | lat-laptop-q4_k_m-t8-lexdraft4 | gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft | processed/test | 200 | 0.0109 | 0.0423 | 0.9581 | 0.5600 | – / – / – | 358.16 | 648.25 | 1246.7 | cpu |
 | lat-laptop-q4_k_m-t8-lexdraft8 | gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft | processed/test | 200 | 0.0106 | 0.0413 | 0.9590 | 0.5650 | – / – / – | 380.8 | 775.54 | 1250.0 | cpu |
@@ -45,3 +48,9 @@
 | t2-tagger-clean | tagger:tagger | processed/test | 19956 | 0.0080 | 0.0333 | 0.9667 | 0.6022 | 0.6022 / 0.7324 / 0.7719 | – | – | 2293.6 | cuda |
 | t2-tagger-hard | tagger:tagger | processed/test_hard | 2801 | 0.0114 | 0.0469 | 0.9531 | 0.5587 | 0.5587 / 0.6944 / 0.7283 | – | – | 2253.0 | cuda |
 | t2-tagger-noisy | tagger:tagger | processed_noisy/test | 19956 | 0.0358 | 0.0980 | 0.9020 | 0.2097 | 0.2097 / 0.2527 / 0.2644 | – | – | 2300.2 | cuda |
+| t6-tagger-200k-e1-clean | tagger:tagger-200k-e1 | processed/test | 19956 | 0.0698 | 0.2978 | 0.7022 | 0.0196 | – / – / – | – | – | 2267.2 | cuda |
+| t6-tagger-200k-e1-hard | tagger:tagger-200k-e1 | processed/test_hard | 2801 | 0.0840 | 0.3532 | 0.6468 | 0.0118 | – / – / – | – | – | 2248.9 | cuda |
+| t6-tagger-200k-e3-clean | tagger:tagger-200k-e3 | processed/test | 19956 | 0.0311 | 0.1325 | 0.8675 | 0.1544 | – / – / – | – | – | 2268.2 | cuda |
+| t6-tagger-200k-e3-hard | tagger:tagger-200k-e3 | processed/test_hard | 2801 | 0.0405 | 0.1701 | 0.8299 | 0.1157 | – / – / – | – | – | 2251.9 | cuda |
+| t6-tagger-50k-e3-clean | tagger:tagger-50k-e3 | processed/test | 19956 | 0.0895 | 0.3810 | 0.6190 | 0.0087 | – / – / – | – | – | 2245.1 | cuda |
+| t6-tagger-50k-e3-hard | tagger:tagger-50k-e3 | processed/test_hard | 2801 | 0.1027 | 0.4319 | 0.5681 | 0.0039 | – / – / – | – | – | 2252.2 | cuda |

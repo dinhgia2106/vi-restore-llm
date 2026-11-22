@@ -485,6 +485,35 @@ def tagger_large(CLEAN, HARD, NOISY, REPO, job_state, launch, mo, refresh):
 
 
 @app.cell(hide_code=True)
+def scaling_md(mo):
+    mo.md(r"""
+    ## 7b. Tagger data scaling (E6 for the tagger)
+
+    Same model as `configs/tagger.yaml`, trained on the first 50k / 200k / 1M clean training pairs for
+    3 epochs, plus 200k pairs for 1 epoch - the data budget of the LoRA run (E3) - so the tagger and
+    the LLM can be compared at equal data. Evaluated on the full clean and hard test sets.
+    """)
+    return
+
+
+@app.cell
+def tagger_scaling(CLEAN, HARD, REPO, job_state, launch, mo, refresh):
+    refresh
+    mo.stop(job_state("tagger_train") != "done", mo.md("scaling waits for the first tagger"))
+    _runs = {"50k-e3": (50_000, 3), "200k-e1": (200_000, 1), "200k-e3": (200_000, 3), "1m-e3": (1_000_000, 3)}
+    _steps = []
+    for _name, (_n, _ep) in _runs.items():
+        _dir = REPO / f"runs/tagger-{_name}"
+        _steps.append(["virestore.tagger", "--config", REPO / "configs/tagger.yaml", "--train-limit", _n, "--epochs", _ep, "--output-dir", _dir])
+        for _s, _te in {"clean": CLEAN / "test.jsonl", "hard": HARD}.items():
+            _steps.append(["virestore.eval", "--model", "tagger", "--tagger", _dir, "--test", _te, "--batch-size", 256,
+                           "--latency-n", 0, "--tag", f"t6-tagger-{_name}-{_s}", "--results", REPO / "results"])
+    SCALING_JOB = launch("tagger_scaling", *_steps)
+    SCALING_JOB
+    return
+
+
+@app.cell(hide_code=True)
 def e1_md(mo):
     mo.md(r"""
     ## 8. E1: acausal TCN, retrained

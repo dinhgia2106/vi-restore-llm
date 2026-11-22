@@ -1,0 +1,24 @@
+{
+  "tag": "t6-tagger-200k-e3-clean",
+  "model": "tagger:tagger-200k-e3",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test.jsonl",
+  "quality": {
+    "n": 19956,
+    "cer": 0.03107,
+    "wer": 0.13252,
+    "word_acc": 0.86748,
+    "sent_acc": 0.15439
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1493.84,
+  "rss_mb": 2268.2,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-22T22:24:19+00:00"
+}
