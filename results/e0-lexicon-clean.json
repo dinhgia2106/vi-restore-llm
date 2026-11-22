@@ -1,0 +1,28 @@
+{
+  "tag": "e0-lexicon-clean",
+  "model": "lexicon",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test.jsonl",
+  "quality": {
+    "n": 19956,
+    "cer": 0.03419,
+    "wer": 0.14265,
+    "word_acc": 0.85735,
+    "sent_acc": 0.1576
+  },
+  "latency": {
+    "n": 100,
+    "p50_ms": 0.05,
+    "p95_ms": 0.08,
+    "mean_ms": 0.05
+  },
+  "throughput_sent_per_s": 26940.13,
+  "rss_mb": 1897.6,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu"
+  },
+  "timestamp": "2026-11-22T16:29:44+00:00"
+}

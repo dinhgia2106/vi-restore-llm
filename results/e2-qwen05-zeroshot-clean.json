@@ -1,0 +1,28 @@
+{
+  "tag": "e2-qwen05-zeroshot-clean",
+  "model": "hf:Qwen/Qwen2.5-0.5B-Instruct",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test.jsonl",
+  "quality": {
+    "n": 1000,
+    "cer": 0.56873,
+    "wer": 1.0144,
+    "word_acc": 0.14533,
+    "sent_acc": 0.0
+  },
+  "latency": {
+    "n": 100,
+    "p50_ms": 325.01,
+    "p95_ms": 666.6,
+    "mean_ms": 344.26
+  },
+  "throughput_sent_per_s": 20.8,
+  "rss_mb": 3311.7,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda"
+  },
+  "timestamp": "2026-11-22T16:27:28+00:00"
+}

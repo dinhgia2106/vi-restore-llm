@@ -1,0 +1,28 @@
+{
+  "tag": "e0-identity-clean",
+  "model": "identity",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test.jsonl",
+  "quality": {
+    "n": 19956,
+    "cer": 0.2111,
+    "wer": 0.82837,
+    "word_acc": 0.17163,
+    "sent_acc": 0.0
+  },
+  "latency": {
+    "n": 100,
+    "p50_ms": 0.0,
+    "p95_ms": 0.0,
+    "mean_ms": 0.0
+  },
+  "throughput_sent_per_s": 43840648.18,
+  "rss_mb": 45.1,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu"
+  },
+  "timestamp": "2026-11-22T16:27:19+00:00"
+}

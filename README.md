@@ -16,17 +16,21 @@ Hypotheses and the full experiment matrix are in [docs/experiment_plan.md](docs/
 
 ## Results
 
-Filled in by `python -m virestore.eval`; see [`results/summary.md`](results/summary.md).
+Filled in by `python -m virestore.eval`; every run, including the noisy and hard test sets, is in [`results/summary.md`](results/summary.md). The table shows the **clean** test split (19 956 sentences, 2M-sentence build from WanJuan-Vietnamese).
 
 | Model | Params | CER ↓ | WER ↓ | Sentence acc ↑ | p95 latency (CPU) | RAM |
 |---|---|---|---|---|---|---|
-| Identity (floor) | – | | | | | |
-| Lexicon (unigram + bigram) | – | | | | | |
+| Identity (floor) | – | 0.2111 | 0.8284 | 0.0000 | | |
+| Lexicon (unigram + bigram) | – | 0.0342 | 0.1426 | 0.1576 | | |
 | Acausal TCN ([repo](https://github.com/dinhgia2106/Vietnamese-diacritic-restoration)) | | | | | | |
-| Qwen2.5-0.5B, zero-shot | 0.5B | | | | | |
+| Qwen2.5-0.5B, zero-shot¹ | 0.5B | 0.5687 | 1.0144 | 0.0000 | | |
 | Qwen2.5-0.5B + LoRA | 0.5B | | | | | |
 | Qwen2.5-0.5B + LoRA, GGUF Q4_K_M | 0.5B | | | | | |
 | Qwen2.5-1.5B + QLoRA (noisy input) | 1.5B | | | | | |
+
+¹ First 1 000 sentences of the clean test split. Without fine-tuning the model often refuses, answers in English, rewrites the sentence or returns the input unchanged, so it scores below the identity floor.
+
+Latency and RAM columns are filled only from runs on the target laptop (CPU, batch size 1). The runs so far were made on a molab sandbox (virtualised CPU; the LLM on a GPU), so their latency and memory, recorded in `results/`, are not comparable to the 50 ms budget.
 
 ## Quick start
 
