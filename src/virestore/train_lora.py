@@ -74,7 +74,7 @@ def main() -> None:
 
         quant = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=torch.bfloat16)
     model = AutoModelForCausalLM.from_pretrained(
-        cfg["model"], torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32, quantization_config=quant
+        cfg["model"], dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32, quantization_config=quant
     )
     if quant:
         model = prepare_model_for_kbit_training(model)

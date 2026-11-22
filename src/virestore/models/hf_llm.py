@@ -17,7 +17,7 @@ class HFRestorer:
         self.tok.padding_side = "left"  # required for batched generation with decoder-only models
         if self.tok.pad_token is None:
             self.tok.pad_token = self.tok.eos_token
-        model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=dtype)
+        model = AutoModelForCausalLM.from_pretrained(model_id, dtype=dtype)
         if adapter:
             from peft import PeftModel
 

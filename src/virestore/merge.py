@@ -24,7 +24,7 @@ def main() -> None:
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    model = AutoModelForCausalLM.from_pretrained(a.base, torch_dtype=torch.float16)
+    model = AutoModelForCausalLM.from_pretrained(a.base, dtype=torch.float16)
     model = PeftModel.from_pretrained(model, a.adapter).merge_and_unload()
     model.save_pretrained(a.out, safe_serialization=True)
     AutoTokenizer.from_pretrained(a.adapter).save_pretrained(a.out)
