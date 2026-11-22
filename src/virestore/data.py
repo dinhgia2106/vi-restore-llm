@@ -46,23 +46,38 @@ def _open(path: Path):
     return path.open(encoding="utf-8", errors="ignore")
 
 
+def _iter_file(f: Path, text_field: str | None):
+    is_json = ".json" in f.name
+    with _open(f) as fh:
+        for line in fh:
+            if not is_json:
+                yield line
+                continue
+            try:
+                obj = json.loads(line)
+            except ValueError:
+                continue
+            field = text_field or next((k for k in TEXT_FIELDS if k in obj), None)
+            if field and isinstance(obj.get(field), str):
+                yield obj[field]
+
+
 def iter_documents(corpus: Path, text_field: str | None = None):
-    """Yield raw text from .txt files (one document per line) or JSON Lines files."""
+    """Yield raw text from .txt files (one document per line) or JSON Lines files.
+
+    Documents from several files are interleaved round-robin, so that ``--limit``
+    draws from every shard (and every WanJuan domain) instead of only the first one.
+    """
     files = [corpus] if corpus.is_file() else sorted(p for p in corpus.rglob("*") if p.name.endswith(TEXT_SUFFIXES))
-    for f in files:
-        is_json = ".json" in f.name
-        with _open(f) as fh:
-            for line in fh:
-                if not is_json:
-                    yield line
-                    continue
-                try:
-                    obj = json.loads(line)
-                except ValueError:
-                    continue
-                field = text_field or next((k for k in TEXT_FIELDS if k in obj), None)
-                if field and isinstance(obj.get(field), str):
-                    yield obj[field]
+    streams = [_iter_file(f, text_field) for f in files]
+    while streams:
+        alive = []
+        for it in streams:
+            doc = next(it, None)
+            if doc is not None:
+                yield doc
+                alive.append(it)
+        streams = alive
 
 
 def is_clean_sentence(s: str, min_words: int, max_words: int) -> bool:

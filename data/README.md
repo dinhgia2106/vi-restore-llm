@@ -3,7 +3,8 @@
 ## Source corpus: WanJuan-Vietnamese (WanJuan3.0 / 万卷·丝路)
 
 - **What:** the Vietnamese subset of WanJuan3.0, a cleaned web-text corpus released by OpenDataLab (Shanghai AI Laboratory) — about 81 M documents, 280 GB, 74 B tokens, JSON Lines.
-- **Where:** https://opendatalab.com/OpenDataLab/WanJuan-Vietnamese (an OpenDataLab login is required to download) · project page https://github.com/opendatalab/WanJuan3.0
+- **Where:** https://huggingface.co/datasets/opendatalab/WanJuan-Vietnamese (47 `jsonl.gz` shards, ~131 GB compressed; not gated) · also https://opendatalab.com/OpenDataLab/WanJuan-Vietnamese · project page https://github.com/opendatalab/WanJuan3.0
+- **Schema:** one JSON object per line with `id`, `language`, `content` (the text), `labels`, `sub_path`, `title`. Some shards repeat the same record on consecutive lines; sentence-level de-duplication removes these.
 - **License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The corpus is not redistributed here; only derived sentence pairs are produced locally.
 - **Citation:**
 
@@ -29,6 +30,22 @@
 4. builds the model input by stripping diacritics (and, with `--noisy`, adding synthetic Telex/typo noise);
 5. assigns train / dev / test (98 / 1 / 1) by a hash of the sentence.
 
+### Shards used
+
+One shard per top-level domain, taken from the `general` source of each domain. `culture/ebooks` is left out because it holds full translated books.
+
+```
+raw/culture/general/part-677f75d865d8-000359.jsonl.gz
+raw/encyclopedia/general/part-677f75d865d8-000109.jsonl.gz
+raw/general/general/part-677f75d865d8-000300.jsonl.gz
+raw/history_policy/general/part-677f75d865d8-000270.jsonl.gz
+raw/local_life/general/part-677f75d865d8-000393.jsonl.gz
+raw/news/general/part-677f75d865d8-000285.jsonl.gz
+raw/professional_field/general/part-677f75d865d8-000332.jsonl.gz
+```
+
+Documents are read round-robin across shards, so `--limit` samples every domain.
+
 ## Layout
 
 ```
@@ -40,6 +57,10 @@ data/
 ```
 
 ## Building
+
+```bash
+hf download opendatalab/WanJuan-Vietnamese --repo-type dataset --local-dir data/raw/wanjuan-vietnamese --include "raw/news/general/part-677f75d865d8-000285.jsonl.gz"   # repeat per shard
+```
 
 ```bash
 python -m virestore.data --corpus data/raw/wanjuan-vietnamese --out data/processed --limit 2000000

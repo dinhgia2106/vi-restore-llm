@@ -2,7 +2,7 @@ import json
 import random
 from pathlib import Path
 
-from virestore.data import build
+from virestore.data import build, iter_documents
 from virestore.metrics import levenshtein, score
 from virestore.models.baselines import Identity, Lexicon
 from virestore.noise import NoiseConfig, make_input, telex_spelling
@@ -87,3 +87,10 @@ def test_jsonl_gz_corpus_and_filters(tmp_path):
             fh.write(json.dumps(d, ensure_ascii=False) + "\n")
     assert list(iter_sentences(tmp_path, 3, 40)) == ["Hôm nay trời đẹp quá.", "Chúng tôi học máy mỗi ngày."]
     assert not is_clean_sentence("Liên hệ admin@site.vn để biết thêm", 3, 40)
+
+
+def test_iter_documents_interleaves_shards(tmp_path):
+    (tmp_path / "a.txt").write_text("a1\na2\na3\n", encoding="utf-8")
+    (tmp_path / "b.txt").write_text("b1\n", encoding="utf-8")
+    docs = [d.strip() for d in iter_documents(tmp_path)]
+    assert docs == ["a1", "b1", "a2", "a3"]
