@@ -60,8 +60,7 @@ laptop.
 - **Quantisation cost** (against f16 GGUF, same runtime): Q8_0 is essentially free; Q4_K_M costs
   0.0003 CER / 1.3 points sentence accuracy on clean and 0.0006 CER / 2.8 points on hard.
 - **Latency**: even Q4_K_M has a p95 near 490 ms on the sandbox CPU, about ten times the 50 ms
-  budget. The laptop number is still to be measured, but an order-of-magnitude gap is unlikely to
-  close from the CPU alone; generation length (one token per output piece) dominates.
+  budget. The laptop number is still to be measured.
 - **Open question — HF vs llama.cpp.** The same merged model scores better through llama.cpp
   than through PyTorch (clean2k CER 0.0105 vs 0.0121; 505 of 2 000 outputs differ, almost all in
   diacritic choices, not length). A diagnostic on 300 sentences ruled out the obvious causes:
