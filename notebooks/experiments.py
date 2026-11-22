@@ -380,5 +380,42 @@ def e4_eval(
     return
 
 
+@app.cell(hide_code=True)
+def emk_md(mo):
+    mo.md(r"""
+    ## 6. EM@k: top-k candidates
+
+    EM@k = the reference is among the first k candidates (k = 1, 3, 5), as in the candidate bar of an
+    input method. The LLM uses beam search (`num_beams = 5`), the lexicon a beam over its bigram
+    scores. Runs are tagged `-nbest`; the earlier greedy runs are left untouched.
+    """)
+    return
+
+
+@app.cell
+def emk(CLEAN, E3_ADAPTER, HARD, NOISY, REPO, job_state, launch, mo, refresh):
+    refresh
+    mo.stop(job_state("e3_train") != "done", mo.md("EM@k waits for the E3 adapter"))
+    _sets = {"clean": (CLEAN / "train.jsonl", CLEAN / "test.jsonl"), "noisy": (NOISY / "train.jsonl", NOISY / "test.jsonl"), "hard": (CLEAN / "train.jsonl", HARD)}
+    _hf = ["--model", "hf", "--hf-model", "Qwen/Qwen2.5-0.5B-Instruct", "--adapter", E3_ADAPTER, "--batch-size", 32]
+    EMK_JOB = launch(
+        "emk",
+        ["virestore.eval", *_hf, "--test", CLEAN / "dev.jsonl", "--limit", 64, "--nbest", 5, "--latency-n", 0,
+         "--tag", "smoke-nbest", "--results", "/marimo/smoke/results"],
+        *[
+            ["virestore.eval", "--model", "lexicon", "--train", tr, "--test", te, "--nbest", 5, "--latency-n", 0,
+             "--tag", f"e0-lexicon-{s}-nbest", "--results", REPO / "results", "--save-predictions"]
+            for s, (tr, te) in _sets.items()
+        ],
+        *[
+            ["virestore.eval", *_hf, "--test", te, "--nbest", 5, "--latency-n", 0,
+             "--tag", f"e3-qwen05-lora-{s}-nbest", "--results", REPO / "results", "--save-predictions"]
+            for s, (_, te) in _sets.items()
+        ],
+    )
+    EMK_JOB
+    return
+
+
 if __name__ == "__main__":
     app.run()

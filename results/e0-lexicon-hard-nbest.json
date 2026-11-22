@@ -1,0 +1,26 @@
+{
+  "tag": "e0-lexicon-hard-nbest",
+  "model": "lexicon",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test_hard.jsonl",
+  "quality": {
+    "n": 2801,
+    "cer": 0.0459,
+    "wer": 0.18787,
+    "word_acc": 0.81213,
+    "sent_acc": 0.13174,
+    "em@1": 0.1653,
+    "em@3": 0.2699,
+    "em@5": 0.32096
+  },
+  "latency": {},
+  "throughput_sent_per_s": 32117.35,
+  "rss_mb": 1889.5,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu"
+  },
+  "timestamp": "2026-11-22T19:20:53+00:00"
+}

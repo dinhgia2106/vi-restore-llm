@@ -1,0 +1,26 @@
+{
+  "tag": "e3-qwen05-lora-noisy-nbest",
+  "model": "hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora",
+  "test_file": "/marimo/vi-restore-llm/data/processed_noisy/test.jsonl",
+  "quality": {
+    "n": 19956,
+    "cer": 0.04292,
+    "wer": 0.11723,
+    "word_acc": 0.88692,
+    "sent_acc": 0.19162,
+    "em@1": 0.21728,
+    "em@3": 0.27531,
+    "em@5": 0.29224
+  },
+  "latency": {},
+  "throughput_sent_per_s": 46.17,
+  "rss_mb": 3575.4,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda"
+  },
+  "timestamp": "2026-11-22T19:54:26+00:00"
+}

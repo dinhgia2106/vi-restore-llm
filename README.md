@@ -34,6 +34,19 @@ Filled in by `python -m virestore.eval`; every run, including the noisy and hard
 
 ³ First 2 000 sentences of the clean test split, llama.cpp on CPU. On the same sentences the f16 GGUF of the same merged model scores 0.0105 / 0.0406 / 0.5910 and Q8_0 0.0105 / 0.0411 / 0.5895, so Q4_K_M costs 0.0003 CER and 1.3 points of sentence accuracy (hard set: 2.8 points). The HF/PyTorch run of the same adapter scores lower on these sentences (0.0121 / 0.0472 / 0.5440); the cause is not yet known — see [docs/quantization.md](docs/quantization.md).
 
+**Candidate bar (EM@k).** Share of sentences whose reference is among the top k candidates (`eval --nbest 5`, runs tagged `-nbest`; full test sets):
+
+| Model | test set | EM@1 | EM@3 | EM@5 |
+|---|---|---|---|---|
+| Lexicon | clean | 0.1824 | 0.2970 | 0.3513 |
+| Qwen2.5-0.5B + LoRA | clean | 0.5981 | 0.7397 | 0.7757 |
+| Lexicon | hard | 0.1653 | 0.2699 | 0.3210 |
+| Qwen2.5-0.5B + LoRA | hard | 0.5491 | 0.6951 | 0.7351 |
+| Lexicon | noisy | 0.0805 | 0.1272 | 0.1481 |
+| Qwen2.5-0.5B + LoRA | noisy | 0.2173 | 0.2753 | 0.2922 |
+
+Beam search alone lifts the LoRA model's top-1 above its greedy output (clean 0.5981 vs 0.5209 in the same run). Greedy outputs on the GPU are not bit-for-bit reproducible: the `-nbest` re-run of the clean set scored sentence accuracy 0.5209 against 0.5219 in the original E3 run; the table above keeps the original.
+
 What the errors look like (rewritten words, ambiguous pairs, sentence length, noisy input): [docs/error_analysis.md](docs/error_analysis.md).
 
 Latency and RAM columns are filled only from runs on the target laptop (CPU, batch size 1). The runs so far were made on a molab sandbox (virtualised CPU; the LLM on a GPU), so their latency and memory, recorded in `results/`, are not comparable to the 50 ms budget.
