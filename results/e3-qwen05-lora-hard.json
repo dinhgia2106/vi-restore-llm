@@ -1,0 +1,28 @@
+{
+  "tag": "e3-qwen05-lora-hard",
+  "model": "hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test_hard.jsonl",
+  "quality": {
+    "n": 2801,
+    "cer": 0.01805,
+    "wer": 0.06984,
+    "word_acc": 0.93149,
+    "sent_acc": 0.46805
+  },
+  "latency": {
+    "n": 100,
+    "p50_ms": 259.9,
+    "p95_ms": 476.37,
+    "mean_ms": 271.54
+  },
+  "throughput_sent_per_s": 84.16,
+  "rss_mb": 3315.9,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda"
+  },
+  "timestamp": "2026-11-22T17:15:37+00:00"
+}

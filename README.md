@@ -24,11 +24,13 @@ Filled in by `python -m virestore.eval`; every run, including the noisy and hard
 | Lexicon (unigram + bigram) | – | 0.0342 | 0.1426 | 0.1576 | | |
 | Acausal TCN ([repo](https://github.com/dinhgia2106/Vietnamese-diacritic-restoration)) | | | | | | |
 | Qwen2.5-0.5B, zero-shot¹ | 0.5B | 0.5687 | 1.0144 | 0.0000 | | |
-| Qwen2.5-0.5B + LoRA | 0.5B | | | | | |
+| Qwen2.5-0.5B + LoRA² | 0.5B | 0.0129 | 0.0493 | 0.5219 | | |
 | Qwen2.5-0.5B + LoRA, GGUF Q4_K_M | 0.5B | | | | | |
 | Qwen2.5-1.5B + QLoRA (noisy input) | 1.5B | | | | | |
 
 ¹ First 1 000 sentences of the clean test split. Without fine-tuning the model often refuses, answers in English, rewrites the sentence or returns the input unchanged, so it scores below the identity floor.
+
+² `configs/qwen05_lora.yaml`: LoRA r = 16, 200k clean training pairs, one epoch. On the hard set it reaches CER 0.0181 / sentence acc 0.4681 (lexicon: 0.0459 / 0.1317); on noisy input, which it was not trained on, CER 0.0428 / sentence acc 0.1919 (lexicon trained on noisy pairs: 0.0630 / 0.0724).
 
 Latency and RAM columns are filled only from runs on the target laptop (CPU, batch size 1). The runs so far were made on a molab sandbox (virtualised CPU; the LLM on a GPU), so their latency and memory, recorded in `results/`, are not comparable to the 50 ms budget.
 
