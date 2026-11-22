@@ -59,6 +59,23 @@ What the errors look like (rewritten words, ambiguous pairs, sentence length, no
 
 Latency and RAM columns are filled only from runs on the target laptop (CPU, batch size 1). The other runs were made on a molab sandbox (virtualised CPU; the LLM on a GPU), so their latency and memory, recorded in `results/`, are not comparable to the 50 ms budget.
 
+## Use the model
+
+The model that fits the IME budget is the character tagger (findings: [docs/report.md](docs/report.md)). It is kept in a private Hugging Face repo for now.
+
+```bash
+uv pip install -e ".[serve]" torch            # a CPU build of torch is enough
+hf download dinhgia2106/vi-restore-llm-tagger --local-dir runs/tagger   # needs access to the private repo
+python -m virestore.serve --model tagger --tagger runs/tagger --threads 4 --port 8765
+```
+
+```bash
+curl -s localhost:8765/restore    -d '{"text": "hom nay troi dep qua"}'          -H 'content-type: application/json'
+curl -s localhost:8765/candidates -d '{"text": "toi di hoc", "k": 5}'           -H 'content-type: application/json'
+```
+
+`/restore` returns one sentence, `/candidates` the top-k for a candidate bar. The tagger only restores diacritics: it never changes letters, so it does not fix typos or leftover Telex.
+
 ## Quick start
 
 The GPU experiments run in a marimo notebook on molab: [notebooks/experiments.py](notebooks/experiments.py), guide in [docs/molab.md](docs/molab.md). Locally:
