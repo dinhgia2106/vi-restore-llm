@@ -25,12 +25,14 @@ Filled in by `python -m virestore.eval`; every run, including the noisy and hard
 | Acausal TCN ([repo](https://github.com/dinhgia2106/Vietnamese-diacritic-restoration)) | | | | | | |
 | Qwen2.5-0.5B, zero-shot¹ | 0.5B | 0.5687 | 1.0144 | 0.0000 | | |
 | Qwen2.5-0.5B + LoRA² | 0.5B | 0.0129 | 0.0493 | 0.5219 | | |
-| Qwen2.5-0.5B + LoRA, GGUF Q4_K_M | 0.5B | | | | | |
+| Qwen2.5-0.5B + LoRA, GGUF Q4_K_M³ | 0.5B | 0.0108 | 0.0423 | 0.5780 | | |
 | Qwen2.5-1.5B + QLoRA (noisy input) | 1.5B | | | | | |
 
 ¹ First 1 000 sentences of the clean test split. Without fine-tuning the model often refuses, answers in English, rewrites the sentence or returns the input unchanged, so it scores below the identity floor.
 
 ² `configs/qwen05_lora.yaml`: LoRA r = 16, 200k clean training pairs, one epoch. On the hard set it reaches CER 0.0181 / sentence acc 0.4681 (lexicon: 0.0459 / 0.1317); on noisy input, which it was not trained on, CER 0.0428 / sentence acc 0.1919 (lexicon trained on noisy pairs: 0.0630 / 0.0724).
+
+³ First 2 000 sentences of the clean test split, llama.cpp on CPU. On the same sentences the f16 GGUF of the same merged model scores 0.0105 / 0.0406 / 0.5910 and Q8_0 0.0105 / 0.0411 / 0.5895, so Q4_K_M costs 0.0003 CER and 1.3 points of sentence accuracy (hard set: 2.8 points). The HF/PyTorch run of the same adapter scores lower on these sentences (0.0121 / 0.0472 / 0.5440); the cause is not yet known — see [docs/quantization.md](docs/quantization.md).
 
 What the errors look like (rewritten words, ambiguous pairs, sentence length, noisy input): [docs/error_analysis.md](docs/error_analysis.md).
 

@@ -1,0 +1,23 @@
+{
+  "tag": "e4-ref-hf-clean2k",
+  "model": "hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test.jsonl",
+  "quality": {
+    "n": 2000,
+    "cer": 0.01215,
+    "wer": 0.04719,
+    "word_acc": 0.95324,
+    "sent_acc": 0.544
+  },
+  "latency": {},
+  "throughput_sent_per_s": 81.41,
+  "rss_mb": 3304.1,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda"
+  },
+  "timestamp": "2026-11-22T18:02:41+00:00"
+}

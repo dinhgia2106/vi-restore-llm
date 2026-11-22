@@ -1,0 +1,28 @@
+{
+  "tag": "e4-gguf-q4_k_m-hard1k",
+  "model": "gguf:qwen05-lora-q4_k_m.gguf",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test_hard.jsonl",
+  "quality": {
+    "n": 1000,
+    "cer": 0.01638,
+    "wer": 0.06374,
+    "word_acc": 0.93687,
+    "sent_acc": 0.496
+  },
+  "latency": {
+    "n": 100,
+    "p50_ms": 270.91,
+    "p95_ms": 476.79,
+    "mean_ms": 279.87
+  },
+  "throughput_sent_per_s": 3.5,
+  "rss_mb": 897.1,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu"
+  },
+  "timestamp": "2026-11-22T19:01:26+00:00"
+}

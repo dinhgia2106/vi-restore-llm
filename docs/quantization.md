@@ -43,3 +43,30 @@ CPU decoding through llama.cpp is slow on the sandbox (about 0.3 s per sentence 
 is evaluated on fixed subsets (first 2 000 clean test sentences, first 1 000 hard sentences), and
 the HF model from E3 is re-run on the same subsets (`e4-ref-hf-*`). The GGUF files are in the
 private HF repo `dinhgia2106/vi-restore-llm-qwen05-lora-gguf`.
+
+## E4 results
+
+From `results/e4-*.json` (clean2k = first 2 000 clean test sentences, hard1k = first 1 000 hard
+sentences). Latency is single-sentence on the **sandbox CPU** (20 vCPUs, gVisor), not the target
+laptop.
+
+| run | file size | clean2k CER | clean2k sent acc | hard1k CER | hard1k sent acc | p95 ms (clean2k, sandbox CPU) |
+|---|---|---|---|---|---|---|
+| HF + adapter (PyTorch, GPU) | – | 0.0121 | 0.5440 | 0.0180 | 0.4830 | – |
+| GGUF f16 | 994 MB | 0.0105 | 0.5910 | 0.0158 | 0.5240 | 737.43 |
+| GGUF Q8_0 | 531 MB | 0.0105 | 0.5895 | 0.0158 | 0.5240 | 520.44 |
+| GGUF Q4_K_M | 398 MB | 0.0108 | 0.5780 | 0.0164 | 0.4960 | 489.83 |
+
+- **Quantisation cost** (against f16 GGUF, same runtime): Q8_0 is essentially free; Q4_K_M costs
+  0.0003 CER / 1.3 points sentence accuracy on clean and 0.0006 CER / 2.8 points on hard.
+- **Latency**: even Q4_K_M has a p95 near 490 ms on the sandbox CPU, about ten times the 50 ms
+  budget. The laptop number is still to be measured, but an order-of-magnitude gap is unlikely to
+  close from the CPU alone; generation length (one token per output piece) dominates.
+- **Open question — HF vs llama.cpp.** The same merged model scores better through llama.cpp
+  than through PyTorch (clean2k CER 0.0105 vs 0.0121; 505 of 2 000 outputs differ, almost all in
+  diacritic choices, not length). A diagnostic on 300 sentences ruled out the obvious causes:
+  bf16 vs fp32 weights, merged vs unmerged adapter, and batch size 64 vs 1 all give CER
+  0.0106–0.0118 against 0.0098 for f16 GGUF, and llama.cpp decodes greedily
+  (`temperature=0`, `repeat_penalty=1.0`). Remaining suspects: how llama.cpp renders the chat
+  template into the prompt, and numerical differences between the kernels. Until this is
+  resolved, compare quantised variants against the f16 GGUF, not against the HF run.
