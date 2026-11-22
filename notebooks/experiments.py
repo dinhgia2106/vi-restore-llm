@@ -272,5 +272,37 @@ def e2(CLEAN, REPO, job_state, launch, mo, refresh):
     return
 
 
+@app.cell(hide_code=True)
+def e3_md(mo):
+    mo.md(r"""
+    ## 4. E3: Qwen2.5-0.5B-Instruct + LoRA
+
+    `configs/qwen05_lora.yaml`: LoRA r=16 on all attention and MLP projections, 200k clean training
+    pairs, 1 epoch, loss on the answer only. Evaluated on the full clean, noisy and hard test sets
+    (GPU, batch 64), so the numbers line up with E0.
+    """)
+    return
+
+
+@app.cell
+def e3(CLEAN, HARD, NOISY, REPO, job_state, launch, mo, refresh):
+    refresh
+    mo.stop(job_state("hard") != "done", mo.md("E3 waits for the data jobs"))
+    E3_ADAPTER = REPO / "runs/qwen05-lora"
+    E3_JOBS = {"e3_train": launch("e3_train", ["virestore.train_lora", "--config", REPO / "configs/qwen05_lora.yaml"])}
+    if job_state("e3_train") == "done":
+        E3_JOBS["e3_eval"] = launch(
+            "e3_eval",
+            *[
+                ["virestore.eval", "--model", "hf", "--hf-model", "Qwen/Qwen2.5-0.5B-Instruct", "--adapter", E3_ADAPTER,
+                 "--test", te, "--batch-size", 64, "--latency-n", 100, "--tag", f"e3-qwen05-lora-{s}",
+                 "--results", REPO / "results", "--save-predictions"]
+                for s, te in {"clean": CLEAN / "test.jsonl", "noisy": NOISY / "test.jsonl", "hard": HARD}.items()
+            ],
+        )
+    E3_JOBS
+    return
+
+
 if __name__ == "__main__":
     app.run()

@@ -31,7 +31,15 @@ never retried silently. Cells that depend on a job call `mo.stop(...)` until it 
 that reference `refresh` (a `mo.ui.refresh`, 30 s) re-check automatically while the notebook is
 open in a browser.
 
-Jobs: `data_clean`, `data_noisy`, `hard`, `e0`, `e2`, ...
+Jobs: `data_clean`, `data_noisy`, `hard`, `e0`, `e2`, `e3_train`, `e3_eval`, ...
+
+## Results flow
+
+Runs write `results/<tag>.json` and regenerate `results/summary.md` in the sandbox checkout. Copy
+them into the local repo and commit there; never edit `results/` by hand. Because the files are
+tracked, a later `git pull` in the sandbox refuses to overwrite the sandbox's own untracked copies
+of the same files: check they are identical (`cmp`), remove them, then pull. `summary.md` can always
+be regenerated from the JSON files.
 
 ## Secrets
 
