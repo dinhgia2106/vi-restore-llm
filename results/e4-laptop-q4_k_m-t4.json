@@ -1,0 +1,29 @@
+{
+  "tag": "e4-laptop-q4_k_m-t4",
+  "model": "gguf:qwen05-lora-q4_k_m.gguf",
+  "test_file": "data\\processed\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.01102,
+    "wer": 0.04303,
+    "word_acc": 0.95735,
+    "sent_acc": 0.56
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 357.54,
+    "p95_ms": 623.84,
+    "mean_ms": 365.66
+  },
+  "throughput_sent_per_s": 2.74,
+  "rss_mb": 537.9,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 4
+  },
+  "timestamp": "2026-11-22T19:59:17+00:00"
+}

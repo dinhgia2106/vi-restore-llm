@@ -59,8 +59,26 @@ laptop.
 
 - **Quantisation cost** (against f16 GGUF, same runtime): Q8_0 is essentially free; Q4_K_M costs
   0.0003 CER / 1.3 points sentence accuracy on clean and 0.0006 CER / 2.8 points on hard.
-- **Latency**: even Q4_K_M has a p95 near 490 ms on the sandbox CPU, about ten times the 50 ms
-  budget. The laptop number is still to be measured.
+- **Latency**: even Q4_K_M has a p95 near 490 ms on the sandbox CPU. On the **target laptop**
+  (table below) it is 554 ms at the best thread count — about 11× the 50 ms budget. Full-sentence
+  autoregressive generation does not fit the budget; the decoding has to change.
+
+### Target laptop (CPU)
+
+`results/e4-laptop-*.json`: Windows 11, Intel CPU with 32 logical processors (reported as
+"Intel64 Family 6 Model 183"), llama-cpp-python 0.3.36 CPU wheel (the sandbox used 0.3.37),
+batch size 1, first 200 clean test sentences for both quality and latency.
+
+| file | threads | CER | sent acc | p50 ms | p95 ms | RSS MB |
+|---|---|---|---|---|---|---|
+| Q4_K_M | 4 | 0.0110 | 0.560 | 357.54 | 623.84 | 537.9 |
+| Q4_K_M | 8 | 0.0110 | 0.560 | 315.26 | 554.44 | 538.0 |
+| Q4_K_M | 16 | 0.0110 | 0.560 | 342.40 | 586.44 | 538.3 |
+| Q4_K_M | 32 | 0.0110 | 0.560 | 416.41 | 797.51 | 538.1 |
+| Q8_0 | 8 | 0.0100 | 0.590 | 373.42 | 665.47 | 621.2 |
+
+Quality is identical across thread counts (CPU decoding is deterministic). More threads stop
+helping beyond 8 for a 0.5B model, and all 32 is the slowest.
 - **Open question — HF vs llama.cpp.** The same merged model scores better through llama.cpp
   than through PyTorch (clean2k CER 0.0105 vs 0.0121; 505 of 2 000 outputs differ, almost all in
   diacritic choices, not length). A diagnostic on 300 sentences ruled out the obvious causes:
