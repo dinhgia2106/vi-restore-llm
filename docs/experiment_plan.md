@@ -17,7 +17,7 @@ Under a 50 ms p95 single-sentence latency budget on a laptop CPU, which approach
 - Report results on a test set drawn from the same corpus, plus the hard set; the TCN was trained on different data, so also note its training corpus when comparing.
 - `data.py` keeps sentences of 3–40 words that contain at least one diacritic, de-duplicates them, and splits 98 / 1 / 1 by content hash.
 - Two variants: **clean** (pure stripping) and **noisy** (`NoiseConfig` defaults: 3 % Telex leftovers, 1 % each of dropped, doubled and swapped letters).
-- A small **hard set**: test sentences containing highly ambiguous syllables, to report separately.
+- A small **hard set**, reported separately: clean test sentences in which at least 30 % of syllables (and at least two) are ambiguous. A syllable is ambiguous when it occurs ≥ 50 times in training and its most frequent accented form covers ≤ 50 % of those occurrences (`do` → đó / độ / do / đồ). Counting syllables with "many accented forms" does not work at this corpus size: almost every syllable has several, and that rule kept 99.8 % of the test split.
 
 ## Matrix
 
