@@ -1,0 +1,230 @@
+{
+  "n": 2801,
+  "base_letter_fidelity": 0.96501,
+  "more_words": 0.00464,
+  "fewer_words": 0.00357,
+  "diacritic_errors": 3444,
+  "rewrite_errors": 82,
+  "top_diacritic_confusions": [
+    [
+      "hoá",
+      "hóa",
+      23
+    ],
+    [
+      "qua",
+      "quá",
+      20
+    ],
+    [
+      "tự",
+      "từ",
+      11
+    ],
+    [
+      "cùng",
+      "cũng",
+      11
+    ],
+    [
+      "từ",
+      "tự",
+      10
+    ],
+    [
+      "con",
+      "còn",
+      10
+    ],
+    [
+      "Thanh",
+      "Thành",
+      9
+    ],
+    [
+      "gia",
+      "giá",
+      8
+    ],
+    [
+      "cũng",
+      "cùng",
+      8
+    ],
+    [
+      "Đồng",
+      "Đông",
+      7
+    ],
+    [
+      "cho",
+      "chờ",
+      7
+    ],
+    [
+      "thi",
+      "thì",
+      7
+    ],
+    [
+      "mắt",
+      "mặt",
+      7
+    ],
+    [
+      "do",
+      "đó",
+      7
+    ],
+    [
+      "hoa",
+      "hóa",
+      7
+    ],
+    [
+      "nam",
+      "năm",
+      7
+    ],
+    [
+      "mặt",
+      "mắt",
+      7
+    ],
+    [
+      "Nam",
+      "Năm",
+      6
+    ],
+    [
+      "Tự",
+      "Từ",
+      6
+    ],
+    [
+      "Nhưng",
+      "Những",
+      6
+    ]
+  ],
+  "top_rewrites": [
+    [
+      "Chung",
+      "Chư",
+      2
+    ],
+    [
+      "nasi",
+      "nĩa",
+      2
+    ],
+    [
+      "trêi",
+      "trệo",
+      1
+    ],
+    [
+      "nhà",
+      "nã",
+      1
+    ],
+    [
+      "Ben",
+      "Benjamin",
+      1
+    ],
+    [
+      "thổ",
+      "thoại",
+      1
+    ],
+    [
+      "Haminton(Mỹ)",
+      "Hamiton(Mỹ)",
+      1
+    ],
+    [
+      "đựng",
+      "động",
+      1
+    ],
+    [
+      "CỤC",
+      "CỨU",
+      1
+    ],
+    [
+      "do",
+      "đợt",
+      1
+    ],
+    [
+      "cánh",
+      "cảng",
+      1
+    ],
+    [
+      "Phát",
+      "Phòng",
+      1
+    ],
+    [
+      "luồngUragaSuido",
+      "luồngUragaSido",
+      1
+    ],
+    [
+      "tàukhác",
+      "tākhắc",
+      1
+    ],
+    [
+      "hộ",
+      "họa",
+      1
+    ],
+    [
+      "sẵn",
+      "sử",
+      1
+    ],
+    [
+      "Hupu.",
+      "Huupu.",
+      1
+    ],
+    [
+      "sur",
+      "sưu",
+      1
+    ],
+    [
+      "cơ",
+      "cáo",
+      1
+    ],
+    [
+      "mua",
+      "mộ",
+      1
+    ]
+  ],
+  "cer_by_length": {
+    "1-10": {
+      "sentences": 660,
+      "cer": 0.03033
+    },
+    "11-20": {
+      "sentences": 1071,
+      "cer": 0.01856
+    },
+    "21-30": {
+      "sentences": 693,
+      "cer": 0.01656
+    },
+    "31-": {
+      "sentences": 377,
+      "cer": 0.01493
+    }
+  }
+}
