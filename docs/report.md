@@ -121,5 +121,5 @@ Use the character tagger for restoration while typing (4 threads, p95 16.56 ms o
 laptop), with its top-5 beam for the candidate bar (`virestore.serve --model tagger`,
 `POST /candidates`). For calling it from VIMEK's C++ without Python, `virestore.export_onnx` writes
 an ONNX graph whose labels match PyTorch; under onnxruntime it is slower than PyTorch here (p95
-26.78 ms on 4 threads, 80.98 ms on 1) but still inside the budget with 2+ threads. Keep the LLM off
+26.78 ms on 4 threads, 52.24 ms on 2, 80.98 ms on 1), so it needs 4 threads to stay inside the budget. Keep the LLM off
 the typing path.
