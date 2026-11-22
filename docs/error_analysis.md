@@ -1,4 +1,4 @@
-# Error analysis (E0, E2, E3)
+# Error analysis (E0, E2, E3, character tagger)
 
 Produced by `python -m virestore.analysis results/*.predictions.jsonl`; the per-run numbers are in
 `results/*.analysis.json`. Test sets: clean and noisy test splits (19 956 sentences each), hard set
@@ -15,6 +15,15 @@ outputs with the reference word count: a wrong diacritic keeps the base letters,
 | e3-qwen05-lora-clean | 0.9682 | 0.0024 / 0.0053 | 19 960 | 527 |
 | e3-qwen05-lora-hard | 0.9650 | 0.0046 / 0.0036 | 3 444 | 82 |
 | e3-qwen05-lora-noisy | 0.6293 | 0.0172 / 0.0236 | 25 146 | 21 095 |
+| t2-tagger-clean | 1.0000 | 0.0000 / 0.0000 | 14 336 | 0 |
+| t2-tagger-hard | 1.0000 | 0.0000 / 0.0000 | 2 438 | 0 |
+
+The character tagger (`virestore.tagger`, added after E3) labels the input's own characters, so it
+cannot rewrite or drop words; it also makes fewer diacritic errors than the LoRA model on the same
+clean test set (14 336 vs 19 960). Its CER by length shows the same pattern as the other systems:
+1–10-word sentences 0.0122, 31+ words 0.0072. Its most frequent confusions are the same genuinely
+ambiguous pairs (`nhưng ↔ những`, `cùng ↔ cũng`, `con ↔ còn`, `cô → có`) plus the orthographic
+`hoá → hóa` (82).
 
 ## Findings
 

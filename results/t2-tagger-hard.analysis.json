@@ -1,0 +1,129 @@
+{
+  "n": 2801,
+  "base_letter_fidelity": 1.0,
+  "more_words": 0.0,
+  "fewer_words": 0.0,
+  "diacritic_errors": 2438,
+  "rewrite_errors": 0,
+  "top_diacritic_confusions": [
+    [
+      "hoá",
+      "hóa",
+      23
+    ],
+    [
+      "tự",
+      "từ",
+      11
+    ],
+    [
+      "vị",
+      "vì",
+      11
+    ],
+    [
+      "từ",
+      "tự",
+      10
+    ],
+    [
+      "qua",
+      "quá",
+      9
+    ],
+    [
+      "mùa",
+      "mưa",
+      8
+    ],
+    [
+      "cùng",
+      "cũng",
+      8
+    ],
+    [
+      "mắt",
+      "mặt",
+      8
+    ],
+    [
+      "do",
+      "đó",
+      8
+    ],
+    [
+      "nhưng",
+      "những",
+      8
+    ],
+    [
+      "tính",
+      "tình",
+      7
+    ],
+    [
+      "hương",
+      "hướng",
+      7
+    ],
+    [
+      "dùng",
+      "đùng",
+      7
+    ],
+    [
+      "những",
+      "nhưng",
+      6
+    ],
+    [
+      "kẽm",
+      "kem",
+      6
+    ],
+    [
+      "độ",
+      "đồ",
+      6
+    ],
+    [
+      "con",
+      "còn",
+      6
+    ],
+    [
+      "mọi",
+      "mỗi",
+      6
+    ],
+    [
+      "đồng",
+      "dồng",
+      5
+    ],
+    [
+      "chung",
+      "chứng",
+      5
+    ]
+  ],
+  "top_rewrites": [],
+  "cer_by_length": {
+    "1-10": {
+      "sentences": 660,
+      "cer": 0.01594
+    },
+    "11-20": {
+      "sentences": 1071,
+      "cer": 0.0121
+    },
+    "21-30": {
+      "sentences": 693,
+      "cer": 0.01052
+    },
+    "31-": {
+      "sentences": 377,
+      "cer": 0.01014
+    }
+  }
+}
