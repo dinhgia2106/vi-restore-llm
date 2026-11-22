@@ -30,6 +30,8 @@ Filled in by `python -m virestore.eval`; see [`results/summary.md`](results/summ
 
 ## Quick start
 
+The GPU experiments run in a marimo notebook on molab: [notebooks/experiments.py](notebooks/experiments.py), guide in [docs/molab.md](docs/molab.md). Locally:
+
 ```bash
 uv venv && uv pip install -e ".[dev]"          # core + tests
 uv pip install -e ".[train,serve,gguf]"         # fine-tuning, serving, llama.cpp
@@ -58,7 +60,7 @@ python -m virestore.serve --model gguf --gguf models/qwen05-lora-q4_k_m.gguf   #
 
 ## Data
 
-Sentences come from **[WanJuan-Vietnamese](https://opendatalab.com/OpenDataLab/WanJuan-Vietnamese)**, the Vietnamese subset of OpenDataLab's WanJuan3.0 web corpus ([Yu et al., 2025](https://arxiv.org/abs/2501.14506), CC BY 4.0). The corpus itself is not redistributed; [data/README.md](data/README.md) lists the filtering and changes applied and the citation.
+Sentences come from **[WanJuan-Vietnamese](https://huggingface.co/datasets/opendatalab/WanJuan-Vietnamese)**, the Vietnamese subset of OpenDataLab's WanJuan3.0 web corpus ([Yu et al., 2025](https://arxiv.org/abs/2501.14506), CC BY 4.0). The corpus itself is not redistributed; [data/README.md](data/README.md) lists the shards used (one per domain), the filtering and changes applied, and the citation.
 
 ## Tasks
 
@@ -67,7 +69,7 @@ Sentences come from **[WanJuan-Vietnamese](https://opendatalab.com/OpenDataLab/W
 | **clean** | diacritics stripped: `Hom nay troi dep qua` | `Hôm nay trời đẹp quá` |
 | **noisy** | plus leftover Telex and typos: `Buoi sang o Da nawngx` | `Buổi sáng ở Đà Nẵng` |
 
-Splits are assigned by a hash of the sentence, so the same sentence can never appear in both train and test.
+Splits are assigned by a hash of the sentence, so the same sentence can never appear in both train and test. A third test set, **hard**, keeps clean test sentences dense in ambiguous syllables (see [docs/experiment_plan.md](docs/experiment_plan.md)).
 
 ## Metrics
 
@@ -83,7 +85,7 @@ src/virestore/
   text.py         normalisation, diacritic stripping, sentence splitting
   noise.py        Telex / typo noise generator
   data.py         corpus → train/dev/test JSONL
-  hardset.py      test subset of sentences with highly ambiguous syllables
+  hardset.py      test subset of sentences dense in ambiguous syllables
   metrics.py      CER, WER, word and sentence accuracy
   prompts.py      one prompt format for training and inference
   models/         identity, lexicon, TCN adapter, Hugging Face LLM, GGUF (llama.cpp)
@@ -92,7 +94,8 @@ src/virestore/
   merge.py        merge adapter → full model for conversion
   serve.py        FastAPI server for VIMEK
 configs/          experiment configs
-docs/             experiment plan, quantisation guide
+notebooks/        marimo notebook that runs the experiments on molab
+docs/             experiment plan, quantisation guide, molab guide
 data/sample/      tiny hand-written corpus for tests
 tests/            unit tests (pytest)
 ```
