@@ -31,3 +31,7 @@
 | e4-laptop-q8_0-t8 | gguf:qwen05-lora-q8_0.gguf | processed/test | 200 | 0.0100 | 0.0387 | 0.9626 | 0.5900 | – / – / – | 373.42 | 665.47 | 621.2 | cpu |
 | e4-ref-hf-clean2k | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora | processed/test | 2000 | 0.0121 | 0.0472 | 0.9532 | 0.5440 | – / – / – | – | – | 3304.1 | cuda |
 | e4-ref-hf-hard1k | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora | processed/test_hard | 1000 | 0.0180 | 0.0697 | 0.9315 | 0.4830 | – / – / – | – | – | 3286.2 | cuda |
+| lat-laptop-q4_k_m-t8-lexdraft16 | gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft | processed/test | 200 | 0.0106 | 0.0413 | 0.9590 | 0.5600 | – / – / – | 392.63 | 925.59 | 1246.6 | cpu |
+| lat-laptop-q4_k_m-t8-lexdraft4 | gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft | processed/test | 200 | 0.0109 | 0.0423 | 0.9581 | 0.5600 | – / – / – | 358.16 | 648.25 | 1246.7 | cpu |
+| lat-laptop-q4_k_m-t8-lexdraft8 | gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft | processed/test | 200 | 0.0106 | 0.0413 | 0.9590 | 0.5650 | – / – / – | 380.8 | 775.54 | 1250.0 | cpu |
+| lat-laptop-q4_k_m-t8-nodraft | gguf:qwen05-lora-q4_k_m.gguf | processed/test | 200 | 0.0110 | 0.0430 | 0.9574 | 0.5600 | – / – / – | – | – | 536.1 | cpu |

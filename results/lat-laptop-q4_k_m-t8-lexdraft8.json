@@ -1,0 +1,35 @@
+{
+  "tag": "lat-laptop-q4_k_m-t8-lexdraft8",
+  "model": "gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft",
+  "test_file": "data\\processed\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.01064,
+    "wer": 0.04135,
+    "word_acc": 0.95905,
+    "sent_acc": 0.565
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 380.8,
+    "p95_ms": 775.54,
+    "mean_ms": 411.91
+  },
+  "throughput_sent_per_s": 2.77,
+  "rss_mb": 1250.0,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 8
+  },
+  "decode_stats": {
+    "generated_tokens": 5425,
+    "draft_rounds": 1146,
+    "draft_tokens_proposed": 8256,
+    "draft_max_tokens": 8
+  },
+  "timestamp": "2026-11-22T20:32:07+00:00"
+}

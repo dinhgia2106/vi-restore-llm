@@ -112,9 +112,11 @@ src/virestore/
   noise.py        Telex / typo noise generator
   data.py         corpus → train/dev/test JSONL
   hardset.py      test subset of sentences dense in ambiguous syllables
-  metrics.py      CER, WER, word and sentence accuracy
+  metrics.py      CER, WER, word and sentence accuracy, EM@k
   prompts.py      one prompt format for training and inference
-  models/         identity, lexicon, TCN adapter, Hugging Face LLM, GGUF (llama.cpp)
+  tagger.py       character-level diacritic tagger (one encoder pass per sentence) + training
+  train_tcn.py    retrain the acausal TCN baseline on this project's data
+  models/         identity, lexicon, TCN, tagger, Hugging Face LLM, GGUF (llama.cpp, optional lexicon draft)
   eval.py         quality + latency + memory harness → results/
   analysis.py     error analysis of saved predictions (fidelity, confusions, CER by length)
   latency_profile.py  where a GGUF restoration spends its time (prompt, per-token, n-token forward)
@@ -123,7 +125,7 @@ src/virestore/
   serve.py        FastAPI server for VIMEK
 configs/          experiment configs
 notebooks/        marimo notebook that runs the experiments on molab
-docs/             experiment plan, quantisation guide, molab guide
+docs/             experiment plan, quantisation, latency, error analysis, molab guide
 data/sample/      tiny hand-written corpus for tests
 tests/            unit tests (pytest)
 ```
