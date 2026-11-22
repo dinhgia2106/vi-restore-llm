@@ -1,0 +1,24 @@
+{
+  "tag": "t6-tagger-1m-e3-hard",
+  "model": "tagger:tagger-1m-e3",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test_hard.jsonl",
+  "quality": {
+    "n": 2801,
+    "cer": 0.01526,
+    "wer": 0.06313,
+    "word_acc": 0.93687,
+    "sent_acc": 0.45377
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1589.61,
+  "rss_mb": 2250.0,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-22T23:02:00+00:00"
+}

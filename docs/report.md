@@ -62,11 +62,13 @@ Same tagger, trained on the first N clean pairs (`results/t6-tagger-*.json`, ful
 | 50k × 3 | 0.0895 | 0.0087 | 0.1027 | 0.0039 |
 | 200k × 1 (the LoRA run's budget) | 0.0698 | 0.0196 | 0.0840 | 0.0118 |
 | 200k × 3 | 0.0311 | 0.1544 | 0.0405 | 0.1157 |
+| 1M × 3 | 0.0111 | 0.5012 | 0.0153 | 0.4538 |
 | 1.96M × 3 | 0.0080 | 0.6022 | 0.0114 | 0.5587 |
 
 At the LoRA run's data budget (200k pairs, one epoch) the tagger is worse than the lexicon, while
 the LoRA model reaches CER 0.0129: the pretrained LLM is far more sample-efficient. The tagger
-overtakes it only with an order of magnitude more pairs.
+draws level at about 1M pairs (lower CER, slightly lower sentence accuracy than the LoRA model's
+0.0129 / 0.5219) and passes it with 1.96M.
 
 ### Candidate bar (EM@k, full test sets)
 
@@ -120,7 +122,7 @@ Files: `results/e4-laptop-*.json`, `results/lat-laptop-*.json`, `results/t2-lapt
    for the clean-trained 0.5B model, while staying close on clean input (0.0121 / 0.5675).
 6. **LLMs are far more sample-efficient; the tagger wins on data, and data is free here.** At the
    LoRA run's budget (200k pairs, one epoch) the tagger is worse than the lexicon (CER 0.0698); it
-   needs about ten times more pairs to overtake the LLM. Training pairs for this task cost nothing
+   draws level with the LLM at about 1M pairs (5×) and passes it at 1.96M (about 10×). Training pairs for this task cost nothing
    — any accented Vietnamese text yields them by stripping marks — so the data requirement is not
    a practical obstacle.
 

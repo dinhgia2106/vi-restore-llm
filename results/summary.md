@@ -48,6 +48,8 @@
 | t2-tagger-clean | tagger:tagger | processed/test | 19956 | 0.0080 | 0.0333 | 0.9667 | 0.6022 | 0.6022 / 0.7324 / 0.7719 | – | – | 2293.6 | cuda |
 | t2-tagger-hard | tagger:tagger | processed/test_hard | 2801 | 0.0114 | 0.0469 | 0.9531 | 0.5587 | 0.5587 / 0.6944 / 0.7283 | – | – | 2253.0 | cuda |
 | t2-tagger-noisy | tagger:tagger | processed_noisy/test | 19956 | 0.0358 | 0.0980 | 0.9020 | 0.2097 | 0.2097 / 0.2527 / 0.2644 | – | – | 2300.2 | cuda |
+| t6-tagger-1m-e3-clean | tagger:tagger-1m-e3 | processed/test | 19956 | 0.0111 | 0.0465 | 0.9535 | 0.5012 | – / – / – | – | – | 2268.5 | cuda |
+| t6-tagger-1m-e3-hard | tagger:tagger-1m-e3 | processed/test_hard | 2801 | 0.0153 | 0.0631 | 0.9369 | 0.4538 | – / – / – | – | – | 2250.0 | cuda |
 | t6-tagger-200k-e1-clean | tagger:tagger-200k-e1 | processed/test | 19956 | 0.0698 | 0.2978 | 0.7022 | 0.0196 | – / – / – | – | – | 2267.2 | cuda |
 | t6-tagger-200k-e1-hard | tagger:tagger-200k-e1 | processed/test_hard | 2801 | 0.0840 | 0.3532 | 0.6468 | 0.0118 | – / – / – | – | – | 2248.9 | cuda |
 | t6-tagger-200k-e3-clean | tagger:tagger-200k-e3 | processed/test | 19956 | 0.0311 | 0.1325 | 0.8675 | 0.1544 | – / – / – | – | – | 2268.2 | cuda |
