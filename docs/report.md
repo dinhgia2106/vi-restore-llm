@@ -32,6 +32,7 @@ quantising the LLM cost?
 | Qwen2.5-0.5B zero-shot | instruct model with a restoration prompt | – |
 | Qwen2.5-0.5B + LoRA (E3) | LoRA r = 16 on all projections, loss on the answer | 200k clean pairs, 1 epoch |
 | … GGUF f16 / Q8_0 / Q4_K_M (E4) | E3 merged and quantised with llama.cpp | – |
+| Qwen2.5-1.5B + LoRA on noisy pairs (E5) | LoRA r = 32, bf16 base | 200k noisy pairs, 1 epoch |
 | character tagger (T2) | 14.4M-parameter Transformer encoder over characters; labels every vowel and `d` with one of 30 diacritic labels in one pass | 1.96M clean pairs, 3 epochs |
 
 ## Results
@@ -46,10 +47,26 @@ From `results/summary.md` (E0, E2, E3, T2 runs):
 | lexicon | 0.0342 | 0.1576 | 0.0459 | 0.1317 | 0.0630 | 0.0724 |
 | Qwen2.5-0.5B zero-shot (1k clean) | 0.5687 | 0.0000 | – | – | – | – |
 | Qwen2.5-0.5B + LoRA | 0.0129 | 0.5219 | 0.0181 | 0.4681 | 0.0428 | 0.1919 |
-| character tagger | **0.0080** | **0.6022** | **0.0114** | **0.5587** | **0.0358** | **0.2097** |
+| Qwen2.5-1.5B + LoRA, noisy training | 0.0121 | 0.5675 | 0.0173 | 0.5223 | **0.0157** | **0.5059** |
+| character tagger | **0.0080** | **0.6022** | **0.0114** | **0.5587** | 0.0358 | 0.2097 |
 
-The lexicon on the noisy set is trained on noisy pairs; the LoRA model and the tagger were trained
-on clean pairs only.
+The lexicon on the noisy set is trained on noisy pairs, and so is the 1.5B model; the 0.5B LoRA
+model and the tagger were trained on clean pairs only.
+
+### Data efficiency (tagger trained on less data)
+
+Same tagger, trained on the first N clean pairs (`results/t6-tagger-*.json`, full test sets):
+
+| training pairs × epochs | clean CER | clean sent acc | hard CER | hard sent acc |
+|---|---|---|---|---|
+| 50k × 3 | 0.0895 | 0.0087 | 0.1027 | 0.0039 |
+| 200k × 1 (the LoRA run's budget) | 0.0698 | 0.0196 | 0.0840 | 0.0118 |
+| 200k × 3 | 0.0311 | 0.1544 | 0.0405 | 0.1157 |
+| 1.96M × 3 | 0.0080 | 0.6022 | 0.0114 | 0.5587 |
+
+At the LoRA run's data budget (200k pairs, one epoch) the tagger is worse than the lexicon, while
+the LoRA model reaches CER 0.0129: the pretrained LLM is far more sample-efficient. The tagger
+overtakes it only with an order of magnitude more pairs.
 
 ### Candidate bar (EM@k, full test sets)
 
@@ -97,16 +114,23 @@ Files: `results/e4-laptop-*.json`, `results/lat-laptop-*.json`, `results/t2-lapt
    tagger reaches clean CER 0.0080 / sentence accuracy 0.6022 and p95 16.56 ms on 4 CPU threads
    (44.58 ms on one), about 33× faster than the quantised LLM. It never rewrites letters, by
    construction, whereas the LLM rewrites about 3 % of sentences (`docs/error_analysis.md`).
-5. **The LLM keeps a niche: typo repair.** On clean and hard input its beam gives about the same
-   EM@5 as the tagger. On noisy input, which neither was trained for, its CER is worse (0.0428 vs
-   0.0358) but its EM@5 is higher (0.2922 vs 0.2644) — it can change letters, the tagger by design
-   cannot. Training it on noisy pairs (E5) tests that niche directly.
+5. **The LLM keeps a niche: typo repair.** A tagger can only add marks, so it cannot fix leftover
+   Telex or typos (noisy CER 0.0358). Qwen2.5-1.5B trained on noisy pairs (E5) repairs them: noisy
+   CER 0.0157 / sentence accuracy 0.5059, against 0.0358 / 0.2097 for the tagger and 0.0428 / 0.1919
+   for the clean-trained 0.5B model, while staying close on clean input (0.0121 / 0.5675).
+6. **LLMs are far more sample-efficient; the tagger wins on data, and data is free here.** At the
+   LoRA run's budget (200k pairs, one epoch) the tagger is worse than the lexicon (CER 0.0698); it
+   needs about ten times more pairs to overtake the LLM. Training pairs for this task cost nothing
+   — any accented Vietnamese text yields them by stripping marks — so the data requirement is not
+   a practical obstacle.
 
 ## Caveats
 
-- **Data confound.** The tagger saw ten times the training pairs of the LoRA run (1.96M × 3 epochs
-  vs 200k × 1). The scaling runs below train the tagger on 200k pairs to separate data from
-  architecture.
+- **Data confound.** The headline tagger saw ten times the training pairs of the LoRA runs (1.96M ×
+  3 epochs vs 200k × 1); the data-efficiency table shows what equal data gives. The LLMs were not
+  trained on more data, so whether they too keep improving with 1.96M pairs is open.
+- E5 was trained with a bf16 base instead of the planned 4-bit (QLoRA) base, and was not run on the
+  laptop.
 - The latency runs use the first 200 clean test sentences; quality on those 200 differs slightly
   from the full test set.
 - HF/PyTorch and llama.cpp give different outputs for the same merged model (clean2k CER 0.0121 vs
@@ -122,4 +146,5 @@ laptop), with its top-5 beam for the candidate bar (`virestore.serve --model tag
 `POST /candidates`). For calling it from VIMEK's C++ without Python, `virestore.export_onnx` writes
 an ONNX graph whose labels match PyTorch; under onnxruntime it is slower than PyTorch here (p95
 26.78 ms on 4 threads, 52.24 ms on 2, 80.98 ms on 1), so it needs 4 threads to stay inside the budget. Keep the LLM off
-the typing path.
+the typing path; if typo repair is wanted, the noisy-trained 1.5B model can rework a sentence after
+the user pauses, outside the per-keystroke budget.
