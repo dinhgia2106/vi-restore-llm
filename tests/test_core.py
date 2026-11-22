@@ -98,3 +98,20 @@ def test_iter_documents_interleaves_shards(tmp_path):
     (tmp_path / "b.txt").write_text("b1\n", encoding="utf-8")
     docs = [d.strip() for d in iter_documents(tmp_path)]
     assert docs == ["a1", "b1", "a2", "a3"]
+
+
+def test_analysis_separates_diacritic_errors_from_rewrites():
+    from virestore.analysis import analyse
+
+    rows = [
+        {"input": "hom nay troi dep", "pred": "hôm nay trời đẹp", "target": "hôm nay trời đẹp"},
+        {"input": "ma oi", "pred": "mà ơi", "target": "má ơi"},
+        {"input": "toi di hoc", "pred": "tôi đi làm", "target": "tôi đi học"},
+        {"input": "chao ban", "pred": "xin chào bạn", "target": "chào bạn"},
+    ]
+    a = analyse(rows)
+    assert a["n"] == 4
+    assert a["base_letter_fidelity"] == 0.5
+    assert a["more_words"] == 0.25
+    assert a["top_diacritic_confusions"] == [["má", "mà", 1]]
+    assert a["top_rewrites"] == [["học", "làm", 1]]

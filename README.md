@@ -94,6 +94,7 @@ src/virestore/
   prompts.py      one prompt format for training and inference
   models/         identity, lexicon, TCN adapter, Hugging Face LLM, GGUF (llama.cpp)
   eval.py         quality + latency + memory harness → results/
+  analysis.py     error analysis of saved predictions (fidelity, confusions, CER by length)
   train_lora.py   LoRA / QLoRA SFT (loss on the answer only)
   merge.py        merge adapter → full model for conversion
   serve.py        FastAPI server for VIMEK
