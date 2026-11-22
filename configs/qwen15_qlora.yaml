@@ -1,4 +1,4 @@
-# Experiment E3: QLoRA on a ~1.5B instruct model, noisy input (Telex leftovers + typos).
+# Experiment E5: QLoRA on a ~1.5B instruct model, noisy input (Telex leftovers + typos).
 model: Qwen/Qwen2.5-1.5B-Instruct
 output_dir: runs/qwen15-qlora-noisy
 seed: 13
