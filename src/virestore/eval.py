@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import platform
 import statistics
 import time
@@ -32,6 +33,27 @@ def _rss_mb() -> float | None:
         return psutil.Process().memory_info().rss / 2**20
     except ImportError:
         return None
+
+
+def _cpu_model() -> str:
+    try:
+        for line in Path("/proc/cpuinfo").read_text().splitlines():
+            if line.startswith("model name"):
+                return line.split(":", 1)[1].strip()
+    except OSError:
+        pass
+    return platform.processor()
+
+
+def machine_info(restorer) -> dict:
+    """Latency is only comparable on the same machine, so record where it was measured."""
+    return {
+        "platform": platform.platform(),
+        "python": platform.python_version(),
+        "cpu": _cpu_model(),
+        "cpu_count": os.cpu_count(),
+        "device": str(getattr(restorer, "device", "cpu")),
+    }
 
 
 def measure_latency(restorer, inputs: list[str], n: int) -> dict:
@@ -59,13 +81,15 @@ def write_summary(results_dir: Path) -> Path:
     for f in sorted(results_dir.glob("*.json")):
         r = json.loads(f.read_text(encoding="utf-8"))
         q, lat = r["quality"], r.get("latency", {})
+        test = Path(r["test_file"])
         rows.append(
-            f"| {r['tag']} | {r['model']} | {q['n']} | {q['cer']:.4f} | {q['wer']:.4f} | {q['word_acc']:.4f} | "
-            f"{q['sent_acc']:.4f} | {lat.get('p50_ms', '–')} | {lat.get('p95_ms', '–')} | {r.get('rss_mb') or '–'} |"
+            f"| {r['tag']} | {r['model']} | {test.parent.name}/{test.stem} | {q['n']} | {q['cer']:.4f} | {q['wer']:.4f} | {q['word_acc']:.4f} | "
+            f"{q['sent_acc']:.4f} | {lat.get('p50_ms', '–')} | {lat.get('p95_ms', '–')} | {r.get('rss_mb') or '–'} | "
+            f"{r['machine'].get('device', '–')} |"
         )
     header = (
-        "| run | model | n | CER ↓ | WER ↓ | word acc ↑ | sentence acc ↑ | p50 ms | p95 ms | RSS MB |\n"
-        "|---|---|---|---|---|---|---|---|---|---|"
+        "| run | model | test set | n | CER ↓ | WER ↓ | word acc ↑ | sentence acc ↑ | p50 ms | p95 ms | RSS MB | device |\n"
+        "|---|---|---|---|---|---|---|---|---|---|---|---|"
     )
     out = results_dir / "summary.md"
     out.write_text("# Results\n\n" + header + "\n" + "\n".join(rows) + "\n", encoding="utf-8")
@@ -120,7 +144,7 @@ def main() -> None:
         "latency": latency,
         "throughput_sent_per_s": round(len(inputs) / wall, 2) if wall else None,
         "rss_mb": round(_rss_mb(), 1) if _rss_mb() else None,
-        "machine": {"platform": platform.platform(), "python": platform.python_version(), "processor": platform.processor()},
+        "machine": machine_info(restorer),
         "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
     args.results.mkdir(parents=True, exist_ok=True)
