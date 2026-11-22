@@ -35,6 +35,9 @@
 | lat-laptop-q4_k_m-t8-lexdraft4 | gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft | processed/test | 200 | 0.0109 | 0.0423 | 0.9581 | 0.5600 | – / – / – | 358.16 | 648.25 | 1246.7 | cpu |
 | lat-laptop-q4_k_m-t8-lexdraft8 | gguf:qwen05-lora-q4_k_m.gguf+lexicon-draft | processed/test | 200 | 0.0106 | 0.0413 | 0.9590 | 0.5650 | – / – / – | 380.8 | 775.54 | 1250.0 | cpu |
 | lat-laptop-q4_k_m-t8-nodraft | gguf:qwen05-lora-q4_k_m.gguf | processed/test | 200 | 0.0110 | 0.0430 | 0.9574 | 0.5600 | – / – / – | – | – | 536.1 | cpu |
+| t2-laptop-tagger-onnx-t1 | tagger-onnx:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 37.68 | 80.98 | 315.2 | cpu |
+| t2-laptop-tagger-onnx-t2 | tagger-onnx:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 24.27 | 52.24 | 319.1 | cpu |
+| t2-laptop-tagger-onnx-t4 | tagger-onnx:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 16.7 | 26.78 | 318.3 | cpu |
 | t2-laptop-tagger-t1 | tagger:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 24.56 | 44.58 | 286.7 | cpu |
 | t2-laptop-tagger-t2 | tagger:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 14.38 | 25.16 | 288.7 | cpu |
 | t2-laptop-tagger-t4 | tagger:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 8.98 | 16.56 | 290.2 | cpu |

@@ -103,7 +103,7 @@ def write_summary(results_dir: Path) -> Path:
 def main() -> None:
     utf8_stdio()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--model", required=True, choices=["identity", "lexicon", "tcn", "hf", "gguf", "tagger"])
+    ap.add_argument("--model", required=True, choices=["identity", "lexicon", "tcn", "hf", "gguf", "tagger", "tagger-onnx"])
     ap.add_argument("--test", type=Path, required=True)
     ap.add_argument("--train", type=Path, help="training JSONL (lexicon baseline)")
     ap.add_argument("--hf-model", help="Hugging Face model id or path")

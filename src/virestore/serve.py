@@ -61,7 +61,7 @@ def main() -> None:
     from . import models
 
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--model", required=True, choices=["lexicon", "tcn", "hf", "gguf", "tagger"])
+    ap.add_argument("--model", required=True, choices=["lexicon", "tcn", "hf", "gguf", "tagger", "tagger-onnx"])
     ap.add_argument("--gguf")
     ap.add_argument("--hf-model")
     ap.add_argument("--adapter")

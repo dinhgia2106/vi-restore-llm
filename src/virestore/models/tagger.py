@@ -64,6 +64,9 @@ class TaggerRestorer:
         return out
 
     def restore_nbest(self, inputs: list[str], k: int, per_char: int = 3) -> list[list[str]]:
+        return self._nbest(inputs, k, per_char)
+
+    def _nbest(self, inputs: list[str], k: int, per_char: int) -> list[list[str]]:
         """Top-k sentences by beam search over the per-character label distributions."""
         from ..tagger import TAGGABLE, apply_label
 
@@ -84,3 +87,44 @@ class TaggerRestorer:
                 tail = s[n:]
                 results.append(list(dict.fromkeys(text + tail for _, text in hyps))[:k])
         return results
+
+
+class OnnxTaggerRestorer(TaggerRestorer):
+    """The same tagger exported with virestore.export_onnx, run by onnxruntime (no PyTorch model)."""
+
+    def __init__(self, path: str, threads: int | None = None, batch_size: int = 64):
+        import json
+
+        import onnxruntime as ort
+
+        from ..tagger import N_LABELS, Vocab, valid_labels
+
+        p = Path(path)
+        self.cfg = json.loads((p / "config.json").read_text(encoding="utf-8"))
+        self.vocab = Vocab(self.cfg["vocab"])
+        self.max_len = self.cfg["model"]["max_len"]
+        self.batch_size = batch_size
+        opts = ort.SessionOptions()
+        if threads:
+            opts.intra_op_num_threads = threads
+            opts.inter_op_num_threads = 1
+        self.sess = ort.InferenceSession(str(p / "tagger.onnx"), opts, providers=["CPUExecutionProvider"])
+        self.device, self.n_threads = "cpu", threads
+        self.name = f"tagger-onnx:{p.name}"
+        self._mask_cache = {}
+        self._n_labels, self._valid = N_LABELS, valid_labels
+
+    def _log_probs(self, batch: list[str]):
+        import numpy as np
+        import torch
+
+        n = min(max(len(s) for s in batch), self.max_len)
+        ids = np.zeros((len(batch), n), dtype=np.int64)
+        mask = torch.zeros((len(batch), n, self._n_labels))
+        for k, s in enumerate(batch):
+            s = s[:n]
+            ids[k, : len(s)] = self.vocab.encode(s)
+            if s:
+                mask[k, : len(s)] = torch.stack([self._mask(c) for c in s])
+        logits = torch.from_numpy(self.sess.run(["logits"], {"ids": ids})[0]).float()
+        return torch.log_softmax(logits + mask, dim=-1), n
