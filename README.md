@@ -27,6 +27,7 @@ Filled in by `python -m virestore.eval`; every run, including the noisy and hard
 | Qwen2.5-0.5B + LoRA² | 0.5B | 0.0129 | 0.0493 | 0.5219 | | |
 | Qwen2.5-0.5B + LoRA, GGUF Q4_K_M³ | 0.5B | 0.0108 | 0.0423 | 0.5780 | 554.44 ms⁴ | 538 MB⁴ |
 | Qwen2.5-1.5B + QLoRA (noisy input) | 1.5B | | | | | |
+| **Character tagger** (`virestore.tagger`)⁵ | 14.4M | **0.0080** | **0.0333** | **0.6022** | **16.56 ms**⁵ | 290 MB⁵ |
 
 ¹ First 1 000 sentences of the clean test split. Without fine-tuning the model often refuses, answers in English, rewrites the sentence or returns the input unchanged, so it scores below the identity floor.
 
@@ -36,16 +37,21 @@ Filled in by `python -m virestore.eval`; every run, including the noisy and hard
 
 ⁴ Target laptop (Intel, 32 logical CPUs, Windows 11), llama-cpp-python 0.3.36 on CPU, 8 threads, batch size 1, 200 clean sentences (`results/e4-laptop-q4_k_m-t8.json`); RAM is the process RSS. That is **about 11× the 50 ms budget**. 8 threads was the fastest setting tried (p95: 4 threads 623.84 ms, 16 threads 586.44 ms, 32 threads 797.51 ms); Q8_0 at 8 threads: 665.47 ms.
 
+⁵ `configs/tagger.yaml`: a Transformer encoder over characters that labels every vowel (and `d`) with one of 30 diacritic labels in a single pass, so it cannot rewrite letters. Trained on all 1.96M clean training pairs for 3 epochs — **ten times the data of the LoRA run**, so this row does not isolate the architecture. Hard set: CER 0.0114 / sentence acc 0.5587; noisy input (not trained on): 0.0358 / 0.2097. Latency: target laptop, PyTorch 2.15 CPU, 4 threads, batch size 1, 200 clean sentences (`results/t2-laptop-tagger-t4.json`; on those sentences CER 0.0100 / sentence acc 0.550 against 0.0110 / 0.560 for Q4_K_M). 1 thread: 44.58 ms, 2 threads: 25.16 ms, 8 threads: 16.28 ms.
+
 **Candidate bar (EM@k).** Share of sentences whose reference is among the top k candidates (`eval --nbest 5`, runs tagged `-nbest`; full test sets):
 
 | Model | test set | EM@1 | EM@3 | EM@5 |
 |---|---|---|---|---|
 | Lexicon | clean | 0.1824 | 0.2970 | 0.3513 |
 | Qwen2.5-0.5B + LoRA | clean | 0.5981 | 0.7397 | 0.7757 |
+| Character tagger | clean | 0.6022 | 0.7324 | 0.7719 |
 | Lexicon | hard | 0.1653 | 0.2699 | 0.3210 |
 | Qwen2.5-0.5B + LoRA | hard | 0.5491 | 0.6951 | 0.7351 |
+| Character tagger | hard | 0.5587 | 0.6944 | 0.7283 |
 | Lexicon | noisy | 0.0805 | 0.1272 | 0.1481 |
 | Qwen2.5-0.5B + LoRA | noisy | 0.2173 | 0.2753 | 0.2922 |
+| Character tagger | noisy | 0.2097 | 0.2527 | 0.2644 |
 
 Beam search alone lifts the LoRA model's top-1 above its greedy output (clean 0.5981 vs 0.5209 in the same run). Greedy outputs on the GPU are not bit-for-bit reproducible: the `-nbest` re-run of the clean set scored sentence accuracy 0.5209 against 0.5219 in the original E3 run; the table above keeps the original.
 

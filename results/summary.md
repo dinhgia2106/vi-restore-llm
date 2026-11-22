@@ -39,3 +39,6 @@
 | t2-laptop-tagger-t2 | tagger:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 14.38 | 25.16 | 288.7 | cpu |
 | t2-laptop-tagger-t4 | tagger:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 8.98 | 16.56 | 290.2 | cpu |
 | t2-laptop-tagger-t8 | tagger:tagger | processed/test | 200 | 0.0100 | 0.0399 | 0.9601 | 0.5500 | – / – / – | 9.5 | 16.28 | 291.5 | cpu |
+| t2-tagger-clean | tagger:tagger | processed/test | 19956 | 0.0080 | 0.0333 | 0.9667 | 0.6022 | 0.6022 / 0.7324 / 0.7719 | – | – | 2293.6 | cuda |
+| t2-tagger-hard | tagger:tagger | processed/test_hard | 2801 | 0.0114 | 0.0469 | 0.9531 | 0.5587 | 0.5587 / 0.6944 / 0.7283 | – | – | 2253.0 | cuda |
+| t2-tagger-noisy | tagger:tagger | processed_noisy/test | 19956 | 0.0358 | 0.0980 | 0.9020 | 0.2097 | 0.2097 / 0.2527 / 0.2644 | – | – | 2300.2 | cuda |

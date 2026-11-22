@@ -417,5 +417,143 @@ def emk(CLEAN, E3_ADAPTER, HARD, NOISY, REPO, job_state, launch, mo, refresh):
     return
 
 
+@app.cell(hide_code=True)
+def tagger_md(mo):
+    mo.md(r"""
+    ## 7. Character-level tagger (non-autoregressive)
+
+    The LLM cannot meet the 50 ms CPU budget: on the target laptop the prompt alone costs about
+    80 ms and every generated token about 10 ms (`results/profile-laptop-q4_k_m-t8.profile.json`).
+    `virestore.tagger` instead labels every vowel of the input in one encoder pass
+    (`configs/tagger.yaml`). Trained on the clean training split; evaluated like every other model.
+    """)
+    return
+
+
+@app.cell
+def tagger(CLEAN, HARD, NOISY, Path, REPO, job_state, launch, mo, refresh):
+    refresh
+    mo.stop(job_state("hard") != "done", mo.md("tagger waits for the data jobs"))
+    import yaml as _yaml
+
+    TAGGER_DIR = REPO / "runs/tagger"
+    _cfg = _yaml.safe_load((REPO / "configs/tagger.yaml").read_text())
+    _cfg["output_dir"] = "/marimo/smoke/tagger"
+    _cfg["data"].update(train_limit=20000, dev_limit=500)
+    _cfg["train"].update(epochs=1, eval_steps=40, log_steps=20)
+    Path("/marimo/smoke").mkdir(exist_ok=True)
+    Path("/marimo/smoke/tagger.yaml").write_text(_yaml.safe_dump(_cfg))
+    TAGGER_JOBS = {
+        "tagger_train": launch(
+            "tagger_train",
+            ["virestore.tagger", "--config", "/marimo/smoke/tagger.yaml"],
+            ["virestore.eval", "--model", "tagger", "--tagger", "/marimo/smoke/tagger", "--test", CLEAN / "dev.jsonl",
+             "--limit", 200, "--latency-n", 0, "--tag", "smoke-tagger", "--results", "/marimo/smoke/results"],
+            ["virestore.tagger", "--config", REPO / "configs/tagger.yaml"],
+        )
+    }
+    if job_state("tagger_train") == "done":
+        TAGGER_JOBS["tagger_eval"] = launch(
+            "tagger_eval",
+            *[
+                ["virestore.eval", "--model", "tagger", "--tagger", TAGGER_DIR, "--test", te, "--batch-size", 256,
+                 "--latency-n", 0, "--nbest", 5, "--tag", f"t2-tagger-{s}", "--results", REPO / "results", "--save-predictions"]
+                for s, te in {"clean": CLEAN / "test.jsonl", "noisy": NOISY / "test.jsonl", "hard": HARD}.items()
+            ],
+        )
+    TAGGER_JOBS
+    return
+
+
+@app.cell
+def tagger_large(CLEAN, HARD, NOISY, REPO, job_state, launch, mo, refresh):
+    refresh
+    mo.stop(job_state("tagger_train") != "done", mo.md("the large tagger waits for the first one"))
+    TAGGER_LARGE_DIR = REPO / "runs/tagger-large"
+    TAGGER_LARGE_JOBS = {"tagger_large_train": launch("tagger_large_train", ["virestore.tagger", "--config", REPO / "configs/tagger_large.yaml"])}
+    if job_state("tagger_large_train") == "done":
+        TAGGER_LARGE_JOBS["tagger_large_eval"] = launch(
+            "tagger_large_eval",
+            *[
+                ["virestore.eval", "--model", "tagger", "--tagger", TAGGER_LARGE_DIR, "--test", te, "--batch-size", 256,
+                 "--latency-n", 0, "--nbest", 5, "--tag", f"t2-tagger-large-{s}", "--results", REPO / "results", "--save-predictions"]
+                for s, te in {"clean": CLEAN / "test.jsonl", "noisy": NOISY / "test.jsonl", "hard": HARD}.items()
+            ],
+        )
+    TAGGER_LARGE_JOBS
+    return
+
+
+@app.cell(hide_code=True)
+def e1_md(mo):
+    mo.md(r"""
+    ## 8. E1: acausal TCN, retrained
+
+    The original checkpoint is lost, so the TCN is retrained with its own repo's code
+    (`virestore.train_tcn`: architecture, dataset and trainer from
+    <https://github.com/dinhgia2106/Vietnamese-diacritic-restoration>) on the clean training split.
+    """)
+    return
+
+
+@app.cell
+def e1(CLEAN, HARD, NOISY, Path, REPO, job_state, launch, mo, refresh):
+    refresh
+    mo.stop(job_state("hard") != "done", mo.md("E1 waits for the data jobs"))
+    TCN_REPO = Path("/marimo/Vietnamese-diacritic-restoration")
+    TCN_DIR = REPO / "runs/tcn"
+    TCN_JOBS = {
+        "e1_train": launch(
+            "e1_train",
+            f"(test -d {TCN_REPO} || git clone --depth 1 https://github.com/dinhgia2106/Vietnamese-diacritic-restoration {TCN_REPO})",
+            ["virestore.train_tcn", "--tcn-repo", TCN_REPO, "--train", CLEAN / "train.jsonl", "--dev", CLEAN / "dev.jsonl",
+             "--out", TCN_DIR, "--epochs", 3, "--batch-size", 128,
+             # 300k sentences: a full epoch over 1.96M took ~8 h on the shared GPU; the LoRA runs use 200k
+             "--limit", 300000],
+        )
+    }
+    if job_state("e1_train") == "done":
+        TCN_JOBS["e1_eval"] = launch(
+            "e1_eval",
+            *[
+                ["virestore.eval", "--model", "tcn", "--tcn-repo", TCN_REPO, "--tcn-weights", TCN_DIR / "best_model.pth",
+                 "--test", te, "--latency-n", 0, "--tag", f"e1-tcn-{s}", "--results", REPO / "results", "--save-predictions"]
+                for s, te in {"clean": CLEAN / "test.jsonl", "noisy": NOISY / "test.jsonl", "hard": HARD}.items()
+            ],
+        )
+    TCN_JOBS
+    return
+
+
+@app.cell(hide_code=True)
+def e5_md(mo):
+    mo.md(r"""
+    ## 9. E5: Qwen2.5-1.5B-Instruct + LoRA on noisy pairs
+
+    `configs/qwen15_lora_noisy.yaml` (bf16 base on the sandbox GPU; otherwise as `qwen15_qlora.yaml`).
+    """)
+    return
+
+
+@app.cell
+def e5(CLEAN, HARD, NOISY, REPO, job_state, launch, mo, refresh):
+    refresh
+    mo.stop(job_state("hard") != "done", mo.md("E5 waits for the data jobs"))
+    E5_ADAPTER = REPO / "runs/qwen15-lora-noisy"
+    E5_JOBS = {"e5_train": launch("e5_train", ["virestore.train_lora", "--config", REPO / "configs/qwen15_lora_noisy.yaml"])}
+    if job_state("e5_train") == "done":
+        E5_JOBS["e5_eval"] = launch(
+            "e5_eval",
+            *[
+                ["virestore.eval", "--model", "hf", "--hf-model", "Qwen/Qwen2.5-1.5B-Instruct", "--adapter", E5_ADAPTER,
+                 "--test", te, "--batch-size", 64, "--latency-n", 0, "--tag", f"e5-qwen15-lora-noisy-{s}",
+                 "--results", REPO / "results", "--save-predictions"]
+                for s, te in {"clean": CLEAN / "test.jsonl", "noisy": NOISY / "test.jsonl", "hard": HARD}.items()
+            ],
+        )
+    E5_JOBS
+    return
+
+
 if __name__ == "__main__":
     app.run()
