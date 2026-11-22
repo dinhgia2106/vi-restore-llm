@@ -2,14 +2,19 @@
 
 Usage:
     python -m virestore.data --corpus data/raw --out data/processed --noisy
+    python -m virestore.data --corpus data/raw/wanjuan-vietnamese --out data/processed --limit 2000000
+
+The corpus can be a .txt file, a .jsonl(.gz) file, or a folder containing either.
 """
 
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
 import json
 import random
+import re
 from pathlib import Path
 
 from . import utf8_stdio
@@ -30,27 +35,65 @@ def _split_of(sentence: str) -> str:
     return SPLITS[-1][0]
 
 
-def iter_sentences(corpus: Path, min_words: int, max_words: int):
-    files = sorted(corpus.rglob("*.txt")) if corpus.is_dir() else [corpus]
+TEXT_SUFFIXES = (".txt", ".jsonl", ".jsonl.gz", ".json.gz")
+TEXT_FIELDS = ("content", "text")  # WanJuan-Vietnamese uses JSON Lines; field is auto-detected
+_JUNK = re.compile(r"https?://|www\.|@|\{|\}|<[a-z/]|\|")
+
+
+def _open(path: Path):
+    if path.name.endswith(".gz"):
+        return gzip.open(path, "rt", encoding="utf-8", errors="ignore")
+    return path.open(encoding="utf-8", errors="ignore")
+
+
+def iter_documents(corpus: Path, text_field: str | None = None):
+    """Yield raw text from .txt files (one document per line) or JSON Lines files."""
+    files = [corpus] if corpus.is_file() else sorted(p for p in corpus.rglob("*") if p.name.endswith(TEXT_SUFFIXES))
     for f in files:
-        with f.open(encoding="utf-8", errors="ignore") as fh:
+        is_json = ".json" in f.name
+        with _open(f) as fh:
             for line in fh:
-                for s in split_sentences(line):
-                    n = len(s.split())
-                    if min_words <= n <= max_words and has_diacritics(s):
-                        yield s
+                if not is_json:
+                    yield line
+                    continue
+                try:
+                    obj = json.loads(line)
+                except ValueError:
+                    continue
+                field = text_field or next((k for k in TEXT_FIELDS if k in obj), None)
+                if field and isinstance(obj.get(field), str):
+                    yield obj[field]
 
 
-def build(corpus: Path, out: Path, noisy: bool, seed: int, min_words: int, max_words: int, limit: int | None) -> dict:
+def is_clean_sentence(s: str, min_words: int, max_words: int) -> bool:
+    n = len(s.split())
+    if not (min_words <= n <= max_words) or not has_diacritics(s) or _JUNK.search(s):
+        return False
+    letters = sum(c.isalpha() for c in s)
+    digits = sum(c.isdigit() for c in s)
+    return letters / max(len(s), 1) >= 0.7 and digits / max(len(s), 1) <= 0.1
+
+
+def iter_sentences(corpus: Path, min_words: int, max_words: int, text_field: str | None = None):
+    for doc in iter_documents(corpus, text_field):
+        for paragraph in doc.splitlines():
+            for s in split_sentences(paragraph):
+                if is_clean_sentence(s, min_words, max_words):
+                    yield s
+
+
+def build(
+    corpus: Path, out: Path, noisy: bool, seed: int, min_words: int, max_words: int, limit: int | None, text_field: str | None = None
+) -> dict:
     out.mkdir(parents=True, exist_ok=True)
     rng = random.Random(seed)
     noise = NoiseConfig() if noisy else None
     writers = {name: (out / f"{name}.jsonl").open("w", encoding="utf-8") for name, _ in SPLITS}
-    seen: set[str] = set()
+    seen: set[bytes] = set()  # 8-byte digests keep memory small on millions of sentences
     counts = {name: 0 for name, _ in SPLITS}
     try:
-        for s in iter_sentences(corpus, min_words, max_words):
-            key = hashlib.md5(s.encode("utf-8")).hexdigest()
+        for s in iter_sentences(corpus, min_words, max_words, text_field):
+            key = hashlib.md5(s.encode("utf-8")).digest()[:8]
             if key in seen:
                 continue
             seen.add(key)
@@ -63,7 +106,7 @@ def build(corpus: Path, out: Path, noisy: bool, seed: int, min_words: int, max_w
     finally:
         for w in writers.values():
             w.close()
-    stats = {"corpus": str(corpus), "noisy": noisy, "seed": seed, "counts": counts}
+    stats = {"corpus": str(corpus), "noisy": noisy, "seed": seed, "min_words": min_words, "max_words": max_words, "counts": counts}
     (out / "stats.json").write_text(json.dumps(stats, indent=2), encoding="utf-8")
     return stats
 
@@ -88,8 +131,9 @@ def main() -> None:
     ap.add_argument("--min-words", type=int, default=3)
     ap.add_argument("--max-words", type=int, default=40)
     ap.add_argument("--limit", type=int, default=None, help="stop after N unique sentences")
+    ap.add_argument("--text-field", default=None, help="JSON field holding the text (default: auto-detect content/text)")
     args = ap.parse_args()
-    stats = build(args.corpus, args.out, args.noisy, args.seed, args.min_words, args.max_words, args.limit)
+    stats = build(args.corpus, args.out, args.noisy, args.seed, args.min_words, args.max_words, args.limit, args.text_field)
     print(json.dumps(stats, indent=2, ensure_ascii=False))
 
 

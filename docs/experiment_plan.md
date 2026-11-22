@@ -13,7 +13,8 @@ Under a 50 ms p95 single-sentence latency budget on a laptop CPU, which approach
 
 ## Data
 
-- Corpus: any large Vietnamese text (news, Wikipedia, the corpus used for the TCN). Keep the source and licence in `data/README` for every corpus used.
+- Corpus: [WanJuan-Vietnamese](https://opendatalab.com/OpenDataLab/WanJuan-Vietnamese) (CC BY 4.0, 74 B tokens). A 2 M-sentence slice is enough for E3–E5; E6 scales it. Source, licence and changes are documented in [data/README.md](../data/README.md).
+- Report results on a test set drawn from the same corpus, plus the hard set; the TCN was trained on different data, so also note its training corpus when comparing.
 - `data.py` keeps sentences of 3–40 words that contain at least one diacritic, de-duplicates them, and splits 98 / 1 / 1 by content hash.
 - Two variants: **clean** (pure stripping) and **noisy** (`NoiseConfig` defaults: 3 % Telex leftovers, 1 % each of dropped, doubled and swapped letters).
 - A small **hard set**: test sentences containing highly ambiguous syllables, to report separately.

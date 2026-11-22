@@ -69,3 +69,21 @@ def test_ambiguous_syllables():
 
     rows = [{"target": t} for t in ["ma", "mà", "má", "mả", "mã", "mạ", "hoa"] * 5]
     assert ambiguous_syllables(rows, min_forms=4, min_count=5) == {"ma"}
+
+
+def test_jsonl_gz_corpus_and_filters(tmp_path):
+    import gzip
+
+    from virestore.data import is_clean_sentence, iter_sentences
+
+    docs = [
+        {"content": "Hôm nay trời đẹp quá. Xem thêm tại https://example.com nhé bạn ơi."},
+        {"content": "Mã đơn 123456789 0987654321 thanh toán."},
+        {"id": 3, "content": "Chúng tôi học máy mỗi ngày."},
+    ]
+    path = tmp_path / "part-000.jsonl.gz"
+    with gzip.open(path, "wt", encoding="utf-8") as fh:
+        for d in docs:
+            fh.write(json.dumps(d, ensure_ascii=False) + "\n")
+    assert list(iter_sentences(tmp_path, 3, 40)) == ["Hôm nay trời đẹp quá.", "Chúng tôi học máy mỗi ngày."]
+    assert not is_clean_sentence("Liên hệ admin@site.vn để biết thêm", 3, 40)

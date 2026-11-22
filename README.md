@@ -34,9 +34,9 @@ Filled in by `python -m virestore.eval`; see [`results/summary.md`](results/summ
 uv venv && uv pip install -e ".[dev]"          # core + tests
 uv pip install -e ".[train,serve,gguf]"         # fine-tuning, serving, llama.cpp
 
-# 1. data — any folder of Vietnamese .txt files
-python -m virestore.data --corpus data/raw --out data/processed
-python -m virestore.data --corpus data/raw --out data/processed_noisy --noisy
+# 1. data — WanJuan-Vietnamese shards (see data/README.md), or any Vietnamese .txt / .jsonl
+python -m virestore.data --corpus data/raw/wanjuan-vietnamese --out data/processed --limit 2000000
+python -m virestore.data --corpus data/raw/wanjuan-vietnamese --out data/processed_noisy --noisy --limit 2000000
 python -m virestore.hardset --train data/processed/train.jsonl --test data/processed/test.jsonl --out data/processed/test_hard.jsonl
 
 # 2. baselines
@@ -55,6 +55,10 @@ python -m virestore.merge --base Qwen/Qwen2.5-0.5B-Instruct --adapter runs/qwen0
 python -m virestore.eval --model gguf --gguf models/qwen05-lora-q4_k_m.gguf --test data/processed/test.jsonl
 python -m virestore.serve --model gguf --gguf models/qwen05-lora-q4_k_m.gguf   # POST /restore
 ```
+
+## Data
+
+Sentences come from **[WanJuan-Vietnamese](https://opendatalab.com/OpenDataLab/WanJuan-Vietnamese)**, the Vietnamese subset of OpenDataLab's WanJuan3.0 web corpus ([Yu et al., 2025](https://arxiv.org/abs/2501.14506), CC BY 4.0). The corpus itself is not redistributed; [data/README.md](data/README.md) lists the filtering and changes applied and the citation.
 
 ## Tasks
 
