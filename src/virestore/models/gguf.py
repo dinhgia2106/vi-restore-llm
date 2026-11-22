@@ -14,8 +14,10 @@ class LexiconDraft:
     The restored sentence keeps the input's letters and changes only diacritics, and the lexicon
     gets most syllables right at almost no cost. At every step this proposes the lexicon's text
     for whatever the model has not written yet; llama.cpp checks all proposed tokens in one
-    forward pass and keeps the prefix that matches its own greedy choice, so the output is exactly
-    the greedy output — the draft only changes how many forward passes it takes.
+    forward pass and keeps the prefix that matches its own greedy choice. In exact arithmetic the
+    output would equal the greedy output; in practice llama.cpp's multi-token forward passes are not
+    bit-identical to single-token ones, so near-ties can flip and a few outputs differ (measured, see
+    docs/latency.md).
 
     When the model's text so far no longer matches the input's letters (it rewrote a word), there
     is nothing sensible to propose and the step falls back to plain decoding.

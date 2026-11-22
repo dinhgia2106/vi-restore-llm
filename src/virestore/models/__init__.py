@@ -42,4 +42,8 @@ def load(kind: str, **kwargs) -> Restorer:
 
             draft = LexiconDraft(Lexicon.from_jsonl(kwargs["train"]), max_tokens=kwargs.get("draft_tokens") or 32)
         return GGUFRestorer(kwargs["model"], n_threads=kwargs.get("threads"), draft=draft)
+    if kind == "tagger":
+        from .tagger import TaggerRestorer
+
+        return TaggerRestorer(kwargs["model"], threads=kwargs.get("threads"), batch_size=kwargs.get("batch_size", 64))
     raise ValueError(f"unknown model kind: {kind}")

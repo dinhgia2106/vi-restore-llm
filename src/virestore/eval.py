@@ -103,12 +103,13 @@ def write_summary(results_dir: Path) -> Path:
 def main() -> None:
     utf8_stdio()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--model", required=True, choices=["identity", "lexicon", "tcn", "hf", "gguf"])
+    ap.add_argument("--model", required=True, choices=["identity", "lexicon", "tcn", "hf", "gguf", "tagger"])
     ap.add_argument("--test", type=Path, required=True)
     ap.add_argument("--train", type=Path, help="training JSONL (lexicon baseline)")
     ap.add_argument("--hf-model", help="Hugging Face model id or path")
     ap.add_argument("--adapter", help="LoRA adapter directory")
     ap.add_argument("--gguf", help="path to a .gguf file")
+    ap.add_argument("--tagger", help="directory of a trained virestore.tagger model")
     ap.add_argument("--tcn-repo", help="path to the Vietnamese-diacritic-restoration repo")
     ap.add_argument("--tcn-weights", help="TCN checkpoint (.pth)")
     ap.add_argument("--batch-size", type=int, default=8)
@@ -133,7 +134,7 @@ def main() -> None:
     restorer = models.load(
         args.model,
         train=args.train,
-        model=args.hf_model or args.gguf,
+        model=args.hf_model or args.gguf or args.tagger,
         adapter=args.adapter,
         batch_size=args.batch_size,
         threads=args.threads,

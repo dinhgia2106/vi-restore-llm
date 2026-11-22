@@ -145,3 +145,16 @@ def test_em_at_k_and_lexicon_nbest(tmp_path):
     assert nb[0] == lex.restore(["ma oi"])[0] == "ma ơi"
     assert set(nb) == {"ma ơi", "má ơi", "mà ơi"}
     assert Identity().restore_nbest(["ma oi"], 3) == [["ma oi"]]
+
+
+def test_tagger_labels_round_trip():
+    from virestore.tagger import N_LABELS, apply_label, char_label, decode, labels_for
+
+    for line in SAMPLE.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            assert decode(strip_diacritics(line), labels_for(line)) == line
+    for ch in "ăâêôơưđĂÂÊÔƠƯĐ" + "áàảãạ" + "ỳýỷỹỵ" + "ữựừứử":
+        assert apply_label(strip_diacritics(ch), char_label(ch)) == ch
+    assert N_LABELS == 30
+    assert apply_label("b", 7) == "b"  # consonants are copied
+    assert apply_label("i", char_label("ơ")) == "i"  # a modifier the letter cannot take is dropped
