@@ -53,6 +53,14 @@ def collate(pad_id: int):
     return fn
 
 
+def _warmup(training_args_cls, ratio: float) -> dict:
+    """transformers 5 dropped `warmup_ratio`; its `warmup_steps` takes a float in [0, 1) as a ratio."""
+    import dataclasses
+
+    names = {f.name for f in dataclasses.fields(training_args_cls)}
+    return {"warmup_ratio": ratio} if "warmup_ratio" in names else {"warmup_steps": ratio}
+
+
 def main() -> None:
     utf8_stdio()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -100,7 +108,7 @@ def main() -> None:
             gradient_accumulation_steps=t["grad_accum"],
             learning_rate=t["lr"],
             num_train_epochs=t["epochs"],
-            warmup_ratio=t["warmup_ratio"],
+            **_warmup(TrainingArguments, t["warmup_ratio"]),
             lr_scheduler_type="cosine",
             logging_steps=t["logging_steps"],
             eval_strategy="steps",

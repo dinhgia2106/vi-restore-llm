@@ -1,4 +1,4 @@
-# Experiment E2: LoRA on a ~0.5B instruct model, clean diacritic restoration.
+# Experiment E3: LoRA on a ~0.5B instruct model, clean diacritic restoration.
 model: Qwen/Qwen2.5-0.5B-Instruct
 output_dir: runs/qwen05-lora
 seed: 13
