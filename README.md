@@ -32,6 +32,8 @@ Filled in by `python -m virestore.eval`; every run, including the noisy and hard
 
 ² `configs/qwen05_lora.yaml`: LoRA r = 16, 200k clean training pairs, one epoch. On the hard set it reaches CER 0.0181 / sentence acc 0.4681 (lexicon: 0.0459 / 0.1317); on noisy input, which it was not trained on, CER 0.0428 / sentence acc 0.1919 (lexicon trained on noisy pairs: 0.0630 / 0.0724).
 
+What the errors look like (rewritten words, ambiguous pairs, sentence length, noisy input): [docs/error_analysis.md](docs/error_analysis.md).
+
 Latency and RAM columns are filled only from runs on the target laptop (CPU, batch size 1). The runs so far were made on a molab sandbox (virtualised CPU; the LLM on a GPU), so their latency and memory, recorded in `results/`, are not comparable to the 50 ms budget.
 
 ## Quick start
