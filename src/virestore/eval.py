@@ -80,7 +80,7 @@ def measure_latency(restorer, inputs: list[str], n: int) -> dict:
 def write_summary(results_dir: Path) -> Path:
     rows = []
     for f in sorted(results_dir.glob("*.json")):
-        if f.name.endswith(".analysis.json"):  # written by virestore.analysis, not an eval run
+        if f.name.endswith((".analysis.json", ".profile.json")):  # analysis / latency profiles, not eval runs
             continue
         r = json.loads(f.read_text(encoding="utf-8"))
         q, lat = r["quality"], r.get("latency", {})
@@ -113,6 +113,8 @@ def main() -> None:
     ap.add_argument("--tcn-weights", help="TCN checkpoint (.pth)")
     ap.add_argument("--batch-size", type=int, default=8)
     ap.add_argument("--threads", type=int, default=None, help="CPU threads for GGUF models (default: all)")
+    ap.add_argument("--draft", choices=["none", "lexicon"], default="none", help="GGUF speculative decoding draft (lexicon needs --train)")
+    ap.add_argument("--draft-tokens", type=int, default=32, help="max draft tokens proposed per step")
     ap.add_argument("--limit", type=int, default=None, help="evaluate on the first N test rows")
     ap.add_argument("--latency-n", type=int, default=100, help="sentences used for latency (0 = skip)")
     ap.add_argument("--tag", help="name of this run (default: derived from model)")
@@ -135,6 +137,8 @@ def main() -> None:
         adapter=args.adapter,
         batch_size=args.batch_size,
         threads=args.threads,
+        draft=args.draft,
+        draft_tokens=args.draft_tokens,
         tcn_repo=args.tcn_repo,
         tcn_weights=args.tcn_weights,
     )
@@ -142,6 +146,7 @@ def main() -> None:
     t0 = time.perf_counter()
     preds = restorer.restore(inputs)
     wall = time.perf_counter() - t0
+    decode_stats = restorer.stats() if hasattr(restorer, "stats") else None  # quality pass only
     quality = score(preds, refs).as_dict()
     nbest = None
     if args.nbest:
@@ -163,6 +168,7 @@ def main() -> None:
         "throughput_sent_per_s": round(len(inputs) / wall, 2) if wall else None,
         "rss_mb": round(_rss_mb(), 1) if _rss_mb() else None,
         "machine": machine_info(restorer),
+        **({"decode_stats": decode_stats} if decode_stats else {}),
         "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
     args.results.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,27 @@
+{
+  "tag": "laptop-q4_k_m-t8",
+  "model": "gguf:qwen05-lora-q4_k_m.gguf",
+  "test_file": "data\\processed\\test.jsonl",
+  "sentences": 100,
+  "median_prompt_tokens": 83.0,
+  "median_completion_tokens": 28.5,
+  "median_full_ms": 316.04,
+  "median_prompt_plus_one_token_ms": 79.55,
+  "forward_ms_by_new_tokens": {
+    "1": 10.64,
+    "2": 19.09,
+    "4": 24.77,
+    "8": 34.36,
+    "16": 44.14,
+    "32": 73.78
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 8
+  },
+  "timestamp": "2026-11-22T20:26:15+00:00"
+}
