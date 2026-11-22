@@ -74,7 +74,7 @@ curl -s localhost:8765/restore    -d '{"text": "hom nay troi dep qua"}'         
 curl -s localhost:8765/candidates -d '{"text": "toi di hoc", "k": 5}'           -H 'content-type: application/json'
 ```
 
-`/restore` returns one sentence, `/candidates` the top-k for a candidate bar. The tagger only restores diacritics: it never changes letters, so it does not fix typos or leftover Telex.
+`/restore` returns one sentence, `/candidates` the top-k for a candidate bar. For C++ (VIMEK) without Python, `tagger.onnx` in the same repo runs under onnxruntime (`python -m virestore.export_onnx` documents its inputs and labels). The tagger only restores diacritics: it never changes letters, so it does not fix typos or leftover Telex.
 
 ## Quick start
 

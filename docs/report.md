@@ -75,6 +75,8 @@ by both the LLM and the tagger, against one third for the lexicon.
 | … + lexicon draft (speculative, 4 tokens) | 8 | 0.0109 | 0.560 | 358.16 | 648.25 | – |
 | character tagger | 1 | 0.0100 | 0.550 | 24.56 | 44.58 | 286.7 |
 | character tagger | 4 | 0.0100 | 0.550 | 8.98 | 16.56 | 290.2 |
+| character tagger, ONNX (onnxruntime) | 4 | 0.0100 | 0.550 | 16.70 | 26.78 | 318.3 |
+| character tagger, ONNX (onnxruntime) | 1 | 0.0100 | 0.550 | 37.68 | 80.98 | 315.2 |
 
 Files: `results/e4-laptop-*.json`, `results/lat-laptop-*.json`, `results/t2-laptop-tagger-*.json`,
 `results/profile-laptop-q4_k_m-t8.profile.json`. Details in `docs/latency.md`.
@@ -117,4 +119,7 @@ Files: `results/e4-laptop-*.json`, `results/lat-laptop-*.json`, `results/t2-lapt
 
 Use the character tagger for restoration while typing (4 threads, p95 16.56 ms on the target
 laptop), with its top-5 beam for the candidate bar (`virestore.serve --model tagger`,
-`POST /candidates`). Keep the LLM off the typing path.
+`POST /candidates`). For calling it from VIMEK's C++ without Python, `virestore.export_onnx` writes
+an ONNX graph whose labels match PyTorch; under onnxruntime it is slower than PyTorch here (p95
+26.78 ms on 4 threads, 80.98 ms on 1) but still inside the budget with 2+ threads. Keep the LLM off
+the typing path.
