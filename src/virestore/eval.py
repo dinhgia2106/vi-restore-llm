@@ -79,6 +79,8 @@ def measure_latency(restorer, inputs: list[str], n: int) -> dict:
 def write_summary(results_dir: Path) -> Path:
     rows = []
     for f in sorted(results_dir.glob("*.json")):
+        if f.name.endswith(".analysis.json"):  # written by virestore.analysis, not an eval run
+            continue
         r = json.loads(f.read_text(encoding="utf-8"))
         q, lat = r["quality"], r.get("latency", {})
         test = Path(r["test_file"])

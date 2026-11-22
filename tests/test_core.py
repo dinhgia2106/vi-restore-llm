@@ -115,3 +115,17 @@ def test_analysis_separates_diacritic_errors_from_rewrites():
     assert a["more_words"] == 0.25
     assert a["top_diacritic_confusions"] == [["má", "mà", 1]]
     assert a["top_rewrites"] == [["học", "làm", 1]]
+
+
+def test_summary_skips_analysis_files(tmp_path):
+    from virestore.eval import write_summary
+
+    run = {
+        "tag": "t", "model": "identity", "test_file": "data/processed/test.jsonl",
+        "quality": {"n": 1, "cer": 0.1, "wer": 0.2, "word_acc": 0.8, "sent_acc": 0.0},
+        "latency": {}, "rss_mb": None, "machine": {"device": "cpu"},
+    }
+    (tmp_path / "t.json").write_text(json.dumps(run), encoding="utf-8")
+    (tmp_path / "t.analysis.json").write_text(json.dumps({"n": 1}), encoding="utf-8")
+    text = write_summary(tmp_path).read_text(encoding="utf-8")
+    assert "| t | identity | processed/test | 1 |" in text
