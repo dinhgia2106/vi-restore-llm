@@ -12,6 +12,11 @@
 | ds-qwen05-lora-external | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen05-lora | doc_split/external | 14000 | 0.0137 | 0.0541 | 0.9471 | 0.5136 | – / – / – | – | – | 4861.8 | cuda |
 | ds-qwen05-lora-hard | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen05-lora | doc_split/test_hard | 2514 | 0.0192 | 0.0734 | 0.9279 | 0.4586 | – / – / – | – | – | 4817.5 | cuda |
 | ds-qwen05-lora-noisy | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen05-lora | doc_split_noisy/test | 17841 | 0.0444 | 0.1233 | 0.8812 | 0.1920 | – / – / – | – | – | 4867.3 | cuda |
+| ds-qwen15-lora-noisy-clean | hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen15-lora-noisy | doc_split/test | 17841 | 0.0137 | 0.0486 | 0.9533 | 0.5595 | – / – / – | – | – | 4974.4 | cuda |
+| ds-qwen15-lora-noisy-external-noisy | hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen15-lora-noisy | doc_split_noisy/external | 14000 | 0.0168 | 0.0562 | 0.9455 | 0.4924 | – / – / – | – | – | 4966.0 | cuda |
+| ds-qwen15-lora-noisy-external | hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen15-lora-noisy | doc_split/external | 14000 | 0.0131 | 0.0469 | 0.9545 | 0.5519 | – / – / – | – | – | 4956.4 | cuda |
+| ds-qwen15-lora-noisy-hard | hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen15-lora-noisy | doc_split/test_hard | 2514 | 0.0177 | 0.0622 | 0.9397 | 0.5330 | – / – / – | – | – | 4941.8 | cuda |
+| ds-qwen15-lora-noisy-noisy | hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen15-lora-noisy | doc_split_noisy/test | 17841 | 0.0173 | 0.0575 | 0.9448 | 0.4952 | – / – / – | – | – | 4964.1 | cuda |
 | ds-tagger-clean | tagger:ds-tagger | doc_split/test | 17841 | 0.0093 | 0.0391 | 0.9609 | 0.5811 | 0.5811 / 0.7134 / 0.7551 | – | – | 3765.0 | cuda |
 | ds-tagger-external-culture | tagger:ds-tagger | doc_split/external_culture | 2000 | 0.0110 | 0.0466 | 0.9534 | 0.5240 | 0.5240 / 0.6465 / 0.6910 | – | – | 3762.3 | cuda |
 | ds-tagger-external-encyclopedia | tagger:ds-tagger | doc_split/external_encyclopedia | 2000 | 0.0140 | 0.0603 | 0.9397 | 0.5250 | 0.5250 / 0.6470 / 0.6875 | – | – | 3775.5 | cuda |

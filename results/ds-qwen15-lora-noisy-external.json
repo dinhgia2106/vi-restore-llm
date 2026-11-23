@@ -1,0 +1,24 @@
+{
+  "tag": "ds-qwen15-lora-noisy-external",
+  "model": "hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen15-lora-noisy",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external.jsonl",
+  "quality": {
+    "n": 14000,
+    "cer": 0.0131,
+    "wer": 0.04685,
+    "word_acc": 0.95454,
+    "sent_acc": 0.55193
+  },
+  "latency": {},
+  "throughput_sent_per_s": 69.9,
+  "rss_mb": 4956.4,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T11:25:20+00:00"
+}

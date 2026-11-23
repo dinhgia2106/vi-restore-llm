@@ -1,0 +1,24 @@
+{
+  "tag": "ds-qwen15-lora-noisy-hard",
+  "model": "hf:Qwen/Qwen2.5-1.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen15-lora-noisy",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/test_hard.jsonl",
+  "quality": {
+    "n": 2514,
+    "cer": 0.01768,
+    "wer": 0.06222,
+    "word_acc": 0.93972,
+    "sent_acc": 0.53302
+  },
+  "latency": {},
+  "throughput_sent_per_s": 74.86,
+  "rss_mb": 4941.8,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T11:16:43+00:00"
+}
