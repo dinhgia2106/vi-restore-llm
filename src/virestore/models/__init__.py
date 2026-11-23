@@ -49,5 +49,8 @@ def load(kind: str, **kwargs) -> Restorer:
     if kind == "tagger-onnx":
         from .tagger import OnnxTaggerRestorer
 
-        return OnnxTaggerRestorer(kwargs["model"], threads=kwargs.get("threads"), batch_size=kwargs.get("batch_size", 64))
+        return OnnxTaggerRestorer(
+            kwargs["model"], threads=kwargs.get("threads"), batch_size=kwargs.get("batch_size", 64),
+            onnx_file=kwargs.get("onnx_file") or "tagger.onnx",
+        )
     raise ValueError(f"unknown model kind: {kind}")

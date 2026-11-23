@@ -1,0 +1,31 @@
+# Character-level diacritic tagger (virestore.tagger): Transformer encoder, one pass per sentence.
+output_dir: runs/ds-tagger-kd
+seed: 13
+
+distill:
+  teacher: runs/ds-tagger-large
+  alpha: 0.5
+  temperature: 2.0
+
+data:
+  train: data/doc_split/train.jsonl
+  dev: data/doc_split/dev.jsonl
+  dev_limit: 5000
+  min_char_count: 20
+
+model:
+  d_model: 384
+  layers: 8
+  heads: 6
+  ff: 1536
+  max_len: 384
+  dropout: 0.1
+
+train:
+  batch_size: 256
+  lr: 5.0e-4
+  weight_decay: 0.01
+  epochs: 3
+  warmup_ratio: 0.02
+  log_steps: 200
+  eval_steps: 2000

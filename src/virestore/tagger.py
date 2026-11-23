@@ -206,6 +206,12 @@ def main() -> None:
 
     model = build_model(len(vocab), m["d_model"], m["layers"], m["heads"], m["ff"], m["max_len"], m["dropout"]).to(device)
     print("parameters:", sum(p.numel() for p in model.parameters()), flush=True)
+    teacher, kd = None, cfg.get("distill")
+    if kd:
+        teacher, teacher_vocab, _ = load(Path(kd["teacher"]), device)
+        if teacher_vocab.chars != vocab.chars:
+            raise SystemExit("teacher and student were built with different vocabularies")
+        print(f"distilling from {kd['teacher']} (alpha {kd['alpha']}, temperature {kd['temperature']})", flush=True)
     opt = torch.optim.AdamW(model.parameters(), lr=t["lr"], weight_decay=t.get("weight_decay", 0.01))
     steps = t["epochs"] * math.ceil(len(train) / t["batch_size"])
     warm = int(steps * t.get("warmup_ratio", 0.02))
@@ -234,7 +240,18 @@ def main() -> None:
             ids, mask, lab = ids.to(device), mask.to(device), lab.to(device)
             with torch.autocast(device, dtype=torch.bfloat16, enabled=device == "cuda"):
                 logits = model(ids, mask)
+                if teacher is not None:
+                    with torch.no_grad():
+                        soft = teacher(ids, mask)
             loss = torch.nn.functional.cross_entropy(logits.float().reshape(-1, N_LABELS), lab.reshape(-1), ignore_index=-100)
+            if teacher is not None:
+                keep = lab != -100
+                temp = kd["temperature"]
+                kl = torch.nn.functional.kl_div(
+                    torch.log_softmax(logits.float()[keep] / temp, -1), torch.log_softmax(soft.float()[keep] / temp, -1),
+                    log_target=True, reduction="batchmean",
+                )
+                loss = (1 - kd["alpha"]) * loss + kd["alpha"] * temp * temp * kl
             opt.zero_grad(set_to_none=True)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)

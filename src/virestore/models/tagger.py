@@ -132,7 +132,7 @@ class TaggerRestorer:
 class OnnxTaggerRestorer(TaggerRestorer):
     """The same tagger exported with virestore.export_onnx, run by onnxruntime (no PyTorch model)."""
 
-    def __init__(self, path: str, threads: int | None = None, batch_size: int = 64):
+    def __init__(self, path: str, threads: int | None = None, batch_size: int = 64, onnx_file: str = "tagger.onnx"):
         import json
 
         import onnxruntime as ort
@@ -148,9 +148,9 @@ class OnnxTaggerRestorer(TaggerRestorer):
         if threads:
             opts.intra_op_num_threads = threads
             opts.inter_op_num_threads = 1
-        self.sess = ort.InferenceSession(str(p / "tagger.onnx"), opts, providers=["CPUExecutionProvider"])
+        self.sess = ort.InferenceSession(str(p / onnx_file), opts, providers=["CPUExecutionProvider"])
         self.device, self.n_threads = "cpu", threads
-        self.name = f"tagger-onnx:{p.name}"
+        self.name = f"tagger-onnx:{p.name}/{onnx_file}"
         self._mask_cache = {}
         self._n_labels, self._valid = N_LABELS, valid_labels
 

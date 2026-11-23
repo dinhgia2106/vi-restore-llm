@@ -34,6 +34,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--tagger", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--quantize", type=Path, help="also write an int8 (dynamic quantisation) copy here")
     a = ap.parse_args()
 
     import numpy as np
@@ -69,6 +70,11 @@ def main() -> None:
         got = sess.run(["logits"], {"ids": ids.numpy()})[0].argmax(-1)
         assert np.array_equal(ref, got), f"onnxruntime labels differ from PyTorch on: {s}"
     print(f"exported {a.out} ({a.out.stat().st_size / 2**20:.1f} MB); onnxruntime labels match PyTorch on {len(CHECK)} sentences")
+    if a.quantize:
+        from onnxruntime.quantization import QuantType, quantize_dynamic
+
+        quantize_dynamic(str(a.out), str(a.quantize), weight_type=QuantType.QInt8, op_types_to_quantize=["MatMul", "Gemm"])
+        print(f"quantised {a.quantize} ({a.quantize.stat().st_size / 2**20:.1f} MB); score it with virestore.eval, labels can differ")
 
 
 if __name__ == "__main__":

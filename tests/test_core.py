@@ -323,3 +323,18 @@ def test_truncate_at_word_keeps_labels_aligned():
         assert l == labels[: len(s)]
         seen.add(s)
     assert seen == {"hom", "hom nay", "hom nay troi"}
+
+
+def test_calibration_metrics():
+    import numpy as np
+
+    from virestore.calibration import auroc, ece, threshold_for
+
+    assert auroc([0.9, 0.8, 0.2, 0.1], [1, 1, 0, 0]) == 1.0
+    assert auroc([0.1, 0.2, 0.8, 0.9], [1, 1, 0, 0]) == 0.0
+    assert ece(np.array([1.0, 1.0]), np.array([1, 1])) == 0.0
+    assert abs(ece(np.array([0.9, 0.9]), np.array([0, 0])) - 0.9) < 1e-9
+    conf, ok = np.array([0.9, 0.8, 0.7, 0.6]), np.array([1, 1, 0, 1])
+    assert threshold_for(conf, ok, 1.0) == 0.8
+    assert threshold_for(conf, ok, 0.75) == 0.6
+    assert threshold_for(np.array([0.5]), np.array([0]), 0.9) is None

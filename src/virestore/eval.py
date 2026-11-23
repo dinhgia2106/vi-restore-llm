@@ -110,6 +110,7 @@ def main() -> None:
     ap.add_argument("--adapter", help="LoRA adapter directory")
     ap.add_argument("--gguf", help="path to a .gguf file")
     ap.add_argument("--tagger", help="directory of a trained virestore.tagger model")
+    ap.add_argument("--onnx-file", help="ONNX file inside --tagger for tagger-onnx (default: tagger.onnx)")
     ap.add_argument("--tcn-repo", help="path to the Vietnamese-diacritic-restoration repo")
     ap.add_argument("--tcn-weights", help="TCN checkpoint (.pth)")
     ap.add_argument("--batch-size", type=int, default=8)
@@ -142,6 +143,7 @@ def main() -> None:
         draft_tokens=args.draft_tokens,
         tcn_repo=args.tcn_repo,
         tcn_weights=args.tcn_weights,
+        onnx_file=args.onnx_file,
     )
 
     t0 = time.perf_counter()
