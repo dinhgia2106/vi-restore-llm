@@ -1,0 +1,27 @@
+{
+  "tag": "ds-tagger-external-local_life",
+  "model": "tagger:ds-tagger",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external_local_life.jsonl",
+  "quality": {
+    "n": 2000,
+    "cer": 0.0086,
+    "wer": 0.03655,
+    "word_acc": 0.96345,
+    "sent_acc": 0.5655,
+    "em@1": 0.5655,
+    "em@3": 0.7045,
+    "em@5": 0.741
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1464.62,
+  "rss_mb": 3750.4,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T05:55:38+00:00"
+}

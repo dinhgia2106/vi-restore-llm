@@ -1,0 +1,27 @@
+{
+  "tag": "ds-tagger-clean",
+  "model": "tagger:ds-tagger",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/test.jsonl",
+  "quality": {
+    "n": 17841,
+    "cer": 0.00934,
+    "wer": 0.03914,
+    "word_acc": 0.96086,
+    "sent_acc": 0.58108,
+    "em@1": 0.58108,
+    "em@3": 0.71341,
+    "em@5": 0.75511
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1978.88,
+  "rss_mb": 3765.0,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T05:52:06+00:00"
+}

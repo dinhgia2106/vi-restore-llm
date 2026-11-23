@@ -1,0 +1,27 @@
+{
+  "tag": "ds-lexicon-hard",
+  "model": "lexicon",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/test_hard.jsonl",
+  "quality": {
+    "n": 2514,
+    "cer": 0.04938,
+    "wer": 0.20236,
+    "word_acc": 0.79764,
+    "sent_acc": 0.11933,
+    "em@1": 0.15513,
+    "em@3": 0.26054,
+    "em@5": 0.30549
+  },
+  "latency": {},
+  "throughput_sent_per_s": 33421.63,
+  "rss_mb": 1888.9,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T04:46:19+00:00"
+}

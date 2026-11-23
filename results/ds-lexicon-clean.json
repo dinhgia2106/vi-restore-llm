@@ -1,0 +1,27 @@
+{
+  "tag": "ds-lexicon-clean",
+  "model": "lexicon",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/test.jsonl",
+  "quality": {
+    "n": 17841,
+    "cer": 0.0361,
+    "wer": 0.15056,
+    "word_acc": 0.84944,
+    "sent_acc": 0.15403,
+    "em@1": 0.18088,
+    "em@3": 0.29483,
+    "em@5": 0.3441
+  },
+  "latency": {},
+  "throughput_sent_per_s": 29635.27,
+  "rss_mb": 1923.5,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T04:44:12+00:00"
+}

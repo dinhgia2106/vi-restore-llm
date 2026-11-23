@@ -2,6 +2,28 @@
 
 | run | model | test set | n | CER ↓ | WER ↓ | word acc ↑ | sentence acc ↑ | EM@1 / @3 / @5 ↑ | p50 ms | p95 ms | RSS MB | device |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ds-lexicon-clean | lexicon | doc_split/test | 17841 | 0.0361 | 0.1506 | 0.8494 | 0.1540 | 0.1809 / 0.2948 / 0.3441 | – | – | 1923.5 | cpu |
+| ds-lexicon-external-noisy | lexicon | doc_split_noisy/external | 14000 | 0.0647 | 0.2104 | 0.7896 | 0.0787 | 0.0890 / 0.1372 / 0.1559 | – | – | 1912.7 | cpu |
+| ds-lexicon-external | lexicon | doc_split/external | 14000 | 0.0358 | 0.1503 | 0.8497 | 0.1546 | 0.1822 / 0.2979 / 0.3471 | – | – | 1920.0 | cpu |
+| ds-lexicon-hard | lexicon | doc_split/test_hard | 2514 | 0.0494 | 0.2024 | 0.7976 | 0.1193 | 0.1551 / 0.2605 / 0.3055 | – | – | 1888.9 | cpu |
+| ds-lexicon-noisy | lexicon | doc_split_noisy/test | 17841 | 0.0649 | 0.2091 | 0.7909 | 0.0733 | 0.0819 / 0.1288 / 0.1467 | – | – | 1927.5 | cpu |
+| ds-qwen05-lora-clean | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen05-lora | doc_split/test | 17841 | 0.0138 | 0.0542 | 0.9468 | 0.5119 | – / – / – | – | – | 4867.4 | cuda |
+| ds-qwen05-lora-external-noisy | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen05-lora | doc_split_noisy/external | 14000 | 0.0438 | 0.1229 | 0.8814 | 0.1983 | – / – / – | – | – | 4863.4 | cuda |
+| ds-qwen05-lora-external | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen05-lora | doc_split/external | 14000 | 0.0137 | 0.0541 | 0.9471 | 0.5136 | – / – / – | – | – | 4861.8 | cuda |
+| ds-qwen05-lora-hard | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen05-lora | doc_split/test_hard | 2514 | 0.0192 | 0.0734 | 0.9279 | 0.4586 | – / – / – | – | – | 4817.5 | cuda |
+| ds-qwen05-lora-noisy | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/ds-qwen05-lora | doc_split_noisy/test | 17841 | 0.0444 | 0.1233 | 0.8812 | 0.1920 | – / – / – | – | – | 4867.3 | cuda |
+| ds-tagger-clean | tagger:ds-tagger | doc_split/test | 17841 | 0.0093 | 0.0391 | 0.9609 | 0.5811 | 0.5811 / 0.7134 / 0.7551 | – | – | 3765.0 | cuda |
+| ds-tagger-external-culture | tagger:ds-tagger | doc_split/external_culture | 2000 | 0.0110 | 0.0466 | 0.9534 | 0.5240 | 0.5240 / 0.6465 / 0.6910 | – | – | 3762.3 | cuda |
+| ds-tagger-external-encyclopedia | tagger:ds-tagger | doc_split/external_encyclopedia | 2000 | 0.0140 | 0.0603 | 0.9397 | 0.5250 | 0.5250 / 0.6470 / 0.6875 | – | – | 3775.5 | cuda |
+| ds-tagger-external-general | tagger:ds-tagger | doc_split/external_general | 2000 | 0.0091 | 0.0383 | 0.9617 | 0.5850 | 0.5850 / 0.7080 / 0.7445 | – | – | 3762.9 | cuda |
+| ds-tagger-external-history_policy | tagger:ds-tagger | doc_split/external_history_policy | 2000 | 0.0055 | 0.0236 | 0.9764 | 0.6765 | 0.6765 / 0.8005 / 0.8270 | – | – | 3762.6 | cuda |
+| ds-tagger-external-local_life | tagger:ds-tagger | doc_split/external_local_life | 2000 | 0.0086 | 0.0365 | 0.9635 | 0.5655 | 0.5655 / 0.7045 / 0.7410 | – | – | 3750.4 | cuda |
+| ds-tagger-external-news | tagger:ds-tagger | doc_split/external_news | 2000 | 0.0079 | 0.0337 | 0.9663 | 0.5910 | 0.5910 / 0.7225 / 0.7580 | – | – | 3760.6 | cuda |
+| ds-tagger-external-noisy | tagger:ds-tagger | doc_split_noisy/external | 14000 | 0.0368 | 0.1023 | 0.8977 | 0.2168 | 0.2168 / 0.2581 / 0.2703 | – | – | 3809.5 | cuda |
+| ds-tagger-external-professional_field | tagger:ds-tagger | doc_split/external_professional_field | 2000 | 0.0067 | 0.0278 | 0.9722 | 0.6650 | 0.6650 / 0.7790 / 0.8160 | – | – | 3758.5 | cuda |
+| ds-tagger-external | tagger:ds-tagger | doc_split/external | 14000 | 0.0088 | 0.0371 | 0.9629 | 0.5903 | 0.5903 / 0.7154 / 0.7521 | – | – | 3807.6 | cuda |
+| ds-tagger-hard | tagger:ds-tagger | doc_split/test_hard | 2514 | 0.0127 | 0.0518 | 0.9482 | 0.5410 | 0.5410 / 0.6683 / 0.7104 | – | – | 3762.3 | cuda |
+| ds-tagger-noisy | tagger:ds-tagger | doc_split_noisy/test | 17841 | 0.0377 | 0.1043 | 0.8957 | 0.2031 | 0.2031 / 0.2473 / 0.2606 | – | – | 3800.9 | cuda |
 | e0-identity-clean | identity | processed/test | 19956 | 0.2111 | 0.8284 | 0.1716 | 0.0000 | – / – / – | 0.0 | 0.0 | 45.1 | cpu |
 | e0-identity-hard | identity | processed/test_hard | 2801 | 0.2218 | 0.8450 | 0.1550 | 0.0000 | – / – / – | 0.0 | 0.0 | 31.4 | cpu |
 | e0-identity-noisy | identity | processed_noisy/test | 19956 | 0.2271 | 0.8376 | 0.1624 | 0.0000 | – / – / – | 0.0 | 0.0 | 44.7 | cpu |
