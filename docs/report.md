@@ -100,6 +100,22 @@ by both the LLM and the tagger, against one third for the lexicon.
 Files: `results/e4-laptop-*.json`, `results/lat-laptop-*.json`, `results/t2-laptop-tagger-*.json`,
 `results/profile-laptop-q4_k_m-t8.profile.json`. Details in `docs/latency.md`.
 
+**Large tagger** (`configs/tagger_large.yaml`, d 512 × 12 layers; sentence split: clean CER 0.0058 /
+sentence accuracy 0.6857). Laptop on AC power, Windows Balanced plan, browser left open; three
+interleaved rounds of 200 clean sentences, batch size 1 (`results/laptop-ac/`):
+
+| system | threads | p95 ms per round | median p95 ms | median p50 ms |
+|---|---|---|---|---|
+| tagger (control) | 4 | 17.30 / 18.10 / 29.69 | 18.10 | 10.82 |
+| large tagger | 1 | 110.82 / 112.47 / 116.55 | 112.47 | 63.11 |
+| large tagger | 2 | 61.21 / 63.00 / 63.67 | 63.00 | 35.91 |
+| large tagger | 4 | 41.79 / 64.83 / 70.07 | 64.83 | 29.27 |
+| large tagger | 8 | 39.29 / 46.05 / 46.83 | 46.05 | 28.32 |
+| large tagger | 16 | 28.92 / 31.63 / 31.66 | 31.63 | 19.69 |
+
+The large tagger meets the 50 ms budget only with 8 or more threads, with little margin at 8. The
+smaller tagger stays well inside it on 4 threads.
+
 ## Findings
 
 1. **A fine-tuned 0.5B LLM restores diacritics well but cannot meet the budget on the target CPU.**

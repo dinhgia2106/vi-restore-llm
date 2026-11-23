@@ -1,0 +1,29 @@
+{
+  "tag": "tagger-large-t4-r3",
+  "model": "tagger:tagger-large",
+  "test_file": "data\\processed\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.00615,
+    "wer": 0.02452,
+    "word_acc": 0.97548,
+    "sent_acc": 0.685
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 35.07,
+    "p95_ms": 70.07,
+    "mean_ms": 36.45
+  },
+  "throughput_sent_per_s": 31.87,
+  "rss_mb": 367.4,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 4
+  },
+  "timestamp": "2026-11-23T04:22:45+00:00"
+}
