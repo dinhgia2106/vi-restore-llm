@@ -28,7 +28,7 @@
 2. drops sentences containing URLs, e-mail addresses or markup, or with < 70 % letters or > 10 % digits;
 3. removes exact duplicates;
 4. builds the model input by stripping diacritics (and, with `--noisy`, adding synthetic Telex/typo noise);
-5. assigns train / dev / test (98 / 1 / 1) by a hash of the sentence.
+5. assigns train / dev / test (98 / 1 / 1) by a hash of the sentence, or of the document id with `--split-by document`.
 
 ### Shards used
 
@@ -46,6 +46,27 @@ raw/professional_field/general/part-677f75d865d8-000332.jsonl.gz
 
 Documents are read round-robin across shards, so `--limit` samples every domain.
 
+### Document-level split
+
+The first build (`data/processed`) assigns each **sentence** to a split by hash, so different sentences of one document can land in train and test. Results from it are labelled "sentence split". `--split-by document` (`data/doc_split`, tags `ds-*`) instead:
+
+1. assigns each document to train / dev / test (98 / 1 / 1) by a hash of its `id`;
+2. removes from dev and test every sentence that matches a training sentence after lower-casing and masking digits, or shares a run of 8 words with one.
+
+`python -m virestore.docsplit` builds an **external** test set from shards used for no split, one per domain, at most 3 sentences per document, with the same near-duplicate filter against the full training split:
+
+```
+raw/culture/common_crawl/part-677f75d865d8-001249.jsonl.gz
+raw/encyclopedia/common_crawl/part-677f75d865d8-001285.jsonl.gz
+raw/general/common_crawl/part-677f75d865d8-000073.jsonl.gz
+raw/history_policy/general/part-677f75d865d8-000358.jsonl.gz
+raw/local_life/general/part-677f75d865d8-000731.jsonl.gz
+raw/news/general/part-677f75d865d8-000509.jsonl.gz
+raw/professional_field/general/part-677f75d865d8-000530.jsonl.gz
+```
+
+Three of these come from the `common_crawl` source because their domains have no second `general` shard.
+
 ## Layout
 
 ```
@@ -53,6 +74,7 @@ data/
   raw/wanjuan-vietnamese/   downloaded *.jsonl(.gz) shards — not committed
   processed/                clean task pairs — not committed
   processed_noisy/          noisy task pairs — not committed
+  doc_split/, doc_split_noisy/   document-level split and external set — not committed
   sample/sample.txt         18 hand-written sentences used by the tests
 ```
 

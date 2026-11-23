@@ -1,0 +1,31 @@
+# Experiment E5 as run on the molab GPU: same as qwen15_qlora.yaml, but the base model stays in bf16
+# (the 4-bit base in qwen15_qlora.yaml exists to fit the 8 GB laptop GPU; the sandbox has 96 GB, and
+# installing bitsandbytes there risks replacing the sandbox's CUDA torch). Effective batch is still 32.
+model: Qwen/Qwen2.5-1.5B-Instruct
+output_dir: runs/ds-qwen15-lora-noisy
+seed: 13
+load_in_4bit: false
+
+data:
+  train: data/doc_split_noisy/train.jsonl
+  dev: data/doc_split_noisy/dev.jsonl
+  train_limit: 200000
+  dev_limit: 1000
+  max_len: 192
+
+lora:
+  r: 32
+  alpha: 64
+  dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+train:
+  batch_size: 16
+  grad_accum: 2
+  lr: 1.5e-4
+  epochs: 1
+  warmup_ratio: 0.03
+  logging_steps: 25
+  eval_steps: 500
+  gradient_checkpointing: false
+  report_to: none

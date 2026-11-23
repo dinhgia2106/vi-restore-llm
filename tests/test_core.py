@@ -240,3 +240,49 @@ def test_resolve_stacked_tones_keeps_the_likelier_one():
     lp[2, labels[2]], lp[3, labels[3]] = -0.1, -1.0
     lp[2, 0], lp[3, 0] = -3.0, -2.0
     assert decode("thoa", resolve_stacked_tones("thoa", labels, lp, valid_labels)) == "thỏa"
+
+
+def test_document_split_keeps_documents_whole_and_filters_near_duplicates(tmp_path):
+    import json
+
+    from virestore.data import _split_of, build, load_jsonl
+    from virestore.docsplit import TrainIndex
+
+    index = TrainIndex(["Năm 2020 thành phố có một trăm nghìn người dân sinh sống tại đây"])
+    assert index.leaks("năm 1999 thành phố có một trăm nghìn người dân sinh sống tại đây")
+    assert index.leaks("Hôm đó thành phố có một trăm nghìn người dân đến xem")
+    assert not index.leaks("Hôm nay trời đẹp quá nên chúng tôi đi chơi ở công viên")
+
+    ids = [f"doc-{i}" for i in range(4000)]
+    test_id = next(i for i in ids if _split_of(i) == "test")
+    train_id = next(i for i in ids if _split_of(i) == "train")
+    records = [
+        {"id": test_id, "content": "Câu riêng của tài liệu kiểm tra này.\nMột câu thứ hai cũng thuộc về nó."},
+        {"id": train_id, "content": "Tài liệu huấn luyện có câu hoàn toàn khác biệt."},
+    ]
+    corpus = tmp_path / "c.jsonl"
+    corpus.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in records), encoding="utf-8")
+    stats = build(corpus, tmp_path / "out", False, 13, 3, 40, None, split_by="document")
+    assert stats["counts"] == {"train": 1, "dev": 0, "test": 2}
+    assert len(load_jsonl(tmp_path / "out" / "test.jsonl")) == 2
+
+
+def test_external_set_samples_per_domain_and_skips_train_neighbours(tmp_path):
+    import gzip
+    import json
+
+    from virestore.data import load_jsonl
+    from virestore.docsplit import build_external
+
+    shared = "Thành phố có một trăm nghìn người dân sinh sống tại đây"
+    train = tmp_path / "train.jsonl"
+    train.write_text(json.dumps({"input": "x", "target": shared}, ensure_ascii=False) + "\n", encoding="utf-8")
+    shard = tmp_path / "ext" / "raw" / "news" / "general" / "part-1.jsonl.gz"
+    shard.parent.mkdir(parents=True)
+    content = "\n".join([shared, "Câu mới đầu tiên của bài báo.", "Câu mới thứ hai của bài báo.", "Câu mới thứ ba của bài báo."])
+    with gzip.open(shard, "wt", encoding="utf-8") as fh:
+        fh.write(json.dumps({"id": "a", "content": content}, ensure_ascii=False) + "\n")
+    stats = build_external(tmp_path / "ext", train, tmp_path / "out", 10, 2, 1.0, False, 13)
+    assert stats["sentences"] == {"news": 2} and stats["removed_as_near_train"] == 1
+    rows = load_jsonl(tmp_path / "out" / "external_news.jsonl")
+    assert len(rows) == 2 and all(r["domain"] == "news" and r["target"] != shared for r in rows)

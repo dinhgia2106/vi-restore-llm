@@ -3,6 +3,7 @@
 Usage:
     python -m virestore.data --corpus data/raw --out data/processed --noisy
     python -m virestore.data --corpus data/raw/wanjuan-vietnamese --out data/processed --limit 2000000
+    python -m virestore.data --corpus data/raw/wanjuan-vietnamese --out data/doc_split --limit 2000000 --split-by document
 
 The corpus can be a .txt file, a .jsonl(.gz) file, or a folder containing either.
 """
@@ -24,9 +25,13 @@ from .text import has_diacritics, split_sentences
 SPLITS = (("train", 0.98), ("dev", 0.01), ("test", 0.01))
 
 
-def _split_of(sentence: str) -> str:
-    """Deterministic split by content hash, so a sentence never leaks across splits."""
-    h = int(hashlib.md5(sentence.encode("utf-8")).hexdigest()[:8], 16) / 0xFFFFFFFF
+def _split_of(key: str) -> str:
+    """Deterministic split by a hash of the sentence or of the document id.
+
+    Hashing sentences only keeps exact copies out of other splits: sentences of one document can
+    still land in train and test. Use `--split-by document` to keep documents whole.
+    """
+    h = int(hashlib.md5(key.encode("utf-8")).hexdigest()[:8], 16) / 0xFFFFFFFF
     acc = 0.0
     for name, frac in SPLITS:
         acc += frac
@@ -46,12 +51,17 @@ def _open(path: Path):
     return path.open(encoding="utf-8", errors="ignore")
 
 
-def _iter_file(f: Path, text_field: str | None):
+def _doc_id(obj: dict | None, text: str) -> str:
+    doc_id = obj.get("id") if obj else None
+    return str(doc_id) if doc_id not in (None, "") else hashlib.md5(text.encode("utf-8")).hexdigest()
+
+
+def _iter_file(f: Path, text_field: str | None, with_id: bool = False):
     is_json = ".json" in f.name
     with _open(f) as fh:
         for line in fh:
             if not is_json:
-                yield line
+                yield (_doc_id(None, line), line) if with_id else line
                 continue
             try:
                 obj = json.loads(line)
@@ -59,17 +69,17 @@ def _iter_file(f: Path, text_field: str | None):
                 continue
             field = text_field or next((k for k in TEXT_FIELDS if k in obj), None)
             if field and isinstance(obj.get(field), str):
-                yield obj[field]
+                yield (_doc_id(obj, obj[field]), obj[field]) if with_id else obj[field]
 
 
-def iter_documents(corpus: Path, text_field: str | None = None):
+def iter_documents(corpus: Path, text_field: str | None = None, with_id: bool = False):
     """Yield raw text from .txt files (one document per line) or JSON Lines files.
 
     Documents from several files are interleaved round-robin, so that ``--limit``
     draws from every shard (and every WanJuan domain) instead of only the first one.
     """
     files = [corpus] if corpus.is_file() else sorted(p for p in corpus.rglob("*") if p.name.endswith(TEXT_SUFFIXES))
-    streams = [_iter_file(f, text_field) for f in files]
+    streams = [_iter_file(f, text_field, with_id) for f in files]
     while streams:
         alive = []
         for it in streams:
@@ -97,8 +107,18 @@ def iter_sentences(corpus: Path, min_words: int, max_words: int, text_field: str
                     yield s
 
 
+def iter_doc_sentences(corpus: Path, min_words: int, max_words: int, text_field: str | None = None):
+    """Yield (document id, sentence)."""
+    for doc_id, doc in iter_documents(corpus, text_field, with_id=True):
+        for paragraph in doc.splitlines():
+            for s in split_sentences(paragraph):
+                if is_clean_sentence(s, min_words, max_words):
+                    yield doc_id, s
+
+
 def build(
-    corpus: Path, out: Path, noisy: bool, seed: int, min_words: int, max_words: int, limit: int | None, text_field: str | None = None
+    corpus: Path, out: Path, noisy: bool, seed: int, min_words: int, max_words: int, limit: int | None,
+    text_field: str | None = None, split_by: str = "sentence",
 ) -> dict:
     out.mkdir(parents=True, exist_ok=True)
     rng = random.Random(seed)
@@ -107,12 +127,16 @@ def build(
     seen: set[bytes] = set()  # 8-byte digests keep memory small on millions of sentences
     counts = {name: 0 for name, _ in SPLITS}
     try:
-        for s in iter_sentences(corpus, min_words, max_words, text_field):
+        if split_by == "document":
+            stream = iter_doc_sentences(corpus, min_words, max_words, text_field)
+        else:
+            stream = ((None, s) for s in iter_sentences(corpus, min_words, max_words, text_field))
+        for doc_id, s in stream:
             key = hashlib.md5(s.encode("utf-8")).digest()[:8]
             if key in seen:
                 continue
             seen.add(key)
-            split = _split_of(s)
+            split = _split_of(doc_id if split_by == "document" else s)
             row = {"input": make_input(s, rng, noise), "target": s}
             writers[split].write(json.dumps(row, ensure_ascii=False) + "\n")
             counts[split] += 1
@@ -121,7 +145,13 @@ def build(
     finally:
         for w in writers.values():
             w.close()
-    stats = {"corpus": str(corpus), "noisy": noisy, "seed": seed, "min_words": min_words, "max_words": max_words, "counts": counts}
+    stats = {"corpus": str(corpus), "noisy": noisy, "seed": seed, "min_words": min_words, "max_words": max_words,
+             "split_by": split_by, "counts": counts}
+    if split_by == "document":
+        from .docsplit import filter_leaks
+
+        stats["near_duplicate_filter"] = filter_leaks(out)
+        stats["counts"] = {"train": counts["train"], **{k: v["kept"] for k, v in stats["near_duplicate_filter"].items()}}
     (out / "stats.json").write_text(json.dumps(stats, indent=2), encoding="utf-8")
     return stats
 
@@ -147,8 +177,11 @@ def main() -> None:
     ap.add_argument("--max-words", type=int, default=40)
     ap.add_argument("--limit", type=int, default=None, help="stop after N unique sentences")
     ap.add_argument("--text-field", default=None, help="JSON field holding the text (default: auto-detect content/text)")
+    ap.add_argument("--split-by", choices=["sentence", "document"], default="sentence",
+                    help="document keeps each document in one split and removes near-duplicates of train from dev/test")
     args = ap.parse_args()
-    stats = build(args.corpus, args.out, args.noisy, args.seed, args.min_words, args.max_words, args.limit, args.text_field)
+    stats = build(args.corpus, args.out, args.noisy, args.seed, args.min_words, args.max_words, args.limit,
+                  args.text_field, args.split_by)
     print(json.dumps(stats, indent=2, ensure_ascii=False))
 
 
