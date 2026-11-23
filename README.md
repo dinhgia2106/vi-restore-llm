@@ -22,7 +22,7 @@ Filled in by `python -m virestore.eval`; every run, including the noisy and hard
 |---|---|---|---|---|---|---|
 | Identity (floor) | – | 0.2111 | 0.8284 | 0.0000 | | |
 | Lexicon (unigram + bigram) | – | 0.0342 | 0.1426 | 0.1576 | | |
-| Acausal TCN ([repo](https://github.com/dinhgia2106/Vietnamese-diacritic-restoration)) | | | | | | |
+| Acausal TCN ([repo](https://github.com/dinhgia2106/Vietnamese-diacritic-restoration))⁷ | | | | | | |
 | Qwen2.5-0.5B, zero-shot¹ | 0.5B | 0.5687 | 1.0144 | 0.0000 | | |
 | Qwen2.5-0.5B + LoRA² | 0.5B | 0.0129 | 0.0493 | 0.5219 | | |
 | Qwen2.5-0.5B + LoRA, GGUF Q4_K_M³ | 0.5B | 0.0108 | 0.0423 | 0.5780 | 554.44 ms⁴ | 538 MB⁴ |
@@ -40,6 +40,8 @@ Filled in by `python -m virestore.eval`; every run, including the noisy and hard
 ⁵ `configs/tagger.yaml`: a Transformer encoder over characters that labels every vowel (and `d`) with one of 30 diacritic labels in a single pass, so it cannot rewrite letters. Trained on all 1.96M clean training pairs for 3 epochs — **ten times the data of the LoRA run**, so this row does not isolate the architecture. Hard set: CER 0.0114 / sentence acc 0.5587; noisy input (not trained on): 0.0358 / 0.2097. Latency: target laptop, PyTorch 2.15 CPU, 4 threads, batch size 1, 200 clean sentences (`results/t2-laptop-tagger-t4.json`; on those sentences CER 0.0100 / sentence acc 0.550 against 0.0110 / 0.560 for Q4_K_M). 1 thread: 44.58 ms, 2 threads: 25.16 ms, 8 threads: 16.28 ms.
 
 ⁶ `configs/qwen15_lora_noisy.yaml` (E5): LoRA r = 32 on 200k **noisy** pairs, one epoch; the base stays in bf16 on the sandbox GPU instead of the 4-bit base of `qwen15_qlora.yaml`. It is the only system trained to repair typos and leftover Telex: on the noisy test set CER 0.0157 / sentence acc 0.5059 (tagger 0.0358 / 0.2097, 0.5B LoRA 0.0428 / 0.1919); hard set 0.0173 / 0.5223. Not measured on the laptop; the 0.5B model already misses the budget.
+
+⁷ Not measured. The original checkpoint is lost; a retrain on 300k sentences (`virestore.train_tcn`) was in its last epoch when the molab sandbox shut down, and its checkpoint was lost with it.
 
 **Candidate bar (EM@k).** Share of sentences whose reference is among the top k candidates (`eval --nbest 5`, runs tagged `-nbest`; full test sets):
 

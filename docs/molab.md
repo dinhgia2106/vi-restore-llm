@@ -46,6 +46,15 @@ in the sandbox: for each incoming `results/` file, compare the sandbox copy with
 `git checkout -- results/summary.md` (it is regenerated from the JSON files on the next eval) and
 `git pull --ff-only`. The `repo` cell pulls with `check=True`, so a blocked pull stops the notebook.
 
+## Sandbox lifetime
+
+A molab sandbox can shut down without warning (on 2026-11-23 it went from answering to HTTP 401,
+then 410 Gone, while two training jobs were running). Everything on its disk goes with it:
+checkpoints, logs, predictions. For long training runs, upload the checkpoint to the private HF
+repo at each epoch, not only at the end, and copy results to the laptop as soon as a job finishes.
+A new sandbox needs a new URL and token from the user, then the notebook (`notebooks/experiments.py`)
+and the data build again.
+
 ## Model files
 
 Checkpoints and GGUF files are not committed. Adapters are pushed to **private** Hugging Face model

@@ -138,6 +138,10 @@ Files: `results/e4-laptop-*.json`, `results/lat-laptop-*.json`, `results/t2-lapt
 - HF/PyTorch and llama.cpp give different outputs for the same merged model (clean2k CER 0.0121 vs
   0.0105); precision, merging and batch size were ruled out; the cause is open
   (`docs/quantization.md`).
+- **Not finished.** The acausal TCN baseline (E1) has no result: its original checkpoint is lost,
+  and the retrain (`virestore.train_tcn`, 300k sentences) and a larger tagger
+  (`configs/tagger_large.yaml`, d 512 × 12 layers) were both still training when the molab sandbox
+  shut down; no checkpoint survived. Both need a rerun.
 - Exact-match metrics count orthographic variants (`hoá` / `hóa`) as errors for every system.
 - GPU greedy decoding is not bit-for-bit reproducible (a re-run moved sentence accuracy by 0.001).
 
