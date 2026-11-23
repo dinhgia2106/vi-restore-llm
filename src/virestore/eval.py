@@ -80,7 +80,7 @@ def measure_latency(restorer, inputs: list[str], n: int) -> dict:
 def write_summary(results_dir: Path) -> Path:
     rows = []
     for f in sorted(results_dir.glob("*.json")):
-        if f.name.endswith((".analysis.json", ".profile.json")):  # analysis / latency profiles, not eval runs
+        if f.name.endswith((".analysis.json", ".profile.json", ".stream.json", ".calibration.json")):  # analysis / latency profiles, not eval runs
             continue
         r = json.loads(f.read_text(encoding="utf-8"))
         q, lat = r["quality"], r.get("latency", {})

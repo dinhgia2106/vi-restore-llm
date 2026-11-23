@@ -286,3 +286,40 @@ def test_external_set_samples_per_domain_and_skips_train_neighbours(tmp_path):
     assert stats["sentences"] == {"news": 2} and stats["removed_as_near_train"] == 1
     rows = load_jsonl(tmp_path / "out" / "external_news.jsonl")
     assert len(rows) == 2 and all(r["domain"] == "news" and r["target"] != shared for r in rows)
+
+
+def test_streaming_policies_count_revisions():
+    from virestore.streaming import empty_counts, rates, simulate, word_prefixes
+
+    assert word_prefixes("hom nay  troi") == ["hom", "hom nay", "hom nay  troi"]
+    target = ["hôm", "nay", "trời"]
+    steps = [["hom"], ["hôm", "này"], ["hôm", "nay", "trời"]]
+
+    free = empty_counts()
+    simulate(steps, target, None, free)
+    assert free["sentences_correct"] == 1 and free["revisions"] == 2 and free["helpful"] == 2 and free["harmful"] == 0
+    assert free["first_correct"] == 1 and free["settle_steps"] == 2
+
+    frozen = empty_counts()
+    simulate(steps, target, 0, frozen)
+    assert frozen["revisions"] == 0 and frozen["sentences_correct"] == 0 and frozen["final_correct"] == 1
+
+    one = empty_counts()
+    simulate(steps, target, 1, one)
+    assert one["sentences_correct"] == 1 and one["revisions"] == 2
+    assert rates(one)["final_word_acc"] == 1.0
+
+
+def test_truncate_at_word_keeps_labels_aligned():
+    import random
+
+    from virestore.tagger import truncate_at_word
+
+    src, labels = "hom nay troi", list(range(12))
+    seen = set()
+    rng = random.Random(1)
+    for _ in range(50):
+        s, l = truncate_at_word(src, labels, rng)
+        assert l == labels[: len(s)]
+        seen.add(s)
+    assert seen == {"hom", "hom nay", "hom nay troi"}

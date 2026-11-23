@@ -114,7 +114,14 @@ class Vocab:
         return len(self.chars) + 2
 
 
-def _batches(rows, vocab, batch_size, max_len, shuffle, rng):
+def truncate_at_word(src: str, labels: list[int], rng) -> tuple[str, list[int]]:
+    """Cut a training pair after a random word, as if the user were still typing the sentence."""
+    ends = [i for i, c in enumerate(src) if c == " "] + [len(src)]
+    end = rng.choice(ends)
+    return src[:end], labels[:end]
+
+
+def _batches(rows, vocab, batch_size, max_len, shuffle, rng, prefix_prob: float = 0.0):
     import torch
 
     order = list(range(len(rows)))
@@ -122,6 +129,8 @@ def _batches(rows, vocab, batch_size, max_len, shuffle, rng):
         rng.shuffle(order)
     for i in range(0, len(order), batch_size):
         chunk = [rows[j] for j in order[i : i + batch_size]]
+        if prefix_prob:
+            chunk = [truncate_at_word(*r, rng) if rng.random() < prefix_prob else r for r in chunk]
         n = min(max(len(r[0]) for r in chunk), max_len)
         ids = torch.zeros((len(chunk), n), dtype=torch.long)
         lab = torch.full((len(chunk), n), -100, dtype=torch.long)
@@ -221,7 +230,7 @@ def main() -> None:
 
     model.train()
     for epoch in range(t["epochs"]):
-        for ids, mask, lab in _batches(train, vocab, t["batch_size"], m["max_len"], True, rng):
+        for ids, mask, lab in _batches(train, vocab, t["batch_size"], m["max_len"], True, rng, d.get("prefix_prob", 0.0)):
             ids, mask, lab = ids.to(device), mask.to(device), lab.to(device)
             with torch.autocast(device, dtype=torch.bfloat16, enabled=device == "cuda"):
                 logits = model(ids, mask)
