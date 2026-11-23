@@ -1,0 +1,29 @@
+{
+  "tag": "s-kd-onnx-t4-r1",
+  "model": "tagger-onnx:ds-tagger-s-kd/tagger.onnx",
+  "test_file": "data\\doc_split\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.01374,
+    "wer": 0.05704,
+    "word_acc": 0.94296,
+    "sent_acc": 0.505
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 6.66,
+    "p95_ms": 11.1,
+    "mean_ms": 6.96
+  },
+  "throughput_sent_per_s": 84.98,
+  "rss_mb": 269.9,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 4
+  },
+  "timestamp": "2026-11-23T10:52:15+00:00"
+}

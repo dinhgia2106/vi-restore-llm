@@ -1,0 +1,29 @@
+{
+  "tag": "kd-pt-t4-r1",
+  "model": "tagger:ds-tagger-kd",
+  "test_file": "data\\doc_split\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.01078,
+    "wer": 0.04439,
+    "word_acc": 0.95561,
+    "sent_acc": 0.565
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 10.01,
+    "p95_ms": 19.57,
+    "mean_ms": 10.76
+  },
+  "throughput_sent_per_s": 94.58,
+  "rss_mb": 289.9,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 4
+  },
+  "timestamp": "2026-11-23T10:51:57+00:00"
+}

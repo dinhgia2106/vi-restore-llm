@@ -1,0 +1,24 @@
+{
+  "tag": "ds-tagger-kd-int8-clean",
+  "model": "tagger-onnx:ds-tagger-kd/tagger.int8.onnx",
+  "test_file": "data\\doc_split\\test.jsonl",
+  "quality": {
+    "n": 17841,
+    "cer": 0.00907,
+    "wer": 0.03797,
+    "word_acc": 0.96203,
+    "sent_acc": 0.59021
+  },
+  "latency": {},
+  "throughput_sent_per_s": 125.77,
+  "rss_mb": 299.8,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 16
+  },
+  "timestamp": "2026-11-23T11:00:35+00:00"
+}
