@@ -1,0 +1,27 @@
+{
+  "tag": "t2-tagger-large-clean",
+  "model": "tagger:tagger-large",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test.jsonl",
+  "quality": {
+    "n": 19956,
+    "cer": 0.0058,
+    "wer": 0.0241,
+    "word_acc": 0.9759,
+    "sent_acc": 0.68566,
+    "em@1": 0.68566,
+    "em@3": 0.80176,
+    "em@5": 0.83634
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1164.22,
+  "rss_mb": 3781.4,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T04:05:19+00:00"
+}
