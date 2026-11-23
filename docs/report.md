@@ -119,6 +119,22 @@ interleaved rounds of 200 clean sentences, batch size 1 (`results/laptop-ac/`):
 The large tagger meets the 50 ms budget only with 8 or more threads, with little margin at 8. The
 smaller tagger stays well inside it on 4 threads.
 
+**Acausal TCN** (300k training pairs), same protocol with its own control runs
+(`results/laptop-ac-tcn/`). On these 200 sentences the TCN scores CER 0.0289 / sentence accuracy
+0.095, against 0.0100 / 0.550 for the tagger:
+
+| system | threads | p95 ms per round | median p95 ms | median p50 ms |
+|---|---|---|---|---|
+| tagger (control) | 4 | 16.28 / 16.69 / 17.76 | 16.69 | 9.93 |
+| TCN | 1 | 48.57 / 48.58 / 49.33 | 48.58 | 28.02 |
+| TCN | 2 | 29.64 / 29.85 / 30.73 | 29.85 | 17.91 |
+| TCN | 4 | 23.83 / 24.42 / 24.70 | 24.42 | 14.43 |
+| TCN | 8 | 24.26 / 24.74 / 27.72 | 24.74 | 16.04 |
+| TCN | 16 | 31.72 / 31.84 / 32.11 | 31.84 | 20.14 |
+
+The TCN fits the budget at every thread count tried, but it is slower than the tagger on 4 threads
+and far less accurate at its 300k-pair training size.
+
 ## Findings
 
 1. **A fine-tuned 0.5B LLM restores diacritics well but cannot meet the budget on the target CPU.**

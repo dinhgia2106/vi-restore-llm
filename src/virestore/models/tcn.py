@@ -14,7 +14,12 @@ from pathlib import Path
 class TCNRestorer:
     name = "tcn"
 
-    def __init__(self, repo: str | Path, weights: str | Path | None = None):
+    def __init__(self, repo: str | Path, weights: str | Path | None = None, threads: int | None = None):
+        import torch
+
+        if threads:
+            torch.set_num_threads(threads)
+        self.n_threads = torch.get_num_threads()
         repo = Path(repo).resolve()
         if not (repo / "model_architecture.py").exists():
             raise FileNotFoundError(f"model_architecture.py not found in {repo}")

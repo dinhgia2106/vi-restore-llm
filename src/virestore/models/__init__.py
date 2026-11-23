@@ -27,7 +27,7 @@ def load(kind: str, **kwargs) -> Restorer:
     if kind == "tcn":
         from .tcn import TCNRestorer
 
-        return TCNRestorer(kwargs["tcn_repo"], kwargs.get("tcn_weights"))
+        return TCNRestorer(kwargs["tcn_repo"], kwargs.get("tcn_weights"), threads=kwargs.get("threads"))
     if kind == "hf":
         from .hf_llm import HFRestorer
 

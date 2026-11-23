@@ -1,0 +1,29 @@
+{
+  "tag": "tcn-t1-r1",
+  "model": "tcn",
+  "test_file": "data\\processed\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.02894,
+    "wer": 0.12476,
+    "word_acc": 0.87524,
+    "sent_acc": 0.095
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 28.02,
+    "p95_ms": 48.58,
+    "mean_ms": 28.81
+  },
+  "throughput_sent_per_s": 34.03,
+  "rss_mb": 301.3,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 1
+  },
+  "timestamp": "2026-11-23T04:27:33+00:00"
+}
