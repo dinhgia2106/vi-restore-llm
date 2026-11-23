@@ -77,6 +77,10 @@ def main() -> None:
         a.model, model=a.hf_model or a.gguf or a.tagger, adapter=a.adapter, train=a.train,
         tcn_repo=a.tcn_repo, tcn_weights=a.tcn_weights, threads=a.threads,
     )
+    if a.model in ("tagger", "tagger-onnx"):
+        from .ime import ImeRestorer
+
+        restorer = ImeRestorer(restorer)
     uvicorn.run(create_app(restorer), host=a.host, port=a.port)
 
 

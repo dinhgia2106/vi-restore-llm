@@ -195,3 +195,48 @@ def test_tagger_restorer_untrained_smoke(tmp_path):
     assert strip_diacritics(out) == src  # never changes letters
     nb = r.restore_nbest([src], 3)[0]
     assert nb[0] == out and len(nb) == 3 and all(strip_diacritics(x) == src for x in nb)
+
+
+def test_ime_chunks_lock_and_tone_rules():
+    from virestore.ime import ImeRestorer, has_stacked_tones, lock_typed_words, split_chunks
+
+    text = "mot hai ba. bon nam sau bay tam chin muoi"
+    chunks = split_chunks(text, 16)
+    assert "".join(c for c, _ in chunks) == text
+    assert chunks[0] == ("mot hai ba. ", True)
+    assert all(len(c) <= 16 for c, _ in chunks)
+    assert split_chunks("x" * 30 + " mot", 10)[0] == ("x" * 30 + " ", False)
+    assert "".join(c for c, _ in split_chunks(" " * 30, 10)) == " " * 30
+
+    assert lock_typed_words("hôm nay troi", "hom này trời") == "hôm này trời"
+    assert has_stacked_tones("thỏả") and not has_stacked_tones("và/hoặc") and not has_stacked_tones("người")
+
+    class Fake:
+        name, max_len = "fake", 16
+        seen: list[str] = []
+
+        def restore_one_tone(self, xs):
+            self.seen += xs
+            return [x.replace("nay", "này") for x in xs]
+
+        def restore_nbest(self, xs, k):
+            return [[x, "thỏả"] for x in xs]
+
+    fake = Fake()
+    ime = ImeRestorer(fake)
+    assert ime.restore(["", "  "]) == ["", "  "] and fake.seen == []
+    assert ime.restore(["hôm nay"]) == ["hôm này"] and fake.seen == ["hom nay"]
+    assert "thỏả" not in ime.restore_nbest(["hom nay"], 3)[0]
+
+
+def test_resolve_stacked_tones_keeps_the_likelier_one():
+    import torch
+
+    from virestore.models.tagger import resolve_stacked_tones
+    from virestore.tagger import char_label, decode, valid_labels
+
+    labels = [char_label(c) for c in "thỏả"]
+    lp = torch.full((4, 30), -9.0)
+    lp[2, labels[2]], lp[3, labels[3]] = -0.1, -1.0
+    lp[2, 0], lp[3, 0] = -3.0, -2.0
+    assert decode("thoa", resolve_stacked_tones("thoa", labels, lp, valid_labels)) == "thỏa"

@@ -3,7 +3,31 @@
 from __future__ import annotations
 
 import heapq
+import re
 from pathlib import Path
+
+
+def resolve_stacked_tones(source: str, labels: list[int], log_probs, valid) -> list[int]:
+    """Keep one tone per run of adjacent vowels: the choice with the best total log-probability."""
+    from ..tagger import TONES
+
+    labels = list(labels)
+    for m in re.finditer(r"[aeiouy]+", source, re.IGNORECASE):
+        toned = [j for j in range(m.start(), m.end()) if labels[j] % len(TONES)]
+        if len(toned) < 2:
+            continue
+        untoned = {
+            j: max((l for l in valid(source[j]) if l % len(TONES) == 0), key=lambda l: float(log_probs[j, l]))
+            for j in toned
+        }
+        keep = max(
+            toned,
+            key=lambda t: float(log_probs[t, labels[t]]) + sum(float(log_probs[j, untoned[j]]) for j in toned if j != t),
+        )
+        for j in toned:
+            if j != keep:
+                labels[j] = untoned[j]
+    return labels
 
 
 class TaggerRestorer:
@@ -39,6 +63,8 @@ class TaggerRestorer:
         import torch
 
         n = min(max(len(s) for s in batch), self.max_len)
+        if n == 0:  # all sentences empty: onnxruntime cannot run a zero-length sequence
+            return torch.zeros((len(batch), 0, self._n_labels)), 0
         ids = torch.zeros((len(batch), n), dtype=torch.long)
         mask = torch.zeros((len(batch), n, self._n_labels))
         for k, s in enumerate(batch):
@@ -61,6 +87,20 @@ class TaggerRestorer:
             labels = lp.argmax(-1).tolist()
             # characters beyond max_len (very long sentences) are copied unchanged
             out += [decode(s[:n], lab[: min(len(s), n)]) + s[n:] for s, lab in zip(batch, labels)]
+        return out
+
+    def restore_one_tone(self, inputs: list[str]) -> list[str]:
+        """Like restore(), but a run of adjacent vowels never gets two tones (used by virestore.ime)."""
+        from ..tagger import decode
+
+        out: list[str] = []
+        for i in range(0, len(inputs), self.batch_size):
+            batch = inputs[i : i + self.batch_size]
+            lp, n = self._log_probs(batch)
+            labels = lp.argmax(-1).tolist()
+            for b, s in enumerate(batch):
+                lab = resolve_stacked_tones(s[:n], labels[b][: min(len(s), n)], lp[b], self._valid)
+                out.append(decode(s[:n], lab) + s[n:])
         return out
 
     def restore_nbest(self, inputs: list[str], k: int, per_char: int = 3) -> list[list[str]]:
@@ -119,6 +159,8 @@ class OnnxTaggerRestorer(TaggerRestorer):
         import torch
 
         n = min(max(len(s) for s in batch), self.max_len)
+        if n == 0:  # all sentences empty: onnxruntime cannot run a zero-length sequence
+            return torch.zeros((len(batch), 0, self._n_labels)), 0
         ids = np.zeros((len(batch), n), dtype=np.int64)
         mask = torch.zeros((len(batch), n, self._n_labels))
         for k, s in enumerate(batch):
