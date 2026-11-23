@@ -684,20 +684,109 @@ def docsplit(LOGS, RAW, REPO, job_state, launch, mo, refresh, sys):
             ["virestore.train_lora", "--config", REPO / "configs/qwen15_lora_noisy_ds.yaml"],
             *_evals("qwen15-lora-noisy", _q15),
         )
+        DS_JOBS["ds_gpu3"] = launch(
+            "ds_gpu3",
+            ["virestore.tagger", "--config", REPO / "configs/tagger_large_ds.yaml"],
+            *_evals("tagger-large", ["--model", "tagger", "--tagger", REPO / "runs/ds-tagger-large", "--batch-size", 256], ("--nbest", 5)),
+            *[
+                ["virestore.eval", "--model", "tagger", "--tagger", REPO / "runs/ds-tagger-large", "--batch-size", 256,
+                 "--test", DS / f"external_{d}.jsonl", "--latency-n", 0, "--nbest", 5,
+                 "--tag", f"ds-tagger-large-external-{d}", "--results", REPO / "results"]
+                for d in _domains
+            ],
+        )
         _up = "from huggingface_hub import HfApi; import os; a = HfApi(); a.create_repo('dinhgia2106/vi-restore-llm-docsplit', private=True, exist_ok=True); " + "; ".join(
             f"os.path.isdir('runs/{d}') and a.upload_folder(repo_id='dinhgia2106/vi-restore-llm-docsplit', folder_path='runs/{d}', "
             f"path_in_repo='{d}', ignore_patterns=['*/optimizer.pt', '*/scheduler.pt', '*/rng_state*'])"
-            for d in ("ds-tagger", "ds-tcn", "ds-qwen05-lora", "ds-qwen15-lora-noisy")
+            for d in ("ds-tagger", "ds-tagger-large", "ds-tcn", "ds-qwen05-lora", "ds-qwen15-lora-noisy")
         )
         # the exit check comes before the upload, so the last pass always sees the final checkpoints
         DS_JOBS["ds_sync"] = launch(
             "ds_sync",
             "while true; do d=0; "
-            f"test -f {LOGS}/ds_gpu1.exit && test -f {LOGS}/ds_gpu2.exit && d=1; "
+            f"test -f {LOGS}/ds_gpu1.exit && test -f {LOGS}/ds_gpu2.exit && test -f {LOGS}/ds_gpu3.exit && d=1; "
             f'{sys.executable} -c "{_up}" || true; '
             'test "$d" = 1 && break; sleep 1200; done',
         )
     DS_JOBS
+
+    return DS, DSN
+
+
+@app.cell
+def followups(DS, DSN, LOGS, REPO, job_state, launch, mo, refresh, sys):
+    refresh
+    # Follow-up studies on the document split: (1) streaming, (2) smaller models, (3) calibration.
+    mo.stop(
+        not all(job_state(j) == "done" for j in ("ds_gpu1", "ds_gpu2", "ds_gpu3")),
+        mo.md("the follow-up studies wait for the document-split training jobs"),
+    )
+    _res = REPO / "results"
+    _runs = REPO / "runs"
+    _clean, _ext = DS / "test.jsonl", DS / "external.jsonl"
+
+
+    def _stream(name, args, sets, extra=()):
+        return [
+            ["virestore.streaming", *args, "--test", te, *extra, "--tag", f"stream-{name}-{s}", "--results", _res]
+            for s, te in sets.items()
+        ]
+
+
+    def _tagger_stream(d):
+        return _stream(d, ["--model", "tagger", "--tagger", _runs / f"ds-{d}", "--batch-size", 512], {"clean": _clean, "external": _ext})
+
+
+    def _quality(d):
+        return [
+            ["virestore.eval", "--model", "tagger", "--tagger", _runs / f"ds-{d}", "--test", te, "--batch-size", 256,
+             "--latency-n", 0, "--nbest", 5, "--tag", f"ds-{d}-{s}", "--results", _res]
+            for s, te in {"clean": _clean, "hard": DS / "test_hard.jsonl", "noisy": DSN / "test.jsonl", "external": _ext}.items()
+        ]
+
+
+    def _calib(d):
+        return ["virestore.calibration", "--tagger", _runs / f"ds-{d}", "--dev", DS / "dev.jsonl", "--test", _ext,
+                "--tag", f"calib-{d}-external", "--results", _res]
+
+
+    FU_JOBS = {
+        "fu_stream": launch(
+            "fu_stream",
+            *_tagger_stream("tagger"),
+            *_tagger_stream("tagger-large"),
+            *_stream("lexicon", ["--model", "lexicon", "--train", DS / "train.jsonl"], {"clean": _clean, "external": _ext}),
+            *_stream("tcn", ["--model", "tcn", "--tcn-repo", "/marimo/Vietnamese-diacritic-restoration", "--tcn-weights",
+                             _runs / "ds-tcn/best_model.pth"], {"clean": _clean}, ("--limit", 1000)),
+            ["virestore.tagger", "--config", REPO / "configs/tagger_prefix_ds.yaml"],
+            *_quality("tagger-prefix"),
+            *_tagger_stream("tagger-prefix"),
+        ),
+        "fu_small": launch(
+            "fu_small",
+            ["virestore.tagger", "--config", REPO / "configs/tagger_kd_ds.yaml"],
+            *_quality("tagger-kd"),
+            ["virestore.tagger", "--config", REPO / "configs/tagger_s_ds.yaml"],
+            *_quality("tagger-s"),
+            ["virestore.tagger", "--config", REPO / "configs/tagger_s_kd_ds.yaml"],
+            *_quality("tagger-s-kd"),
+            _calib("tagger"),
+            _calib("tagger-large"),
+            _calib("tagger-kd"),
+        ),
+    }
+    _up2 = "from huggingface_hub import HfApi; import os; a = HfApi(); " + "; ".join(
+        f"os.path.isdir('runs/{d}') and a.upload_folder(repo_id='dinhgia2106/vi-restore-llm-docsplit', folder_path='runs/{d}', path_in_repo='{d}')"
+        for d in ("ds-tagger-prefix", "ds-tagger-kd", "ds-tagger-s", "ds-tagger-s-kd")
+    )
+    FU_JOBS["fu_sync"] = launch(
+        "fu_sync",
+        "while true; do d=0; "
+        f"test -f {LOGS}/fu_stream.exit && test -f {LOGS}/fu_small.exit && d=1; "
+        f'{sys.executable} -c "{_up2}" || true; '
+        'test "$d" = 1 && break; sleep 1200; done',
+    )
+    FU_JOBS
 
     return
 
