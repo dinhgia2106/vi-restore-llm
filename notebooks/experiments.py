@@ -709,7 +709,6 @@ def docsplit(LOGS, RAW, REPO, job_state, launch, mo, refresh, sys):
             'test "$d" = 1 && break; sleep 1200; done',
         )
     DS_JOBS
-
     return DS, DSN
 
 
@@ -718,7 +717,7 @@ def followups(DS, DSN, LOGS, REPO, job_state, launch, mo, refresh, sys):
     refresh
     # Follow-up studies on the document split: (1) streaming, (2) smaller models, (3) calibration.
     mo.stop(
-        not all(job_state(j) == "done" for j in ("ds_gpu1", "ds_gpu2", "ds_gpu3")),
+        not all(job_state(j) == "done" for j in ("ds_gpu1", "ds_gpu3")),
         mo.md("the follow-up studies wait for the document-split training jobs"),
     )
     _res = REPO / "results"
@@ -756,8 +755,6 @@ def followups(DS, DSN, LOGS, REPO, job_state, launch, mo, refresh, sys):
             *_tagger_stream("tagger"),
             *_tagger_stream("tagger-large"),
             *_stream("lexicon", ["--model", "lexicon", "--train", DS / "train.jsonl"], {"clean": _clean, "external": _ext}),
-            *_stream("tcn", ["--model", "tcn", "--tcn-repo", "/marimo/Vietnamese-diacritic-restoration", "--tcn-weights",
-                             _runs / "ds-tcn/best_model.pth"], {"clean": _clean}, ("--limit", 1000)),
             ["virestore.tagger", "--config", REPO / "configs/tagger_prefix_ds.yaml"],
             *_quality("tagger-prefix"),
             *_tagger_stream("tagger-prefix"),
@@ -787,6 +784,72 @@ def followups(DS, DSN, LOGS, REPO, job_state, launch, mo, refresh, sys):
         'test "$d" = 1 && break; sleep 1200; done',
     )
     FU_JOBS
+    return
+
+
+@app.cell
+def ds_resume(DS, DSN, LOGS, REPO, job_state, launch, mo, refresh, sys):
+    refresh
+    # Resume after the sandbox loss of 2026-11-23: the TCN checkpoint on HF may predate the end of its
+    # training, so it is retrained; TCN evals, its streaming run and the 1.5B LoRA follow. Result JSONs
+    # are uploaded to the private repo as they appear, so another shutdown cannot lose them.
+    mo.stop(job_state("ds_data") != "done", mo.md("waiting for the document-split data"))
+    _res = REPO / "results"
+    _sets = {
+        "clean": DS / "test.jsonl", "hard": DS / "test_hard.jsonl", "noisy": DSN / "test.jsonl",
+        "external": DS / "external.jsonl", "external-noisy": DSN / "external.jsonl",
+    }
+    _tcn = ["--model", "tcn", "--tcn-repo", "/marimo/Vietnamese-diacritic-restoration", "--tcn-weights", REPO / "runs/ds-tcn/best_model.pth"]
+    _q15 = ["--model", "hf", "--hf-model", "Qwen/Qwen2.5-1.5B-Instruct", "--adapter", REPO / "runs/ds-qwen15-lora-noisy", "--batch-size", 64]
+
+
+    def _evals(name, model_args):
+        return [
+            ["virestore.eval", *model_args, "--test", te, "--latency-n", 0, "--tag", f"ds-{name}-{s}", "--results", _res, "--save-predictions"]
+            for s, te in _sets.items()
+        ]
+
+
+    RESUME_JOBS = {
+        "ds_gpu2b": launch(
+            "ds_gpu2b",
+            "mv runs/ds-tcn runs/ds-tcn-restored",
+            ["virestore.train_tcn", "--tcn-repo", "/marimo/Vietnamese-diacritic-restoration", "--train", DS / "train.jsonl",
+             "--dev", DS / "dev.jsonl", "--out", REPO / "runs/ds-tcn", "--epochs", 3, "--batch-size", 128, "--limit", 300000],
+            *_evals("tcn", _tcn),
+            ["virestore.streaming", *_tcn, "--test", DS / "test.jsonl", "--limit", 1000, "--tag", "stream-tcn-clean", "--results", _res],
+            ["virestore.train_lora", "--config", REPO / "configs/qwen15_lora_noisy_ds.yaml"],
+            *_evals("qwen15-lora-noisy", _q15),
+        )
+    }
+    _up = (
+        "from huggingface_hub import HfApi; a = HfApi(); r = 'dinhgia2106/vi-restore-llm-docsplit'; "
+        "a.upload_folder(repo_id=r, folder_path='results', path_in_repo='results-wip', allow_patterns=['ds-*.json', 'stream-*.json', 'calib-*.json']); "
+        "import os; [a.upload_folder(repo_id=r, folder_path='runs/' + d, path_in_repo=d, ignore_patterns=['*/optimizer.pt', '*/scheduler.pt', '*/rng_state*']) "
+        "for d in ('ds-tcn', 'ds-qwen15-lora-noisy') if os.path.isdir('runs/' + d)]"
+    )
+    RESUME_JOBS["ds_sync2"] = launch(
+        "ds_sync2",
+        "while true; do d=0; "
+        f"test -f {LOGS}/ds_gpu2b.exit && test -f {LOGS}/fu_stream.exit && test -f {LOGS}/fu_small.exit && d=1; "
+        f'{sys.executable} -c "{_up}" || true; '
+        'test "$d" = 1 && break; sleep 600; done',
+    )
+    # the first attempt stopped at the TCN streaming run (one-character input, fixed in the adapter)
+    RESUME_JOBS["ds_gpu2c"] = launch(
+        "ds_gpu2c",
+        ["virestore.streaming", *_tcn, "--test", DS / "test.jsonl", "--limit", 1000, "--tag", "stream-tcn-clean", "--results", _res],
+        ["virestore.train_lora", "--config", REPO / "configs/qwen15_lora_noisy_ds.yaml"],
+        *_evals("qwen15-lora-noisy", _q15),
+    )
+    RESUME_JOBS["ds_sync3"] = launch(
+        "ds_sync3",
+        "while true; do d=0; "
+        f"test -f {LOGS}/ds_gpu2c.exit && test -f {LOGS}/fu_small.exit && d=1; "
+        f'{sys.executable} -c "{_up}" || true; '
+        'test "$d" = 1 && break; sleep 600; done',
+    )
+    RESUME_JOBS
 
     return
 
