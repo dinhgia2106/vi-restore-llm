@@ -1,0 +1,128 @@
+{
+  "tag": "calib-tagger-external",
+  "tagger": "/marimo/vi-restore-llm/runs/ds-tagger",
+  "dev_file": "/marimo/vi-restore-llm/data/doc_split/dev.jsonl",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external.jsonl",
+  "temperature": 1.15,
+  "dev_nll": 0.08576,
+  "uncalibrated": {
+    "word": {
+      "n": 289285,
+      "accuracy": 0.9629,
+      "ece": 0.0057,
+      "brier": 0.0249,
+      "auroc": 0.9502,
+      "auto_apply": {
+        "0.9": {
+          "dev_threshold": 0.120924,
+          "test_coverage": 1.0,
+          "test_precision": 0.9629
+        },
+        "0.95": {
+          "dev_threshold": 0.120924,
+          "test_coverage": 1.0,
+          "test_precision": 0.9629
+        },
+        "0.98": {
+          "dev_threshold": 0.695686,
+          "test_coverage": 0.961,
+          "test_precision": 0.981
+        },
+        "0.99": {
+          "dev_threshold": 0.899554,
+          "test_coverage": 0.9159,
+          "test_precision": 0.9907
+        }
+      }
+    },
+    "sentence": {
+      "n": 14000,
+      "accuracy": 0.5903,
+      "ece": 0.0102,
+      "brier": 0.1389,
+      "auroc": 0.878,
+      "auto_apply": {
+        "0.9": {
+          "dev_threshold": 0.774709,
+          "test_coverage": 0.3916,
+          "test_precision": 0.921
+        },
+        "0.95": {
+          "dev_threshold": 0.920604,
+          "test_coverage": 0.2458,
+          "test_precision": 0.959
+        },
+        "0.98": {
+          "dev_threshold": 0.97403,
+          "test_coverage": 0.1191,
+          "test_precision": 0.9754
+        },
+        "0.99": {
+          "dev_threshold": 0.989743,
+          "test_coverage": 0.0499,
+          "test_precision": 0.9928
+        }
+      }
+    }
+  },
+  "temperature_scaled": {
+    "word": {
+      "n": 289285,
+      "accuracy": 0.9629,
+      "ece": 0.0021,
+      "brier": 0.0249,
+      "auroc": 0.9501,
+      "auto_apply": {
+        "0.9": {
+          "dev_threshold": 0.110157,
+          "test_coverage": 1.0,
+          "test_precision": 0.9629
+        },
+        "0.95": {
+          "dev_threshold": 0.110157,
+          "test_coverage": 1.0,
+          "test_precision": 0.9629
+        },
+        "0.98": {
+          "dev_threshold": 0.649472,
+          "test_coverage": 0.9609,
+          "test_precision": 0.9809
+        },
+        "0.99": {
+          "dev_threshold": 0.857744,
+          "test_coverage": 0.9156,
+          "test_precision": 0.9907
+        }
+      }
+    },
+    "sentence": {
+      "n": 14000,
+      "accuracy": 0.5903,
+      "ece": 0.0584,
+      "brier": 0.1439,
+      "auroc": 0.8769,
+      "auto_apply": {
+        "0.9": {
+          "dev_threshold": 0.687175,
+          "test_coverage": 0.3886,
+          "test_precision": 0.9215
+        },
+        "0.95": {
+          "dev_threshold": 0.86152,
+          "test_coverage": 0.2391,
+          "test_precision": 0.9606
+        },
+        "0.98": {
+          "dev_threshold": 0.94467,
+          "test_coverage": 0.1128,
+          "test_precision": 0.9766
+        },
+        "0.99": {
+          "dev_threshold": 0.97619,
+          "test_coverage": 0.042,
+          "test_precision": 0.9915
+        }
+      }
+    }
+  }
+}
