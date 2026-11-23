@@ -32,4 +32,9 @@ class TCNRestorer:
         self.model = VietnameseAccentRestorer(model_path=str(weights))
 
     def restore(self, inputs: list[str]) -> list[str]:
-        return [self.model.predict(s) for s in inputs]
+        return [self._predict(s) for s in inputs]
+
+    def _predict(self, text: str) -> str:
+        if len(text) < 2:  # upstream predict() squeezes a one-character batch to a scalar and crashes
+            return self.model.predict(text + " ")[: len(text)]
+        return self.model.predict(text)
