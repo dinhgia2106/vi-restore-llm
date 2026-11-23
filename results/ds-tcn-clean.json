@@ -1,0 +1,24 @@
+{
+  "tag": "ds-tcn-clean",
+  "model": "tcn",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/test.jsonl",
+  "quality": {
+    "n": 17841,
+    "cer": 0.03248,
+    "wer": 0.14044,
+    "word_acc": 0.85956,
+    "sent_acc": 0.12824
+  },
+  "latency": {},
+  "throughput_sent_per_s": 26.46,
+  "rss_mb": 3755.0,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu",
+    "threads": 20
+  },
+  "timestamp": "2026-11-23T09:47:39+00:00"
+}

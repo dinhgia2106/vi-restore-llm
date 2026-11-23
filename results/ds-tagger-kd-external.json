@@ -1,0 +1,27 @@
+{
+  "tag": "ds-tagger-kd-external",
+  "model": "tagger:ds-tagger-kd",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external.jsonl",
+  "quality": {
+    "n": 14000,
+    "cer": 0.0085,
+    "wer": 0.03597,
+    "word_acc": 0.96403,
+    "sent_acc": 0.60193,
+    "em@1": 0.60193,
+    "em@3": 0.72493,
+    "em@5": 0.76243
+  },
+  "latency": {},
+  "throughput_sent_per_s": 2153.44,
+  "rss_mb": 3801.4,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T09:32:33+00:00"
+}

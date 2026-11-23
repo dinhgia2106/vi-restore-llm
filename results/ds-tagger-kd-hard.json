@@ -1,0 +1,27 @@
+{
+  "tag": "ds-tagger-kd-hard",
+  "model": "tagger:ds-tagger-kd",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/test_hard.jsonl",
+  "quality": {
+    "n": 2514,
+    "cer": 0.01226,
+    "wer": 0.05,
+    "word_acc": 0.95,
+    "sent_acc": 0.55091,
+    "em@1": 0.55091,
+    "em@3": 0.67263,
+    "em@5": 0.7136
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1862.86,
+  "rss_mb": 3765.0,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T09:30:53+00:00"
+}
