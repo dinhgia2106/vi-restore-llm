@@ -66,6 +66,7 @@ def main() -> None:
     ap.add_argument("--hf-model")
     ap.add_argument("--adapter")
     ap.add_argument("--tagger", help="directory of a trained virestore.tagger model")
+    ap.add_argument("--onnx-file", help="ONNX file inside --tagger for tagger-onnx (default: tagger.onnx)")
     ap.add_argument("--train", help="training JSONL for the lexicon baseline")
     ap.add_argument("--tcn-repo")
     ap.add_argument("--tcn-weights")
@@ -75,12 +76,13 @@ def main() -> None:
     a = ap.parse_args()
     restorer = models.load(
         a.model, model=a.hf_model or a.gguf or a.tagger, adapter=a.adapter, train=a.train,
-        tcn_repo=a.tcn_repo, tcn_weights=a.tcn_weights, threads=a.threads,
+        tcn_repo=a.tcn_repo, tcn_weights=a.tcn_weights, threads=a.threads, onnx_file=a.onnx_file,
     )
     if a.model in ("tagger", "tagger-onnx"):
         from .ime import ImeRestorer
 
         restorer = ImeRestorer(restorer)
+    restorer.restore(["khoi dong"])  # the first call is about 100x slower; do not spend it on the user
     uvicorn.run(create_app(restorer), host=a.host, port=a.port)
 
 

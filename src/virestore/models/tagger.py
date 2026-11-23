@@ -168,5 +168,7 @@ class OnnxTaggerRestorer(TaggerRestorer):
             ids[k, : len(s)] = self.vocab.encode(s)
             if s:
                 mask[k, : len(s)] = torch.stack([self._mask(c) for c in s])
-        logits = torch.from_numpy(self.sess.run(["logits"], {"ids": ids})[0]).float()
+        # the exported graph has a fixed batch dimension of 1
+        out = [self.sess.run(["logits"], {"ids": ids[[k]]})[0] for k in range(len(batch))]
+        logits = torch.from_numpy(np.concatenate(out)).float()
         return torch.log_softmax(logits + mask, dim=-1), n
