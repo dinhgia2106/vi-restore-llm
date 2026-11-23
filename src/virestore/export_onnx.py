@@ -2,8 +2,8 @@
 
     python -m virestore.export_onnx --tagger runs/tagger --out runs/tagger/tagger.onnx
 
-The graph takes `ids` (int64, [batch, chars]; 0 = padding, 1 = unknown, others from the `vocab` list
-in config.json, offset by 2) and returns `logits` ([batch, chars, 30]). Decoding a label: modifier =
+The graph takes one sentence per call: `ids` (int64, [1, chars]; 0 = padding, 1 = unknown, others from
+the `vocab` list in config.json, offset by 2) and returns `logits` ([1, chars, 30]). Decoding a label: modifier =
 label // 6 (none, breve, circumflex, horn, stroke), tone = label % 6 (none, grave, acute, hook,
 tilde, dot below); see `virestore.tagger.apply_label`. After export the script checks that
 onnxruntime gives the same labels as PyTorch on a few sentences.
