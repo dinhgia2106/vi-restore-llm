@@ -606,5 +606,101 @@ def ckpt_sync(LOGS, launch, refresh, sys):
     return
 
 
+@app.cell
+def docsplit(LOGS, RAW, REPO, job_state, launch, mo, refresh, sys):
+    refresh
+    # Document-level split: rebuild the data, then retrain and score every trained system on it.
+    mo.stop(
+        not all(job_state(j) == "done" for j in ("e1_eval", "tagger_large_eval")),
+        mo.md("the document-split runs wait for the TCN and large tagger evals"),
+    )
+    DS, DSN = REPO / "data/doc_split", REPO / "data/doc_split_noisy"
+    _ext = REPO / "data/raw/wanjuan-external"
+    _shards = [
+        "raw/culture/common_crawl/part-677f75d865d8-001249.jsonl.gz",
+        "raw/encyclopedia/common_crawl/part-677f75d865d8-001285.jsonl.gz",
+        "raw/general/common_crawl/part-677f75d865d8-000073.jsonl.gz",
+        "raw/history_policy/general/part-677f75d865d8-000358.jsonl.gz",
+        "raw/local_life/general/part-677f75d865d8-000731.jsonl.gz",
+        "raw/news/general/part-677f75d865d8-000509.jsonl.gz",
+        "raw/professional_field/general/part-677f75d865d8-000530.jsonl.gz",
+    ]
+    _dl = (
+        "from huggingface_hub import snapshot_download; snapshot_download('opendatalab/WanJuan-Vietnamese', "
+        f"repo_type='dataset', local_dir='{_ext}', allow_patterns={_shards!r}, max_workers=8)"
+    )
+    DS_JOBS = {
+        "ds_data": launch(
+            "ds_data",
+            f'{sys.executable} -c "{_dl}"',
+            ["virestore.data", "--corpus", RAW, "--out", DS, "--limit", 2000000, "--split-by", "document"],
+            ["virestore.data", "--corpus", RAW, "--out", DSN, "--limit", 2000000, "--split-by", "document", "--noisy"],
+            ["virestore.hardset", "--train", DS / "train.jsonl", "--test", DS / "test.jsonl", "--out", DS / "test_hard.jsonl"],
+            ["virestore.docsplit", "--corpus", _ext, "--train", DS / "train.jsonl", "--out", DS],
+            ["virestore.docsplit", "--corpus", _ext, "--train", DSN / "train.jsonl", "--out", DSN, "--noisy"],
+        )
+    }
+    if job_state("ds_data") == "done":
+        _sets = {
+            "clean": DS / "test.jsonl", "hard": DS / "test_hard.jsonl", "noisy": DSN / "test.jsonl",
+            "external": DS / "external.jsonl", "external-noisy": DSN / "external.jsonl",
+        }
+        _domains = ("culture", "encyclopedia", "general", "history_policy", "local_life", "news", "professional_field")
+
+        def _evals(name, model_args, extra=()):
+            return [
+                ["virestore.eval", *model_args, "--test", te, "--latency-n", 0, *extra, "--tag", f"ds-{name}-{s}",
+                 "--results", REPO / "results", "--save-predictions"]
+                for s, te in _sets.items()
+            ]
+
+        _lex = [
+            ["virestore.eval", "--model", "lexicon", "--train", (DSN if "noisy" in s else DS) / "train.jsonl", "--test", te,
+             "--latency-n", 0, "--nbest", 5, "--tag", f"ds-lexicon-{s}", "--results", REPO / "results", "--save-predictions"]
+            for s, te in _sets.items()
+        ]
+        _tagger = ["--model", "tagger", "--tagger", REPO / "runs/ds-tagger", "--batch-size", 256]
+        _tcn = ["--model", "tcn", "--tcn-repo", "/marimo/Vietnamese-diacritic-restoration", "--tcn-weights", REPO / "runs/ds-tcn/best_model.pth"]
+        _q05 = ["--model", "hf", "--hf-model", "Qwen/Qwen2.5-0.5B-Instruct", "--adapter", REPO / "runs/ds-qwen05-lora", "--batch-size", 64]
+        _q15 = ["--model", "hf", "--hf-model", "Qwen/Qwen2.5-1.5B-Instruct", "--adapter", REPO / "runs/ds-qwen15-lora-noisy", "--batch-size", 64]
+        DS_JOBS["ds_lexicon"] = launch("ds_lexicon", *_lex)
+        DS_JOBS["ds_gpu1"] = launch(
+            "ds_gpu1",
+            ["virestore.tagger", "--config", REPO / "configs/tagger_ds.yaml"],
+            *_evals("tagger", _tagger, ("--nbest", 5)),
+            *[
+                ["virestore.eval", *_tagger, "--test", DS / f"external_{d}.jsonl", "--latency-n", 0, "--nbest", 5,
+                 "--tag", f"ds-tagger-external-{d}", "--results", REPO / "results"]
+                for d in _domains
+            ],
+            ["virestore.train_lora", "--config", REPO / "configs/qwen05_lora_ds.yaml"],
+            *_evals("qwen05-lora", _q05),
+        )
+        DS_JOBS["ds_gpu2"] = launch(
+            "ds_gpu2",
+            ["virestore.train_tcn", "--tcn-repo", "/marimo/Vietnamese-diacritic-restoration", "--train", DS / "train.jsonl",
+             "--dev", DS / "dev.jsonl", "--out", REPO / "runs/ds-tcn", "--epochs", 3, "--batch-size", 128, "--limit", 300000],
+            *_evals("tcn", _tcn),
+            ["virestore.train_lora", "--config", REPO / "configs/qwen15_lora_noisy_ds.yaml"],
+            *_evals("qwen15-lora-noisy", _q15),
+        )
+        _up = "from huggingface_hub import HfApi; import os; a = HfApi(); a.create_repo('dinhgia2106/vi-restore-llm-docsplit', private=True, exist_ok=True); " + "; ".join(
+            f"os.path.isdir('runs/{d}') and a.upload_folder(repo_id='dinhgia2106/vi-restore-llm-docsplit', folder_path='runs/{d}', "
+            f"path_in_repo='{d}', ignore_patterns=['*/optimizer.pt', '*/scheduler.pt', '*/rng_state*'])"
+            for d in ("ds-tagger", "ds-tcn", "ds-qwen05-lora", "ds-qwen15-lora-noisy")
+        )
+        # the exit check comes before the upload, so the last pass always sees the final checkpoints
+        DS_JOBS["ds_sync"] = launch(
+            "ds_sync",
+            "while true; do d=0; "
+            f"test -f {LOGS}/ds_gpu1.exit && test -f {LOGS}/ds_gpu2.exit && d=1; "
+            f'{sys.executable} -c "{_up}" || true; '
+            'test "$d" = 1 && break; sleep 1200; done',
+        )
+    DS_JOBS
+
+    return
+
+
 if __name__ == "__main__":
     app.run()
