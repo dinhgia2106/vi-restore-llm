@@ -16,7 +16,35 @@ Hypotheses and the full experiment matrix are in [docs/experiment_plan.md](docs/
 
 ## Results
 
-Filled in by `python -m virestore.eval`; every run, including the noisy and hard test sets, is in [`results/summary.md`](results/summary.md). The table shows the **clean** test split (19 956 sentences, 2M-sentence build from WanJuan-Vietnamese).
+Filled in by `python -m virestore.eval`; every run, including the noisy and hard test sets, is in [`results/summary.md`](results/summary.md). Full write-up: [docs/report.md](docs/report.md).
+
+### Document-level split (headline)
+
+Train and test share no document, and test sentences that nearly duplicate a training sentence are removed. **Clean**: 17 841 sentences. **External**: 14 000 sentences from seven held-out corpus shards.
+
+| Model | Params | Clean CER ↓ | Clean WER ↓ | Clean sentence acc ↑ | External CER ↓ | External sentence acc ↑ | p95 latency (CPU, 4 threads) |
+|---|---|---|---|---|---|---|---|
+| Lexicon (unigram + bigram) | – | 0.0361 | 0.1506 | 0.1540 | 0.0358 | 0.1546 |  |
+| Acausal TCN (300k pairs) |  | 0.0325 | 0.1404 | 0.1282 | 0.0318 | 0.1277 |  |
+| Qwen2.5-0.5B + LoRA (200k pairs) | 0.5B | 0.0138 | 0.0542 | 0.5119 | 0.0137 | 0.5136 |  |
+| Qwen2.5-1.5B + LoRA, noisy training (200k pairs) | 1.5B | 0.0137 | 0.0486 | 0.5595 | 0.0131 | 0.5519 |  |
+| Character tagger | 14.4M | 0.0093 | 0.0391 | 0.5811 | 0.0088 | 0.5903 |  |
+| Distilled tagger | 14.4M | 0.0091 | 0.0380 | 0.5900 | 0.0085 | 0.6019 |  |
+| Distilled tagger, ONNX int8 | 14.4M | 0.0091 | 0.0380 | 0.5902 | 0.0085 | 0.6026 | 9.62 ms |
+| Large tagger | 38.1M | 0.0071 | 0.0295 | 0.6634 | 0.0065 | 0.6691 |  |
+| **Large tagger, ONNX int8** | 38.1M | 0.0071 | 0.0296 | 0.6625 | 0.0065 | 0.6691 | 22.48 ms |
+
+Latency is the median p95 of five interleaved rounds of 200 clean sentences, batch size 1, on the target laptop on AC power, and it moves with background load ([docs/compression.md](docs/compression.md)). Empty cells were not measured on these weights. The taggers saw 1.96M training pairs, the TCN 300k and the LLMs 200k, so the rows do not isolate the architecture.
+
+Follow-up studies on this split:
+
+- [Streaming](docs/streaming.md): restoring while the sentence is typed. Letting the last three words change keeps most of the quality; freezing each word at once does not.
+- [Compression](docs/compression.md): int8 quantisation makes the large tagger fit the budget at almost no quality cost. Distillation helps only a little.
+- [Calibration](docs/calibration.md): at a 99 % target the large tagger can auto-apply 95.1 % of words, measured on the external set. Decide per word, not per sentence.
+
+### Earlier results: sentence-level split
+
+These runs assign sentences, not documents, to train and test, so near-duplicates can span both and the numbers are somewhat optimistic. The table shows the **clean** test split (19 956 sentences, 2M-sentence build from WanJuan-Vietnamese).
 
 | Model | Params | CER ↓ | WER ↓ | Sentence acc ↑ | p95 latency (CPU) | RAM |
 |---|---|---|---|---|---|---|
@@ -65,12 +93,12 @@ Latency and RAM columns are filled only from runs on the target laptop (CPU, bat
 
 ## Use the model
 
-The model that fits the IME budget is the character tagger (findings: [docs/report.md](docs/report.md)). It is kept in a private Hugging Face repo for now.
+The recommended model is the **large tagger as int8 ONNX** (38.3 MB; findings: [docs/report.md](docs/report.md)). It is kept in a private Hugging Face repo for now.
 
 ```bash
-uv pip install -e ".[serve]" torch            # a CPU build of torch is enough
-hf download dinhgia2106/vi-restore-llm-tagger --local-dir runs/tagger   # needs access to the private repo
-python -m virestore.serve --model tagger --tagger runs/tagger --threads 4 --port 8765
+uv pip install -e ".[serve]" torch onnxruntime   # a CPU build of torch is enough
+hf download dinhgia2106/vi-restore-llm-docsplit --include "ds-tagger-large/config.json" "ds-tagger-large/tagger.int8.onnx" --local-dir runs   # needs access to the private repo
+python -m virestore.serve --model tagger-onnx --tagger runs/ds-tagger-large --onnx-file tagger.int8.onnx --threads 4 --port 8765
 ```
 
 ```bash
@@ -78,7 +106,7 @@ curl -s localhost:8765/restore    -d '{"text": "hom nay troi dep qua"}'         
 curl -s localhost:8765/candidates -d '{"text": "toi di hoc", "k": 5}'           -H 'content-type: application/json'
 ```
 
-`/restore` returns one sentence, `/candidates` the top-k for a candidate bar. For C++ (VIMEK) without Python, `tagger.onnx` in the same repo runs under onnxruntime (`python -m virestore.export_onnx` documents its inputs and labels). The tagger only restores diacritics: it never changes letters, so it does not fix typos or leftover Telex. The server handles empty input, sentence splitting, marks the user already typed and stacked tones; a direct ONNX caller must do the same, see [docs/integration.md](docs/integration.md).
+`/restore` returns one sentence, `/candidates` the top-k for a candidate bar. For C++ (VIMEK) without Python, `tagger.int8.onnx` runs under onnxruntime, one sentence per call (`python -m virestore.export_onnx` documents its inputs and labels). The tagger only restores diacritics: it never changes letters, so it does not fix typos or leftover Telex. The server handles empty input, sentence splitting, marks the user already typed and stacked tones; a direct ONNX caller must do the same, see [docs/integration.md](docs/integration.md).
 
 ## Quick start
 
@@ -121,7 +149,7 @@ Sentences come from **[WanJuan-Vietnamese](https://huggingface.co/datasets/opend
 | **clean** | diacritics stripped: `Hom nay troi dep qua` | `Hôm nay trời đẹp quá` |
 | **noisy** | plus leftover Telex and typos: `Buoi sang o Da nawngx` | `Buổi sáng ở Đà Nẵng` |
 
-Splits are assigned by a hash of the sentence, so the same sentence can never appear in both train and test. A third test set, **hard**, keeps clean test sentences dense in ambiguous syllables (see [docs/experiment_plan.md](docs/experiment_plan.md)).
+The headline runs split by document and remove near-duplicates of training sentences from test; the earlier runs split by a hash of the sentence ([data/README.md](data/README.md)). A third test set, **hard**, keeps clean test sentences dense in ambiguous syllables (see [docs/experiment_plan.md](docs/experiment_plan.md)).
 
 ## Metrics
 
@@ -141,7 +169,12 @@ src/virestore/
   hardset.py      test subset of sentences dense in ambiguous syllables
   metrics.py      CER, WER, word and sentence accuracy, EM@k
   prompts.py      one prompt format for training and inference
-  tagger.py       character-level diacritic tagger (one encoder pass per sentence) + training
+  tagger.py       character-level diacritic tagger (one encoder pass per sentence), training, distillation
+  docsplit.py     near-duplicate filter and held-out external test set
+  ime.py          what an input method needs around the model (chunks, typed marks, stacked tones)
+  streaming.py    word-by-word evaluation and commit policies
+  calibration.py  confidence calibration and auto-apply thresholds
+  export_onnx.py  ONNX export and int8 quantisation
   train_tcn.py    retrain the acausal TCN baseline on this project's data
   models/         identity, lexicon, TCN, tagger, Hugging Face LLM, GGUF (llama.cpp, optional lexicon draft)
   eval.py         quality + latency + memory harness → results/
@@ -152,7 +185,7 @@ src/virestore/
   serve.py        FastAPI server for VIMEK
 configs/          experiment configs
 notebooks/        marimo notebook that runs the experiments on molab
-docs/             experiment plan, quantisation, latency, error analysis, molab guide
+docs/             report, experiment plan, streaming, compression, calibration, quantisation, latency, error analysis, integration, molab guide
 data/sample/      tiny hand-written corpus for tests
 tests/            unit tests (pytest)
 ```

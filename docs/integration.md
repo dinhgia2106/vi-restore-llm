@@ -27,3 +27,7 @@ affect any number in `results/`.
 - **The top candidate can be wrong when several forms are valid.** `hom nay troi dep qua` gives
   `hôm nay trời đẹp qua`, with `quá` as the second candidate. Both are real words, so show the
   candidate bar (`POST /candidates`) instead of committing the first output silently.
+
+## Int8 model
+
+The recommended graph is `tagger.int8.onnx`. Like every exported tagger it takes **one sentence per call** (`ids` has shape `[1, chars]`). Run one warm-up call at startup: the first call on the laptop took about 1.1 s, later ones a few milliseconds.

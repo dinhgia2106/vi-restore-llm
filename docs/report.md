@@ -36,7 +36,48 @@ quantising the LLM cost?
 | acausal TCN (E1) | the user's TCN, retrained with its repo's code | 300k clean pairs, 3 epochs |
 | character tagger (T2) | 14.4M-parameter Transformer encoder over characters; labels every vowel and `d` with one of 30 diacritic labels in one pass | 1.96M clean pairs, 3 epochs |
 
-## Results
+## Headline results: document-level split
+
+The first round of results (next section) split sentences, so one document could span train and
+test. Everything was rerun on a stricter split: documents are assigned whole, test and dev sentences
+that nearly duplicate a training sentence are removed (whole-sentence or 8-word-shingle match), and
+an **external** test set is drawn from seven corpus shards never used for training. Sizes: 1 960 974
+train, 16 553 dev, 17 841 test (2 470 removed), 2 514 hard, 14 000 external (3 590 removed). Files:
+`results/ds-*.json`.
+
+| system | clean CER | clean sent acc | hard CER | hard sent acc | noisy CER | noisy sent acc | external CER | external sent acc |
+|---|---|---|---|---|---|---|---|---|
+| lexicon | 0.0361 | 0.1540 | 0.0494 | 0.1193 | 0.0649 | 0.0733 | 0.0358 | 0.1546 |
+| acausal TCN (300k pairs) | 0.0325 | 0.1282 | 0.0415 | 0.1153 | 0.0613 | 0.0586 | 0.0318 | 0.1277 |
+| Qwen2.5-0.5B + LoRA | 0.0138 | 0.5119 | 0.0192 | 0.4586 | 0.0444 | 0.1920 | 0.0137 | 0.5136 |
+| Qwen2.5-1.5B + LoRA, noisy training | 0.0137 | 0.5595 | 0.0177 | 0.5330 | 0.0173 | 0.4952 | 0.0131 | 0.5519 |
+| character tagger | 0.0093 | 0.5811 | 0.0127 | 0.5410 | 0.0377 | 0.2031 | 0.0088 | 0.5903 |
+| tagger trained on prefixes | 0.0104 | 0.5484 | 0.0141 | 0.5080 | 0.0384 | 0.1938 | 0.0097 | 0.5565 |
+| distilled tagger | 0.0091 | 0.5900 | 0.0123 | 0.5509 | 0.0373 | 0.2058 | 0.0085 | 0.6019 |
+| small tagger | 0.0130 | 0.4712 | 0.0177 | 0.4300 | 0.0407 | 0.1716 | 0.0124 | 0.4796 |
+| small distilled tagger | 0.0129 | 0.4733 | 0.0175 | 0.4368 | 0.0407 | 0.1725 | 0.0122 | 0.4861 |
+| large tagger | 0.0071 | 0.6634 | 0.0097 | 0.6229 | 0.0357 | 0.2301 | 0.0065 | 0.6691 |
+
+The noisy rows of the lexicon and the 1.5B model use models trained on noisy pairs; the others were
+trained on clean pairs. Against the sentence split, clean sentence accuracy fell by 2.1 points for
+the tagger (0.6022 → 0.5811), 2.2 for the large tagger (0.6857 → 0.6634) and 1.0 for the 0.5B LoRA
+model (0.5219 → 0.5119). The ranking did not change. By external domain the large tagger ranges from
+0.5985 (encyclopedia) to 0.7425 (professional field).
+
+**Best model: large tagger as int8 ONNX.** Clean CER 0.0071 / sentence accuracy 0.6625, external
+0.0065 / 0.6691, 38.3 MB, median p95 22.48 ms on 4 threads on the target laptop
+(`docs/compression.md`).
+
+Follow-up studies on this split:
+
+- `docs/streaming.md`: restoring while typing. With the last three words revisable, the large tagger
+  keeps sentence accuracy 0.6190 of its 0.6634; freezing each word at once gives 0.0442.
+- `docs/compression.md`: int8 costs at most 0.09 points of sentence accuracy and makes the ONNX graph
+  2.4–3.1× faster. Distillation adds 0.2–1.2 points.
+- `docs/calibration.md`: at a 99 % precision target the large tagger auto-applies 95.1 % of words on
+  the external set (measured precision 99.05 %). A sentence-level gate covers only 5–11 %.
+
+## Results on the sentence-level split
 
 ### Quality (full test sets)
 
@@ -173,9 +214,16 @@ and far less accurate at its 300k-pair training size.
 - HF/PyTorch and llama.cpp give different outputs for the same merged model (clean2k CER 0.0121 vs
   0.0105); precision, merging and batch size were ruled out; the cause is open
   (`docs/quantization.md`).
-- **Sentence-level split.** Every result above assigns sentences, not documents, to train and test,
-  so near-duplicates and sentences of one document can span both. A rerun on a document-level
-  split with a near-duplicate filter and an external test set is in progress (tags `ds-*`).
+- **Sentence-level split.** The section "Results on the sentence-level split" and the numbered
+  findings assign sentences, not documents, to train and test, so near-duplicates can span both.
+  The headline section reruns every trained system on a document-level split.
+- **No real typed test set.** All test input is corpus text with marks removed, plus synthetic noise.
+  The external set comes from the same corpus family, and part of it is web crawl.
+- Laptop latency of the TCN and of the PyTorch large tagger was measured on their sentence-split
+  weights. The int8 latencies use the document-split weights.
+- Latency on the laptop moves with background load: one scan of the int8 models was more than 2× slower
+  at low thread counts (`results/laptop-ac-int8/`), and is kept alongside the five-round scan.
+- Calibration thresholds were fitted on the PyTorch models and must be refitted for the int8 graph.
 - The TCN was retrained on 300k pairs (its original checkpoint is lost), so its row is not an
   equal-data comparison with the 1.96M-pair taggers.
 - Exact-match metrics count orthographic variants (`hoá` / `hóa`) as errors for every system.
@@ -183,10 +231,13 @@ and far less accurate at its 300k-pair training size.
 
 ## Recommendation for VIMEK
 
-Use the character tagger for restoration while typing (4 threads, p95 16.56 ms on the target
-laptop), with its top-5 beam for the candidate bar (`virestore.serve --model tagger`,
-`POST /candidates`). For calling it from VIMEK's C++ without Python, `virestore.export_onnx` writes
-an ONNX graph whose labels match PyTorch; under onnxruntime it is slower than PyTorch here (p95
-26.78 ms on 4 threads, 52.24 ms on 2, 80.98 ms on 1), so it needs 4 threads to stay inside the budget. Keep the LLM off
-the typing path; if typo repair is wanted, the noisy-trained 1.5B model can rework a sentence after
-the user pauses, outside the per-keystroke budget.
+- **Model:** the large tagger as int8 ONNX, 4 threads (median p95 22.48 ms; per-word streaming p95
+  18.52 ms). On weak machines use the distilled tagger as int8 (9.62 ms).
+- **While typing:** run the model after each word and let only the last three words change.
+- **Applying output:** auto-apply a word when its confidence clears a threshold fitted on dev for the
+  int8 model; otherwise offer the top-5 candidates (`POST /candidates`).
+- **Serving:** `virestore.serve --model tagger-onnx --onnx-file tagger.int8.onnx`, or call the graph
+  from C++ with the contract in `docs/integration.md`. The graph takes one sentence per call.
+- **LLM:** keep it off the typing path. If typo repair is wanted, the noisy-trained 1.5B model can
+  rework a sentence after the user pauses (document split, noisy CER 0.0173 / sentence accuracy 0.4952
+  against 0.0357 / 0.2301 for the large tagger).
