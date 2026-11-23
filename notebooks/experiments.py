@@ -2,6 +2,7 @@
 # requires-python = ">=3.13"
 # dependencies = [
 #     "accelerate==1.16.0",
+#     "huggingface-hub==2.4.0",
 #     "peft==0.22.0",
 # ]
 # ///
@@ -468,7 +469,7 @@ def tagger(CLEAN, HARD, NOISY, Path, REPO, job_state, launch, mo, refresh):
 @app.cell
 def tagger_large(CLEAN, HARD, NOISY, REPO, job_state, launch, mo, refresh):
     refresh
-    mo.stop(job_state("tagger_train") != "done", mo.md("the large tagger waits for the first one"))
+    mo.stop(job_state("data_clean") != "done", mo.md("the large tagger waits for the data"))
     TAGGER_LARGE_DIR = REPO / "runs/tagger-large"
     TAGGER_LARGE_JOBS = {"tagger_large_train": launch("tagger_large_train", ["virestore.tagger", "--config", REPO / "configs/tagger_large.yaml"])}
     if job_state("tagger_large_train") == "done":
@@ -581,6 +582,27 @@ def e5(CLEAN, HARD, NOISY, REPO, job_state, launch, mo, refresh):
             ],
         )
     E5_JOBS
+    return
+
+
+@app.cell
+def ckpt_sync(LOGS, launch, refresh, sys):
+    refresh
+    # Upload training checkpoints to private HF repos every 20 min while they train, so a sandbox
+    # shutdown cannot take them with it (it did once, 2026-11-23).
+    CKPT_REPOS = {"runs/tcn": "dinhgia2106/vi-restore-llm-tcn", "runs/tagger-large": "dinhgia2106/vi-restore-llm-tagger-large"}
+    _sync = "; ".join(
+        f"from huggingface_hub import HfApi; a = HfApi(); a.create_repo('{r}', private=True, exist_ok=True); "
+        f"import os; os.path.isdir('{d}') and a.upload_folder(repo_id='{r}', folder_path='{d}')"
+        for d, r in CKPT_REPOS.items()
+    )
+    CKPT_SYNC = launch(
+        "ckpt_sync",
+        "while true; do "
+        f"{sys.executable} -c \"{_sync}\" || true; "
+        f"test -f {LOGS}/e1_train.exit && test -f {LOGS}/tagger_large_train.exit && break; sleep 1200; done",
+    )
+    CKPT_SYNC
     return
 
 
