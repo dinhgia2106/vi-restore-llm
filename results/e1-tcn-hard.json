@@ -1,0 +1,24 @@
+{
+  "tag": "e1-tcn-hard",
+  "model": "tcn",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test_hard.jsonl",
+  "quality": {
+    "n": 2801,
+    "cer": 0.03718,
+    "wer": 0.15658,
+    "word_acc": 0.84342,
+    "sent_acc": 0.11853
+  },
+  "latency": {},
+  "throughput_sent_per_s": 39.13,
+  "rss_mb": 3628.3,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T04:25:04+00:00"
+}

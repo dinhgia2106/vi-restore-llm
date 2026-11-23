@@ -11,6 +11,9 @@
 | e0-lexicon-hard | lexicon | processed/test_hard | 2801 | 0.0459 | 0.1879 | 0.8121 | 0.1317 | – / – / – | 0.03 | 0.07 | 1881.4 | cpu |
 | e0-lexicon-noisy-nbest | lexicon | processed_noisy/test | 19956 | 0.0630 | 0.2019 | 0.7981 | 0.0724 | 0.0805 / 0.1272 / 0.1481 | – | – | 1931.0 | cpu |
 | e0-lexicon-noisy | lexicon | processed_noisy/test | 19956 | 0.0630 | 0.2019 | 0.7981 | 0.0724 | – / – / – | 0.05 | 0.08 | 1897.7 | cpu |
+| e1-tcn-clean | tcn | processed/test | 19956 | 0.0291 | 0.1250 | 0.8750 | 0.1404 | – / – / – | – | – | 3778.6 | cpu |
+| e1-tcn-hard | tcn | processed/test_hard | 2801 | 0.0372 | 0.1566 | 0.8434 | 0.1185 | – / – / – | – | – | 3628.3 | cpu |
+| e1-tcn-noisy | tcn | processed_noisy/test | 19956 | 0.0572 | 0.1851 | 0.8149 | 0.0639 | – / – / – | – | – | 3762.9 | cpu |
 | e2-qwen05-zeroshot-clean | hf:Qwen/Qwen2.5-0.5B-Instruct | processed/test | 1000 | 0.5687 | 1.0144 | 0.1453 | 0.0000 | – / – / – | 325.01 | 666.6 | 3311.7 | cuda |
 | e3-qwen05-lora-clean-nbest | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora | processed/test | 19956 | 0.0128 | 0.0493 | 0.9519 | 0.5209 | 0.5981 / 0.7397 / 0.7757 | – | – | 3569.3 | cuda |
 | e3-qwen05-lora-clean | hf:Qwen/Qwen2.5-0.5B-Instruct+/marimo/vi-restore-llm/runs/qwen05-lora | processed/test | 19956 | 0.0129 | 0.0493 | 0.9520 | 0.5219 | – / – / – | 290.5 | 487.97 | 3352.6 | cuda |

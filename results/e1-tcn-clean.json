@@ -1,0 +1,24 @@
+{
+  "tag": "e1-tcn-clean",
+  "model": "tcn",
+  "test_file": "/marimo/vi-restore-llm/data/processed/test.jsonl",
+  "quality": {
+    "n": 19956,
+    "cer": 0.02908,
+    "wer": 0.12503,
+    "word_acc": 0.87497,
+    "sent_acc": 0.14041
+  },
+  "latency": {},
+  "throughput_sent_per_s": 41.72,
+  "rss_mb": 3778.6,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T04:15:22+00:00"
+}

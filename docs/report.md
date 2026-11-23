@@ -33,6 +33,7 @@ quantising the LLM cost?
 | Qwen2.5-0.5B + LoRA (E3) | LoRA r = 16 on all projections, loss on the answer | 200k clean pairs, 1 epoch |
 | … GGUF f16 / Q8_0 / Q4_K_M (E4) | E3 merged and quantised with llama.cpp | – |
 | Qwen2.5-1.5B + LoRA on noisy pairs (E5) | LoRA r = 32, bf16 base | 200k noisy pairs, 1 epoch |
+| acausal TCN (E1) | the user's TCN, retrained with its repo's code | 300k clean pairs, 3 epochs |
 | character tagger (T2) | 14.4M-parameter Transformer encoder over characters; labels every vowel and `d` with one of 30 diacritic labels in one pass | 1.96M clean pairs, 3 epochs |
 
 ## Results
@@ -45,10 +46,12 @@ From `results/summary.md` (E0, E2, E3, T2 runs):
 |---|---|---|---|---|---|---|
 | identity | 0.2111 | 0.0000 | 0.2218 | 0.0000 | 0.2271 | 0.0000 |
 | lexicon | 0.0342 | 0.1576 | 0.0459 | 0.1317 | 0.0630 | 0.0724 |
+| acausal TCN (300k pairs) | 0.0291 | 0.1404 | 0.0372 | 0.1185 | 0.0572 | 0.0639 |
 | Qwen2.5-0.5B zero-shot (1k clean) | 0.5687 | 0.0000 | – | – | – | – |
 | Qwen2.5-0.5B + LoRA | 0.0129 | 0.5219 | 0.0181 | 0.4681 | 0.0428 | 0.1919 |
 | Qwen2.5-1.5B + LoRA, noisy training | 0.0121 | 0.5675 | 0.0173 | 0.5223 | **0.0157** | **0.5059** |
-| character tagger | **0.0080** | **0.6022** | **0.0114** | **0.5587** | 0.0358 | 0.2097 |
+| character tagger | 0.0080 | 0.6022 | 0.0114 | 0.5587 | 0.0358 | 0.2097 |
+| large character tagger | **0.0058** | **0.6857** | **0.0083** | **0.6458** | 0.0339 | 0.2351 |
 
 The lexicon on the noisy set is trained on noisy pairs, and so is the 1.5B model; the 0.5B LoRA
 model and the tagger were trained on clean pairs only.
@@ -154,10 +157,11 @@ smaller tagger stays well inside it on 4 threads.
 - HF/PyTorch and llama.cpp give different outputs for the same merged model (clean2k CER 0.0121 vs
   0.0105); precision, merging and batch size were ruled out; the cause is open
   (`docs/quantization.md`).
-- **Not finished.** The acausal TCN baseline (E1) has no result: its original checkpoint is lost,
-  and the retrain (`virestore.train_tcn`, 300k sentences) and a larger tagger
-  (`configs/tagger_large.yaml`, d 512 × 12 layers) were both still training when the molab sandbox
-  shut down; no checkpoint survived. Both need a rerun.
+- **Sentence-level split.** Every result above assigns sentences, not documents, to train and test,
+  so near-duplicates and sentences of one document can span both. A rerun on a document-level
+  split with a near-duplicate filter and an external test set is in progress (tags `ds-*`).
+- The TCN was retrained on 300k pairs (its original checkpoint is lost), so its row is not an
+  equal-data comparison with the 1.96M-pair taggers.
 - Exact-match metrics count orthographic variants (`hoá` / `hóa`) as errors for every system.
 - GPU greedy decoding is not bit-for-bit reproducible (a re-run moved sentence accuracy by 0.001).
 
