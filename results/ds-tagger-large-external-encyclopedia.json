@@ -1,0 +1,27 @@
+{
+  "tag": "ds-tagger-large-external-encyclopedia",
+  "model": "tagger:ds-tagger-large",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external_encyclopedia.jsonl",
+  "quality": {
+    "n": 2000,
+    "cer": 0.011,
+    "wer": 0.04743,
+    "word_acc": 0.95257,
+    "sent_acc": 0.5985,
+    "em@1": 0.5985,
+    "em@3": 0.7205,
+    "em@5": 0.7595
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1298.86,
+  "rss_mb": 3776.7,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T07:23:47+00:00"
+}

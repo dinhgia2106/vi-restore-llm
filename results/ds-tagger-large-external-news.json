@@ -1,0 +1,27 @@
+{
+  "tag": "ds-tagger-large-external-news",
+  "model": "tagger:ds-tagger-large",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external_news.jsonl",
+  "quality": {
+    "n": 2000,
+    "cer": 0.00541,
+    "wer": 0.02289,
+    "word_acc": 0.97711,
+    "sent_acc": 0.6835,
+    "em@1": 0.6835,
+    "em@3": 0.8035,
+    "em@5": 0.8425
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1337.06,
+  "rss_mb": 3761.5,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T07:24:29+00:00"
+}

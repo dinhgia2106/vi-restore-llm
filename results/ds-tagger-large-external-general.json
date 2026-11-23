@@ -1,0 +1,27 @@
+{
+  "tag": "ds-tagger-large-external-general",
+  "model": "tagger:ds-tagger-large",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external_general.jsonl",
+  "quality": {
+    "n": 2000,
+    "cer": 0.00694,
+    "wer": 0.02926,
+    "word_acc": 0.97074,
+    "sent_acc": 0.6535,
+    "em@1": 0.6535,
+    "em@3": 0.7735,
+    "em@5": 0.815
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1397.82,
+  "rss_mb": 3742.4,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T07:23:57+00:00"
+}

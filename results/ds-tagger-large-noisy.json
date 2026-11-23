@@ -1,0 +1,27 @@
+{
+  "tag": "ds-tagger-large-noisy",
+  "model": "tagger:ds-tagger-large",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split_noisy/test.jsonl",
+  "quality": {
+    "n": 17841,
+    "cer": 0.03574,
+    "wer": 0.09618,
+    "word_acc": 0.90382,
+    "sent_acc": 0.23009,
+    "em@1": 0.23009,
+    "em@3": 0.26501,
+    "em@5": 0.27605
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1941.9,
+  "rss_mb": 3794.0,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  },
+  "timestamp": "2026-11-23T07:21:47+00:00"
+}
