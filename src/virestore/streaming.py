@@ -132,6 +132,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", required=True, choices=["lexicon", "tcn", "tagger", "tagger-onnx"])
     ap.add_argument("--tagger")
+    ap.add_argument("--onnx-file", help="ONNX file inside --tagger for tagger-onnx (default: tagger.onnx)")
     ap.add_argument("--train", help="training JSONL (lexicon)")
     ap.add_argument("--tcn-repo")
     ap.add_argument("--tcn-weights")
@@ -149,7 +150,7 @@ def main() -> None:
     from .eval import machine_info
 
     restorer = models.load(a.model, model=a.tagger, train=a.train, tcn_repo=a.tcn_repo, tcn_weights=a.tcn_weights,
-                           threads=a.threads, batch_size=a.batch_size)
+                           threads=a.threads, batch_size=a.batch_size, onnx_file=a.onnx_file)
     rows = load_jsonl(a.test, a.limit)
     policies, skipped = evaluate(restorer, rows, a.batch_size)
     out = {
