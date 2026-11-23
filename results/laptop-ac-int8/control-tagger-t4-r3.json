@@ -1,0 +1,29 @@
+{
+  "tag": "control-tagger-t4-r3",
+  "model": "tagger:ds-tagger",
+  "test_file": "data\\doc_split\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.01092,
+    "wer": 0.04568,
+    "word_acc": 0.95432,
+    "sent_acc": 0.565
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 10.97,
+    "p95_ms": 21.85,
+    "mean_ms": 11.66
+  },
+  "throughput_sent_per_s": 85.91,
+  "rss_mb": 289.9,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 4
+  },
+  "timestamp": "2026-11-23T11:14:01+00:00"
+}

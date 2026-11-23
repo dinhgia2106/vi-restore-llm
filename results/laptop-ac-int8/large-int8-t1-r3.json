@@ -1,0 +1,29 @@
+{
+  "tag": "large-int8-t1-r3",
+  "model": "tagger-onnx:ds-tagger-large/tagger.int8.onnx",
+  "test_file": "data\\doc_split\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.00867,
+    "wer": 0.03624,
+    "word_acc": 0.96376,
+    "sent_acc": 0.6
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 28.31,
+    "p95_ms": 49.05,
+    "mean_ms": 29.25
+  },
+  "throughput_sent_per_s": 28.41,
+  "rss_mb": 302.3,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 1
+  },
+  "timestamp": "2026-11-23T11:14:15+00:00"
+}

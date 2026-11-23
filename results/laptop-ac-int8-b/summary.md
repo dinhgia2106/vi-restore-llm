@@ -1,0 +1,49 @@
+# Results
+
+| run | model | test set | n | CER ↓ | WER ↓ | word acc ↑ | sentence acc ↑ | EM@1 / @3 / @5 ↑ | p50 ms | p95 ms | RSS MB | device |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| control-tagger-t4-r1 | tagger:ds-tagger | doc_split/test | 200 | 0.0109 | 0.0457 | 0.9543 | 0.5650 | – / – / – | 10.51 | 21.15 | 289.7 | cpu |
+| control-tagger-t4-r2 | tagger:ds-tagger | doc_split/test | 200 | 0.0109 | 0.0457 | 0.9543 | 0.5650 | – / – / – | 10.31 | 17.65 | 290.7 | cpu |
+| control-tagger-t4-r3 | tagger:ds-tagger | doc_split/test | 200 | 0.0109 | 0.0457 | 0.9543 | 0.5650 | – / – / – | 10.0 | 18.75 | 290.3 | cpu |
+| control-tagger-t4-r4 | tagger:ds-tagger | doc_split/test | 200 | 0.0109 | 0.0457 | 0.9543 | 0.5650 | – / – / – | 9.69 | 16.5 | 290.4 | cpu |
+| control-tagger-t4-r5 | tagger:ds-tagger | doc_split/test | 200 | 0.0109 | 0.0457 | 0.9543 | 0.5650 | – / – / – | 10.47 | 19.87 | 290.2 | cpu |
+| kd-int8-t1-r1 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 11.67 | 20.88 | 266.1 | cpu |
+| kd-int8-t1-r2 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 11.84 | 20.84 | 267.3 | cpu |
+| kd-int8-t1-r3 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 11.94 | 20.79 | 266.9 | cpu |
+| kd-int8-t1-r4 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 11.78 | 20.52 | 267.0 | cpu |
+| kd-int8-t1-r5 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 11.44 | 20.42 | 266.6 | cpu |
+| kd-int8-t2-r1 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 8.07 | 13.3 | 269.0 | cpu |
+| kd-int8-t2-r2 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 8.17 | 13.63 | 268.3 | cpu |
+| kd-int8-t2-r3 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 8.23 | 13.61 | 267.9 | cpu |
+| kd-int8-t2-r4 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 8.16 | 13.81 | 268.9 | cpu |
+| kd-int8-t2-r5 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 8.43 | 13.97 | 267.8 | cpu |
+| kd-int8-t4-r1 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 6.22 | 9.4 | 268.5 | cpu |
+| kd-int8-t4-r2 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 6.27 | 10.05 | 267.9 | cpu |
+| kd-int8-t4-r3 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 5.97 | 9.29 | 270.2 | cpu |
+| kd-int8-t4-r4 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 6.02 | 9.62 | 268.5 | cpu |
+| kd-int8-t4-r5 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 6.21 | 10.2 | 268.5 | cpu |
+| kd-int8-t8-r1 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 5.9 | 8.73 | 270.1 | cpu |
+| kd-int8-t8-r2 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 6.26 | 9.09 | 269.6 | cpu |
+| kd-int8-t8-r3 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 5.78 | 8.92 | 270.5 | cpu |
+| kd-int8-t8-r4 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 8.13 | 11.98 | 270.0 | cpu |
+| kd-int8-t8-r5 | tagger-onnx:ds-tagger-kd/tagger.int8.onnx | doc_split/test | 200 | 0.0107 | 0.0442 | 0.9558 | 0.5650 | – / – / – | 5.95 | 9.23 | 269.7 | cpu |
+| large-int8-t1-r1 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 29.04 | 47.04 | 302.8 | cpu |
+| large-int8-t1-r2 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 27.84 | 46.9 | 302.7 | cpu |
+| large-int8-t1-r3 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 28.43 | 49.7 | 302.5 | cpu |
+| large-int8-t1-r4 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 28.05 | 48.23 | 302.5 | cpu |
+| large-int8-t1-r5 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 29.22 | 49.07 | 302.3 | cpu |
+| large-int8-t2-r1 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 18.59 | 30.55 | 302.7 | cpu |
+| large-int8-t2-r2 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 18.45 | 29.17 | 306.3 | cpu |
+| large-int8-t2-r3 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 18.51 | 29.04 | 303.1 | cpu |
+| large-int8-t2-r4 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 18.81 | 30.78 | 303.7 | cpu |
+| large-int8-t2-r5 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 18.6 | 29.88 | 303.5 | cpu |
+| large-int8-t4-r1 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 13.66 | 21.77 | 304.0 | cpu |
+| large-int8-t4-r2 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 13.99 | 22.44 | 304.3 | cpu |
+| large-int8-t4-r3 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 14.03 | 23.53 | 304.5 | cpu |
+| large-int8-t4-r4 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 14.03 | 23.18 | 304.3 | cpu |
+| large-int8-t4-r5 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 13.94 | 22.48 | 304.9 | cpu |
+| large-int8-t8-r1 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 12.72 | 19.03 | 305.3 | cpu |
+| large-int8-t8-r2 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 12.99 | 19.33 | 305.2 | cpu |
+| large-int8-t8-r3 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 12.5 | 19.67 | 304.6 | cpu |
+| large-int8-t8-r4 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 12.43 | 19.2 | 305.0 | cpu |
+| large-int8-t8-r5 | tagger-onnx:ds-tagger-large/tagger.int8.onnx | doc_split/test | 200 | 0.0087 | 0.0362 | 0.9638 | 0.6000 | – / – / – | 13.39 | 19.99 | 305.5 | cpu |

@@ -1,0 +1,29 @@
+{
+  "tag": "kd-int8-t2-r4",
+  "model": "tagger-onnx:ds-tagger-kd/tagger.int8.onnx",
+  "test_file": "data\\doc_split\\test.jsonl",
+  "quality": {
+    "n": 200,
+    "cer": 0.01073,
+    "wer": 0.04418,
+    "word_acc": 0.95582,
+    "sent_acc": 0.565
+  },
+  "latency": {
+    "n": 200,
+    "p50_ms": 8.16,
+    "p95_ms": 13.81,
+    "mean_ms": 8.42
+  },
+  "throughput_sent_per_s": 72.22,
+  "rss_mb": 268.9,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.11",
+    "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 32,
+    "device": "cpu",
+    "threads": 2
+  },
+  "timestamp": "2026-11-23T11:26:34+00:00"
+}
