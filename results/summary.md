@@ -36,6 +36,10 @@
 | ds-tagger-large-hard | tagger:ds-tagger-large | doc_split/test_hard | 2514 | 0.0097 | 0.0388 | 0.9612 | 0.6229 | 0.6229 / 0.7363 / 0.7816 | – | – | 3758.6 | cuda |
 | ds-tagger-large-noisy | tagger:ds-tagger-large | doc_split_noisy/test | 17841 | 0.0357 | 0.0962 | 0.9038 | 0.2301 | 0.2301 / 0.2650 / 0.2761 | – | – | 3794.0 | cuda |
 | ds-tagger-noisy | tagger:ds-tagger | doc_split_noisy/test | 17841 | 0.0377 | 0.1043 | 0.8957 | 0.2031 | 0.2031 / 0.2473 / 0.2606 | – | – | 3800.9 | cuda |
+| ds-tagger-prefix-clean | tagger:ds-tagger-prefix | doc_split/test | 17841 | 0.0104 | 0.0435 | 0.9565 | 0.5484 | 0.5484 / 0.6819 / 0.7248 | – | – | 3766.1 | cuda |
+| ds-tagger-prefix-external | tagger:ds-tagger-prefix | doc_split/external | 14000 | 0.0097 | 0.0415 | 0.9585 | 0.5565 | 0.5565 / 0.6889 / 0.7277 | – | – | 3807.2 | cuda |
+| ds-tagger-prefix-hard | tagger:ds-tagger-prefix | doc_split/test_hard | 2514 | 0.0141 | 0.0577 | 0.9423 | 0.5080 | 0.5080 / 0.6277 / 0.6778 | – | – | 3740.6 | cuda |
+| ds-tagger-prefix-noisy | tagger:ds-tagger-prefix | doc_split_noisy/test | 17841 | 0.0384 | 0.1081 | 0.8919 | 0.1938 | 0.1938 / 0.2374 / 0.2510 | – | – | 3776.3 | cuda |
 | e0-identity-clean | identity | processed/test | 19956 | 0.2111 | 0.8284 | 0.1716 | 0.0000 | – / – / – | 0.0 | 0.0 | 45.1 | cpu |
 | e0-identity-hard | identity | processed/test_hard | 2801 | 0.2218 | 0.8450 | 0.1550 | 0.0000 | – / – / – | 0.0 | 0.0 | 31.4 | cpu |
 | e0-identity-noisy | identity | processed_noisy/test | 19956 | 0.2271 | 0.8376 | 0.1624 | 0.0000 | – / – / – | 0.0 | 0.0 | 44.7 | cpu |

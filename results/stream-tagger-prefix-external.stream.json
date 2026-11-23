@@ -1,0 +1,96 @@
+{
+  "tag": "stream-tagger-prefix-external",
+  "model": "tagger:ds-tagger-prefix",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external.jsonl",
+  "n": 14000,
+  "skipped_unaligned": 0,
+  "policies": {
+    "free": {
+      "sent_acc": 0.5565,
+      "final_word_acc": 0.9585,
+      "first_shown_word_acc": 0.872,
+      "screen_word_acc": 0.9552,
+      "revisions_per_100_words": 14.11,
+      "words_revised": 0.117,
+      "helpful_revisions": 30877,
+      "harmful_revisions": 5843,
+      "mean_settle_words": 0.2188,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w0": {
+      "sent_acc": 0.1284,
+      "final_word_acc": 0.872,
+      "first_shown_word_acc": 0.872,
+      "screen_word_acc": 0.8727,
+      "revisions_per_100_words": 0.0,
+      "words_revised": 0.0,
+      "helpful_revisions": 0,
+      "harmful_revisions": 0,
+      "mean_settle_words": 0.0,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w1": {
+      "sent_acc": 0.5183,
+      "final_word_acc": 0.9542,
+      "first_shown_word_acc": 0.872,
+      "screen_word_acc": 0.9512,
+      "revisions_per_100_words": 10.75,
+      "words_revised": 0.1075,
+      "helpful_revisions": 26366,
+      "harmful_revisions": 2577,
+      "mean_settle_words": 0.1075,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w2": {
+      "sent_acc": 0.5472,
+      "final_word_acc": 0.9573,
+      "first_shown_word_acc": 0.872,
+      "screen_word_acc": 0.9541,
+      "revisions_per_100_words": 11.81,
+      "words_revised": 0.1122,
+      "helpful_revisions": 28069,
+      "harmful_revisions": 3394,
+      "mean_settle_words": 0.1228,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w3": {
+      "sent_acc": 0.5506,
+      "final_word_acc": 0.9577,
+      "first_shown_word_acc": 0.872,
+      "screen_word_acc": 0.9545,
+      "revisions_per_100_words": 12.24,
+      "words_revised": 0.1136,
+      "helpful_revisions": 28620,
+      "harmful_revisions": 3829,
+      "mean_settle_words": 0.1312,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w5": {
+      "sent_acc": 0.5534,
+      "final_word_acc": 0.9581,
+      "first_shown_word_acc": 0.872,
+      "screen_word_acc": 0.9548,
+      "revisions_per_100_words": 12.77,
+      "words_revised": 0.1149,
+      "helpful_revisions": 29285,
+      "harmful_revisions": 4363,
+      "mean_settle_words": 0.1453,
+      "n_sentences": 14000,
+      "n_words": 289285
+    }
+  },
+  "keystroke_latency": null,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cuda",
+    "threads": null
+  }
+}

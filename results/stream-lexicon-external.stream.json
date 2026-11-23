@@ -1,0 +1,96 @@
+{
+  "tag": "stream-lexicon-external",
+  "model": "lexicon",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/external.jsonl",
+  "n": 14000,
+  "skipped_unaligned": 0,
+  "policies": {
+    "free": {
+      "sent_acc": 0.1546,
+      "final_word_acc": 0.8497,
+      "first_shown_word_acc": 0.8497,
+      "screen_word_acc": 0.852,
+      "revisions_per_100_words": 0.0,
+      "words_revised": 0.0,
+      "helpful_revisions": 0,
+      "harmful_revisions": 0,
+      "mean_settle_words": 0.0,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w0": {
+      "sent_acc": 0.1546,
+      "final_word_acc": 0.8497,
+      "first_shown_word_acc": 0.8497,
+      "screen_word_acc": 0.852,
+      "revisions_per_100_words": 0.0,
+      "words_revised": 0.0,
+      "helpful_revisions": 0,
+      "harmful_revisions": 0,
+      "mean_settle_words": 0.0,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w1": {
+      "sent_acc": 0.1546,
+      "final_word_acc": 0.8497,
+      "first_shown_word_acc": 0.8497,
+      "screen_word_acc": 0.852,
+      "revisions_per_100_words": 0.0,
+      "words_revised": 0.0,
+      "helpful_revisions": 0,
+      "harmful_revisions": 0,
+      "mean_settle_words": 0.0,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w2": {
+      "sent_acc": 0.1546,
+      "final_word_acc": 0.8497,
+      "first_shown_word_acc": 0.8497,
+      "screen_word_acc": 0.852,
+      "revisions_per_100_words": 0.0,
+      "words_revised": 0.0,
+      "helpful_revisions": 0,
+      "harmful_revisions": 0,
+      "mean_settle_words": 0.0,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w3": {
+      "sent_acc": 0.1546,
+      "final_word_acc": 0.8497,
+      "first_shown_word_acc": 0.8497,
+      "screen_word_acc": 0.852,
+      "revisions_per_100_words": 0.0,
+      "words_revised": 0.0,
+      "helpful_revisions": 0,
+      "harmful_revisions": 0,
+      "mean_settle_words": 0.0,
+      "n_sentences": 14000,
+      "n_words": 289285
+    },
+    "w5": {
+      "sent_acc": 0.1546,
+      "final_word_acc": 0.8497,
+      "first_shown_word_acc": 0.8497,
+      "screen_word_acc": 0.852,
+      "revisions_per_100_words": 0.0,
+      "words_revised": 0.0,
+      "helpful_revisions": 0,
+      "harmful_revisions": 0,
+      "mean_settle_words": 0.0,
+      "n_sentences": 14000,
+      "n_words": 289285
+    }
+  },
+  "keystroke_latency": null,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu",
+    "threads": null
+  }
+}
