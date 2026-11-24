@@ -2,11 +2,23 @@
 
 **Can a small LLM beat a purpose-built model at restoring Vietnamese diacritics — fast enough to run inside a keyboard?**
 
-People type Vietnamese without tone marks all the time (`hom nay troi dep qua`), and an input method has to put them back (`hôm nay trời đẹp quá`) while the user is still typing. This repo fine-tunes small open LLMs (0.5–2B) for that job, benchmarks them against a task-specific acausal TCN, quantises the best one, and serves it locally for the [VIMEK](https://github.com/dinhgia2106/VIMEK) input method.
+People type Vietnamese without tone marks all the time (`hom nay troi dep qua`), and an input method has to put them back (`hôm nay trời đẹp quá`) while the user is still typing. This repo fine-tunes small open LLMs (0.5B and 1.5B) for that job, compares them with a lexicon, an acausal TCN and a one-pass character tagger on WanJuan-Vietnamese, and serves the winner locally for the [VIMEK](https://github.com/dinhgia2106/VIMEK) input method.
+
+## Answer
+
+**Not inside the keystroke loop.** Numbers below are on held-out documents (document-level split, external set of 14 000 sentences); latency is p95 per sentence on the target laptop CPU.
+
+- **The LLMs restore diacritics well but are too slow.** Qwen2.5-0.5B + LoRA goes from unusable zero-shot (CER 0.5687) to CER 0.0137 / sentence accuracy 0.5136, yet even as GGUF Q4_K_M it needs p95 554 ms — about 11× the 50 ms budget. The cost is structural (≈ 80 ms of prompt plus ≈ 10 ms per generated token); quantisation and lexicon-drafted speculative decoding do not close it.
+- **A 38M-parameter character tagger wins on both axes**: CER 0.0065 / sentence accuracy 0.6691, and p95 22.48 ms as int8 ONNX on 4 threads. It labels every vowel in one pass, so it cannot rewrite letters. It also saw ~10× more training pairs than the LoRA runs — free for this task, since any accented text yields pairs.
+- **The LLM keeps one job: typo repair.** Trained on noisy input, Qwen2.5-1.5B fixes leftover Telex and typos that a tagger structurally cannot, so it belongs after the user pauses, not on every keystroke.
 
 ```
-corpus ─► pairs (strip marks + Telex/typo noise) ─► LoRA / QLoRA fine-tune ─► eval harness ─► merge ─► GGUF int4 ─► local server ─► VIMEK
+WanJuan-Vietnamese ─► pairs (strip marks, Telex/typo noise) ─► LoRA LLMs · TCN · character tagger ─► eval harness
+                                                              (quality, p95 latency, streaming, calibration)
+                   ─► int8 ONNX tagger ─► local server / C++ graph ─► VIMEK        LLM ─► optional typo repair after a pause
 ```
+
+Full write-up with caveats: [docs/report.md](docs/report.md).
 
 ## Research question
 
