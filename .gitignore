@@ -19,3 +19,7 @@ wandb/
 .env
 /logs/
 AGENTS.md
+
+# release bundles: weights go to Hugging Face, only the card and script are committed
+/release/*/*.onnx
+/release/*/config.json
