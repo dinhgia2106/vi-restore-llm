@@ -168,7 +168,14 @@ class OnnxTaggerRestorer(TaggerRestorer):
             ids[k, : len(s)] = self.vocab.encode(s)
             if s:
                 mask[k, : len(s)] = torch.stack([self._mask(c) for c in s])
-        # the exported graph has a fixed batch dimension of 1
-        out = [self.sess.run(["logits"], {"ids": ids[[k]]})[0] for k in range(len(batch))]
-        logits = torch.from_numpy(np.concatenate(out)).float()
+        # Run every sentence at its own length, as the server does. Padding a sentence up to the
+        # longest in the batch changes the int8 graph's output: dynamic quantisation computes its
+        # activation scales over the whole tensor, padded positions included.
+        logits = np.zeros((len(batch), n, self._n_labels), dtype=np.float32)
+        for k, s in enumerate(batch):
+            L = min(len(s), n)
+            if L:
+                run = max(L, 2)  # the exported graph needs at least 2 positions
+                logits[k, :L] = self.sess.run(["logits"], {"ids": ids[[k], :run]})[0][0, :L]
+        logits = torch.from_numpy(logits)
         return torch.log_softmax(logits + mask, dim=-1), n
