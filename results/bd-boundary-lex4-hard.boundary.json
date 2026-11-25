@@ -1,0 +1,222 @@
+{
+ "tag": "bd-boundary-lex4-hard",
+ "model": "boundary:ds-boundary+lexicon",
+ "test": "/marimo/vi-restore-llm/data/doc_split/test_hard.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.993799,
+  "recall": 0.993918,
+  "f1": 0.993859,
+  "sentence_exact": 0.880668,
+  "n": 2514
+ },
+ "unknown_logp": -4.0,
+ "breakdown": {
+  "letters_exact": 0.914081,
+  "error_rate_letters": 0.0027,
+  "error_rate_other": 0.014243,
+  "errors_letters": 387,
+  "errors_other": 128,
+  "examples": [
+   {
+    "gold": "Hap thu: la qua trinh thu hut khi hoac hoi tu hon hop bang chat hap thu long.",
+    "pred": "Hap thu: la qua trinh thu hut khi hoac hoi tu hon hop bang cha thap thu long."
+   },
+   {
+    "gold": "Thu tuong cho biet, ca Thu tuong Ao va Viet Nam deu danh gia so luong gan 40 doanh nghiep Ao dang dau tu tai Viet Nam con qua nho trong khi tiem nang hai nuoc rat lon.",
+    "pred": "Thu tuong cho biet, ca Thu tuong Ao va Viet Nam deu danh gia so luong gan 40 doanh nghiep Ao dang dau tu tai Viet Nam con quan ho trong khi tiem nang hai nuoc rat lon."
+   },
+   {
+    "gold": "Costco chan chan khong du tinh duoc truoc kich ban nay.",
+    "pred": "Cost co chan chan khong du tinh duoc truoc kich ban nay."
+   },
+   {
+    "gold": "Khoi boc len ngun ngut tu dam chay rung tren dao Tenerife thuoc Quan dao Canary cua Tay Ban Nha ngay 17/8/2023.",
+    "pred": "Khoi boc len ngun ngut tu dam chay rung tren dao Tenerife thuoc Quan dao Canary cua Tay Ban Nha n gay 17/8/2023."
+   },
+   {
+    "gold": "Cho den nay, \"giac lua\" da thieu rui tren dien tich 8.400ha, tuong duong hon 4% tong dien tich be mat dao Tenerife.",
+    "pred": "Cho den nay, \"giac lua\" dat hieu rui tren dien tich 8.400 ha, tuong duong hon 4% tong dien tich be mat dao Tenerife."
+   },
+   {
+    "gold": "T chc an ninh tron tu.",
+    "pred": "Tch can ninh tron tu."
+   },
+   {
+    "gold": "Phuong phap bao gom truyen dong dien qua nao, kich thich dong kinh lam thay doi chat hoa hoc trong nao.",
+    "pred": "Phuong phap bao gom truyen dong dien quan ao, kich thich dong kinh lam thay doi chat hoa hoc trong nao."
+   },
+   {
+    "gold": "Bap cai xat nho hoac thai san cung co the duoc du tru trong thoi gian dai nhung se lam mat huong vi cua chung.",
+    "pred": "Bap cai xat nho hoac thai san cung co the duoc du tru trong thoi gian dai nhung se lam ma thuong vi cua chung."
+   },
+   {
+    "gold": "\"Mikoshi\", mot ngoi den di dong dung de van chuyen cac vi than Shinto duoc kieu qua duong pho Yokosuka, phia nam Tokyo sau khi khoanh khac giao thua troi qua",
+    "pred": "\"Mikoshi\", mot ngoi den di dong dung de van chuyen cac vi than Shinto duoc kieu qua duong pho Yokosuka, phia nam Tokyo sau khi khoanh khac giao thuat roi qua"
+   },
+   {
+    "gold": "Nap ca po, noi ngon lua boc len",
+    "pred": "Nap cap o, noi ngon lua boc len"
+   },
+   {
+    "gold": "Den khi co khoi lua tu nap capo, ong Duc da voi ra khoi xe de thoat than, khong kip nhin vao dong ho bao nhiet do tren xe.",
+    "pred": "Den khi co khoi lua tu nap cap o, ong Duc da voi ra khoi xe de thoat than, khong kip nhin vao dong ho bao nhiet do tren xe."
+   },
+   {
+    "gold": "Nha dau tu than trong voi thoa thuan hau Brexit, chung khoan chau A dien bien trai nguoc",
+    "pred": "Nha dau tu than trong voi thoa thua nhau Brexit, chung khoan chau A dien bien trai nguoc"
+   },
+   {
+    "gold": "Moi nam co 55 ti m3 khi dot duoc Nga bom sang chau Au qua bien Baltic.",
+    "pred": "Moi nam co 55 tim 3 khi dot duoc Nga bom sang chau Au qua bien Baltic."
+   },
+   {
+    "gold": "Chiec may bay duoc anh Son dau tu du kha nho be nhung tri gia hang chuc trieu dong, co the bay khoang 15- 20 phut lien tuc trong qua trinh van chuyen banh mi.",
+    "pred": "Chiec may bay duoc anh Son dau tu du kha nho benh ung tri gia hang chuc trieu dong, co the bay khoang 15-20 phut lien tuc trong qua trinh van chuyen banh mi."
+   },
+   {
+    "gold": "- Nuoc men a xit cicic.- Duong tinh trang- Mau thuc pham",
+    "pred": "- Nuoc men axit cicic.- Duong tinh trang - Mau thuc pham"
+   },
+   {
+    "gold": "gia TT NVL xuat = Gia TT binh quan 1 don vi x So luong xuat dung dung dau ky",
+    "pred": "gia TTNVL xuat = Gia TT binh quan 1 don vix So luong xuat dung dung dau ky"
+   },
+   {
+    "gold": "Canh sat cuu ho TP HCM cung nhieu chuyen gia dao ham mo o Quang Ninh cung duoc nho chi vien.",
+    "pred": "Canh sat cuu ho TPHCM cung nhieu chuyen gia dao ham mo o Quang Ninh cung duoc nho chi vien."
+   },
+   {
+    "gold": "Nhu vay lu chim se duoc bao dong moi khi meo tien den.",
+    "pred": "Nhu vay luc him se duoc bao dong moi khi meo tien den."
+   },
+   {
+    "gold": "Hy vong ong ay se lam tot trong vai tro moi.",
+    "pred": "Hy vong o ngay se lam tot trong vai tro moi."
+   },
+   {
+    "gold": "Day la cuoc cham tran goi lai ky niem huan luyen vien lan dau ra mat doi tuyen Viet Nam vao thang 11/2017.",
+    "pred": "Day la cuoc cham tra ngoi lai ky niem huan luyen vien lan dau ra mat doi tuyen Viet Nam vao thang 11/2017."
+   },
+   {
+    "gold": "\u201dTich tru tra\u201d la cach bat dau de nhat.",
+    "pred": "\u201d Tich trut ra\u201d la cach bat dau de nhat."
+   },
+   {
+    "gold": "Lanh dao doanh nghiep can kien quyet khac phuc tu tuong \u201csong lau len lao lang\u201d, tu tuong dang cap, thu bac theo kieu phong kien, khac phuc tinh trang o du, cam tinh, e kip, be phai, cuc bo.",
+    "pred": "Lanh dao doanh nghiep can kien quyet khac phuc tu tuong \u201csong lau len lao lang\u201d, tu tuong dang cap, thu bac theo kieu phong kien, khac phuc tinh trang o du, cam tinh, ekip, be phai, cuc bo."
+   },
+   {
+    "gold": "Nha nao it nguoi thi hai ba cai, nhieu thi chuc cai an dan.",
+    "pred": "Nha nao it nguoi thi hai ba c ai, nhieu thi chuc cai an dan."
+   },
+   {
+    "gold": "Thanh thu co banh an hoai toi ra gieng.",
+    "pred": "Thanh thu co ban han hoai toi ra gieng."
+   },
+   {
+    "gold": "Dem ay, toi khong ngu, ngoi thuc canh noi banh.",
+    "pred": "De may, toi khong ngu, ngoi thuc canh noi banh."
+   },
+   {
+    "gold": "Tinh ra den gio, toi an thu com nghia tinh cung ngot hai muoi nam, nhung nam nao cung hao huc la thuong nhu lai duoc cho qua moi.",
+    "pred": "Tinh ra den gio, toi an thu com nghia tinh cung ngo thai muoi nam, nhung nam nao cung hao huc la thuong nhu lai duoc cho qua moi."
+   },
+   {
+    "gold": "Vai Nam Hoa trong phim \"Biet dong Sai Gon\" cung da khien khan gia ca nuoc nho den ong cho den tan bay gio.",
+    "pred": "Vai Nam Hoa trong phim \"Biet dong Sai Gon\" cung da khien khan gia ca nuoc nho de nong cho den tan bay gio."
+   },
+   {
+    "gold": "Truoc do, tu dau nam 2021, Dang Van Lam da don phuong cham dut hop dong voi CLB Muangthong United.",
+    "pred": "Truoc do, tu dau nam 2021, Dang Van Lam da don phuong cham dut hop dong voi CLB Muang thong United."
+   },
+   {
+    "gold": "Tuong tuong ban than dang cho nhung con vit hay ngong an banh mi o ho.",
+    "pred": "Tuong tuong ban than dang cho nhung con vi thay ngo ngan banh mi o ho."
+   },
+   {
+    "gold": "Giong ca \u201cTha rang nhu the\u201d cho hay, trong qua trinh dong phim co nhieu canh tinh tu cua ba xa va ban dien nam nhung vo chong anh da qua hieu nhau, nen khong co chuyen ghen tuong.",
+    "pred": "Giong ca \u201cTha rang nhu the\u201d cho hay, trong qua trinh dong phim co nhieu canh tinh tu cua ba xa va ban dien nam nhung vo cho nganh da qua hieu nhau, nen khong co chuyen ghen tuong."
+   },
+   {
+    "gold": "Tuong tu ba mau xe duoc hang oto Nhat Ban gioi thieu moi day, muc gia ban le cua bo doi da dung moi nay cung duoc d.anh gia la kha \u201cchat\u201d.",
+    "pred": "Tuong tu ba mau xe duoc hang o to Nhat Ban gioi thieu moi day, muc gia ban le cua bo doi da dung moi nay cung duoc d.anh gia la kha \u201cchat\u201d."
+   },
+   {
+    "gold": "(Tin the thao, tin vo thuat) \"Hau due Thai Cuc Quyen\" co man bien ho nuc cuoi sau tran thua Tu Hieu Dong.",
+    "pred": "(Tin the thao, tin vo thuat) \"Hau due Thai Cuc Quyen\" co man bien ho n uc cuoi sau tran thua Tu Hieu Dong."
+   },
+   {
+    "gold": "Bay gio neu co the phong van duoc vi tri 2yoe thi em co nen nop 2 yoe khong a(junior/middle) hay van nop vi tri 1 yoe a",
+    "pred": "Bay gio neu co the phong van duoc vi tri 2 y oe thiem co nen nop 2 y oe khong a (junior/middle) hay van nop vi tri 1 y oe a"
+   },
+   {
+    "gold": "De vuot qua su tu huy diet, chung ta can mot he chuan moi ve gia tri.",
+    "pred": "De vuot qua su tu huy diet, chung ta can mo the chuan moi ve gia tri."
+   },
+   {
+    "gold": "Bo canh Huong Giang dien truoc do duoc ngoi sao Dualipa khoac len nguoi.",
+    "pred": "Bo canh Huong Giang dien truoc do duoc ngoi sao Dua lipa khoac len nguoi."
+   },
+   {
+    "gold": "Vi du: \"Chau khong tin ong ay la nguoi giet cha chau\", Mai noi, mat dam le.",
+    "pred": "Vi du: \"Chau khong tin o ng ay la nguoi giet chac hau\", Mai noi, mat dam le."
+   },
+   {
+    "gold": "Pha thung luoi cua U23 Viet Nam la do thu mon Van Toan bat khong dinh bong.",
+    "pred": "Phat hung luoi cua U23 Viet Nam la do thu mon Van Toan bat khong dinh bong."
+   },
+   {
+    "gold": "Neu tra loi dung se duoc chon mot o qua.",
+    "pred": "Neu tra loi dung se duoc chon moto qua."
+   },
+   {
+    "gold": "Dat in vo hop, huong dan su dung de dua thuoc gia vao tiep tuc dua ra thi truong tieu thu.",
+    "pred": "Da tin vo hop, huong dan su dung de dua thuoc gia vao tiep tuc dua ra thi truong tieu thu."
+   },
+   {
+    "gold": "Den nam 17 tuoi, mot kep hat ma nu nghe si \"ghet cay, ghet dang\" cu tan tinh ba trong khi ong da trai qua sau doi vo.",
+    "pred": "Den nam 17 tuoi, mot ke phat man u nghe si \"ghet cay, ghet dang\" cu tan tinh ba trong khi ong da trai qua sau doi vo."
+   }
+  ]
+ },
+ "seconds": 1.84,
+ "chunks": {
+  "1": {
+   "chunks": 39378,
+   "exact@1": 0.981055,
+   "exact@3": 0.999111,
+   "exact@5": 0.999594
+  },
+  "2": {
+   "chunks": 17732,
+   "exact@1": 0.975524,
+   "exact@3": 0.996334,
+   "exact@5": 0.998647
+  },
+  "3": {
+   "chunks": 10650,
+   "exact@1": 0.975117,
+   "exact@3": 0.995775,
+   "exact@5": 0.997746
+  },
+  "4": {
+   "chunks": 7155,
+   "exact@1": 0.971908,
+   "exact@3": 0.993431,
+   "exact@5": 0.996087
+  },
+  "6": {
+   "chunks": 3805,
+   "exact@1": 0.962155,
+   "exact@3": 0.991064,
+   "exact@5": 0.995532
+  },
+  "8": {
+   "chunks": 2241,
+   "exact@1": 0.95627,
+   "exact@3": 0.986167,
+   "exact@5": 0.990629
+  }
+ }
+}

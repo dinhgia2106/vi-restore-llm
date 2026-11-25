@@ -1,0 +1,222 @@
+{
+ "tag": "bd-span-dev",
+ "model": "boundary:ds-boundary-span",
+ "test": "/marimo/vi-restore-llm/data/doc_split/dev.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.993003,
+  "recall": 0.99112,
+  "f1": 0.992061,
+  "sentence_exact": 0.819247,
+  "n": 16553
+ },
+ "unknown_logp": null,
+ "breakdown": {
+  "letters_exact": 0.862744,
+  "error_rate_letters": 0.00341,
+  "error_rate_other": 0.018345,
+  "errors_letters": 3868,
+  "errors_other": 1327,
+  "examples": [
+   {
+    "gold": "Trong bao cao nay , ban giam doc lsc rat han hanh cung cap thong tin noi chuyen voi ba hieu truong cua quoc hoi .",
+    "pred": "Trong bao cao nay, ban giam do clscrat hanh anh cung cap thong tin noi chuyen voi ba hieu truong cua quoc hoi."
+   },
+   {
+    "gold": "Voi anh em nha Russo tu Vu tru Dien anh Marvel trong vai tro san xuat va Sam Hargrave ngoi tren ghe dao dien, Extraction la \u201ccu no\" lon cua Netflix ke tu khi len song tu cuoi thang 4.",
+    "pred": "Voi anh em nha Russo tu Vu tru Dien anh Marvel trong vai tro san xuat va Sam Hargra ve ngoi tren ghe dao dien, Extraction la \u201ccu no\" lon cua Netflix ke tu khi len song tu cuoi thang 4."
+   },
+   {
+    "gold": "Theo cong bo cua nen tang chieu phim truc tuyen, da co hon 90 trieu tai khoan an chon theo doi tac pham hanh dong.",
+    "pred": "Theo cong bo cua nen tang chieu phim truc tuyen, da co hon 90 trieu tai khoa nan chon theo doi tac pham hanh dong."
+   },
+   {
+    "gold": "Ban se tro nen mien cuong khong muon cuoi neu ban cam thay e ngai ve ham rang hoac hoi tho cua ban.",
+    "pred": "Ban se tro nen mien cuong khong muon cuoi neu ban cam thay engai ve ham rang hoac hoi tho cua ban."
+   },
+   {
+    "gold": "Anh cung khong biet ro tinh trang cua co sau lan ve nha cua cha o Dai Bac nhung cong da thay khoa.",
+    "pred": "Anh cung khong biet ro tinh trang cua co sau lan ve nha cua chao Dai Bac nhung cong da thay khoa."
+   },
+   {
+    "gold": "\"Toi von khong co y dinh tranh gianh tai san, tat ca do Lam Tinh An that hua.",
+    "pred": "\"Toi von khong co y dinh tranh gianh tai san, tat ca do Lam Tinh An tha thua."
+   },
+   {
+    "gold": "Theo y hoc co truyen, phan hoa co the chua benh bieng an, gay yeu, suy nhuoc, boi duong co the, nang cao tinh trang the chat...",
+    "pred": "Theo y hoc co truyen, phan hoa co the chua benh bien gan, gay yeu, suy nhuoc, boi duong co the, nang cao tinh trang the chat..."
+   },
+   {
+    "gold": "Theo to Healthline, phan hoa co dac tinh chong viem va chong oxy hoa, co the ho tro co the chua lanh vet thuong, ngan ngua nhiem trung.",
+    "pred": "Theo to Healthline, phan hoaco dac tinh chong viem va chong oxy hoa, co the ho tro co the chua lanh vet thuong, ngan ngua nhiem trung."
+   },
+   {
+    "gold": "Theo do, 65% nguoi tham gia cho biet ho ngu ngon, giam cau kinh, it dau khop hon khi bo sung phan hoa moi ngay lien tuc trong mot thang.",
+    "pred": "Theo do, 65% nguoi tham gia cho biet hongu ngon, giam cau kinh, it dau khop hon khi bo sung phan hoa moi ngay lien tuc trong mot thang."
+   },
+   {
+    "gold": "Doc gia Toan Le: \" Khong nem da, nhung VFF hay ra an phat la dinh chi da bong 2 nam voi Hoang thinh, vi hanh vi vao bong ac y voi Hung Dung \".",
+    "pred": "Doc gia Toan Le: \"Khong nem da, nhung VFF hay ra an phat la dinh chi da bong 2 nam voi Hoang thinh, vi hanh vi vao bongac y voi Hung Dung\"."
+   },
+   {
+    "gold": "Doc gia Dinh Hoa Binh: \" Xem nhung tran bong da o nuoc ta, hinh nhu la ho da vao chan doi thu gioi hon la da bong.",
+    "pred": "Doc gia Dinh Hoa Binh: \"Xem nhung tran bong dao nuoc ta, hinh nhu la ho da vao chan doi thu gioi hon la da bong."
+   },
+   {
+    "gold": "Tren mang xa hoi facebook, tai khoan Yo Amon viet: \" Chan bi gap lai, that dang so \".",
+    "pred": "Tren mang xa hoi facebook, tai khoan YoA mon viet: \"Chan bi gap lai, that dang so\"."
+   },
+   {
+    "gold": "Do la dieu dung dan \", tai khoan Jakkraphan Juijek cho biet.",
+    "pred": "Do la dieu dung dan\", tai khoan Jakk ra phan Juijek cho biet."
+   },
+   {
+    "gold": "Tai khoan Thanachai Thammanam nhan xet: \"That chang co chut tinh than the thao, tinh than bong da nao o trong do \".",
+    "pred": "Tai khoan Thanachai Tham ma nam nhan xet: \"That chang co chut tinh than the thao, tinh than bong da nao o trong do\"."
+   },
+   {
+    "gold": "Tai khoan Komdach Yindee chia se: \" Toi cam thay ton thuong khi toi nhin thay ca chan thuong nay \".",
+    "pred": "Tai khoan Kom dach Yindee chia se: \"Toi cam thay ton thuong khi toi nhin thay cach an thuong nay\"."
+   },
+   {
+    "gold": "No co dang nhu mot khoi u dinh vao thanh trong cua tu cung, kich thuoc co the tu vai milimet den vai centimet.",
+    "pred": "No co dang nhu mot khoi u dinh vao thanh trong cua tu cung, kich thuoc co the tu vai milimet den vaicentimet."
+   },
+   {
+    "gold": "Boi polyp se can tro tinh trung di vao gap trung va neu polyp lon hon co the gay ra tac co tu cung, bit kin co tu cung.",
+    "pred": "Boi polyp se can tro tinh trung di vao gap trung va neu polyplon hon co the gay ra tac co tu cung, bit kin co tu cung."
+   },
+   {
+    "gold": "- Chu ki kinh khong deu: ngay kinh den bat thuong khong doan truoc duoc, thuong xuyen cham kinh, kinh nguyet xuat hien 2 lan/ thang hoac mat han kinh nguyet.",
+    "pred": "- Chu ki kinh khong deu: ngay kinh den bat thuong khong doan truoc duoc, thuong xuyen cham kinh, kinh nguyet xuat hien 2 lan/thang hoac ma than kinh nguyet."
+   },
+   {
+    "gold": "Day la dau hieu kha ro rang rang ban dang mac 1 benh phu khoa nao do chu khong rieng gi polyp tu cung.",
+    "pred": "Day la dau hieu kha ro rang rang ban dang mac 1 benh phu khoa nao do chu khong rieng gipolyp tu cung."
+   },
+   {
+    "gold": "Chua nhan dat coc, co phai cac chuoi \"tho o\" kinh doanh iPhone 13?",
+    "pred": "Chua nhan dat coc, co phai cac chuoi \"thoo\" kinh doanh iPhone 13?"
+   },
+   {
+    "gold": "Trong khi do, thong tin tu chuoi FPT Shop cho biet, viec cac chuoi chua mo cho dat coc truoc chac chan la do quy dinh cua Apple.",
+    "pred": "Trong khi do, thong tin tu chuoi FPTS hop cho biet, viec cac chuoi chua mo cho dat coc truoc chac chan la do quy dinh cua Apple."
+   },
+   {
+    "gold": "Tuy nhien tu ngay 17.9, cac chuoi nhu The Gioi Di Dong, FPT Shop hay CellphoneS\u2026",
+    "pred": "Tuy nhien tu ngay 17.9, cac chuoi nhu The Gioi Di Dong, FPT Shop hay Cellphone S\u2026"
+   },
+   {
+    "gold": "Phia FPT Shop cho biet se van tien hanh nhan dat coc, dong thoi dang lien he voi chinh quyen de duoc huong dan cu the hon.",
+    "pred": "Phia FPT S hop cho biet se van tien hanh nhan dat coc, dong thoi dang lien he voi chinh quyen de duoc huong dan cu the hon."
+   },
+   {
+    "gold": "Nam 1989, sau khi lap gia dinh voi nguoi chong la chu ngan hang, ba Brigitte tham gia ung cu vao chinh quyen dia phuong o Truchtersheim, cach thanh pho Strasbourg, Phap khoang 20km.",
+    "pred": "Nam 1989, sau khi lap gia dinh voi nguoi chong la chungan hang, ba Brigitte tham gia ung cu vao chinh quyen dia phuong o Truchtersheim, cach thanh pho Strasbourg, Phap khoang 20 km."
+   },
+   {
+    "gold": "Trong tai lieu tham gia ung cu, ba Brigitte duoc mo ta minh la giao su Phap cung voi buc anh ba mim cuoi trong to roi voi tieu de \u201cTruchtersheim tomorrow\u201d (tam dich: tuong lai cua Truchtersheim).",
+    "pred": "Trong tai lieu tham gia ung cu, ba Brigitte duoc mot a minh la giao su Phap cung voi buc anh ba mim cuoi trong to roi voi tieu de \u201cTruchtersheim tomorrow\u201d (tam dich: tuong lai cua Truch tersheim)."
+   },
+   {
+    "gold": "Nam 2015, ba Brigitte nghi hoan toan viec day hoc de ho tro chong tren con duong tro thanh Tong thong.",
+    "pred": "Nam 2015, ba Brigitten ghi hoan toan viec day hoc de ho tro chong tren con duong tro thanh Tong thong."
+   },
+   {
+    "gold": "Trong lan bau cu Tong thong Phap nam nay, ba Brigitte duoc cho la da thuc giuc chong ung cu vi ba da gia va \u201ckhong cho doi lau hon duoc nua\u201d.",
+    "pred": "Trong lan bau cu Tong thong Phap nam nay, ba Brigitte duoc cho la da thuc giuc chongung cu vi ba da gia va \u201ckhong cho doi lau hon duoc nua\u201d."
+   },
+   {
+    "gold": "Ho noi voi toi gan nhu 100% san pham bay ban o gian hang Nike ma khong phai mall chinh hang tren san TMDT thi la gia.",
+    "pred": "Ho noi voi toi gan nhu 100% san pham bay ban o gian hang Nikema khong phai mall chinh hang tren san TMDT thi la gia."
+   },
+   {
+    "gold": "Phai xu phat duoc moi co tinh ran de, con neu chi tieu huy thi khong khac nao \"muoi dot inox\", khong an thua\" - ong Minh noi them.",
+    "pred": "Phai xu phat duoc moi co tinh ran de, con neu chi tieu huy thi khong khac nao \"muoi do tin ox\", khong an thua\" - ong Minh noi them."
+   },
+   {
+    "gold": "Con dien tich cay trong cai thien o Espirito Santo, Bahia va Rondonia la nhung nhan to chu chot dong gop cho su gia tang cua mua vu ca phe Robusta.",
+    "pred": "Con dien tich cay trong cai thien o Espirito Santo, Bahia va Rondonia la nhung nhan to chuc hot dong gop cho su gia tang cua mua vu ca phe Robusta."
+   },
+   {
+    "gold": "San luong ca phe giam trong nhung thang do la vi luong mua lon, du mua co the cai thien mua vu mitaca.",
+    "pred": "San luong ca phe giam trong nhung thang do la vi luong mua lon, du mua co the cai thien mua vu mi ta ca."
+   },
+   {
+    "gold": "Dembele dinh chan thuong dau goi trong tran hoa Hungary 1-1 o luot thu hai vong bang.",
+    "pred": "Dem be le dinh chan thuong dau goi trong tran hoa Hungary 1-1 o luot thu hai vong bang."
+   },
+   {
+    "gold": "Cac cong ty vien thong An Do, chang han nhu Reliance Jio va Vodafone Idea, da thu nghiem cong nghe haptic trong cac ung dung cham soc suc khoe 5G.",
+    "pred": "Cac cong ty vien thong An Do, chang han nhu Reliance Jio va Vodafone Idea, da thu nghiem cong nghe hap tic trong cac ung dung cham soc suc khoe 5G."
+   },
+   {
+    "gold": "Vi du, cac bac si da deo gang tay haptic de co the cham va cam nhan khi sieu am tu xa tren man hinh.",
+    "pred": "Vi du, cac bac si da deo gang tay hap tic de co the cham va cam nhan khi sieu am tu xa tren man hinh."
+   },
+   {
+    "gold": "Nang cap chuoi phau thuat robot tu xa chinh xac se de dang hon nhieu voi 6G.",
+    "pred": "Nang cap chuoi phau thua tro bot tu xa chinh xac se de dang hon nhieu voi 6G."
+   },
+   {
+    "gold": "Cong nghe nay co the co nhieu truong hop su dung, mien la gia thiet bi haptic giam.",
+    "pred": "Cong nghe nay co the co nhieu truong hop su dung, mien la gia thiet bi hap tic giam."
+   },
+   {
+    "gold": "Cong nghe 6G cung co the cung cap cho ban khuu giac ao.",
+    "pred": "Cong nghe 6G cung co the cung cap cho ban khuu gia cao."
+   },
+   {
+    "gold": "\u201cCho den luc ho nhan ra co the thoat ra theo loi cua chinh, lua da bao trum toan bo khu vuc phia truoc\u201d, Gatchalian noi.",
+    "pred": "\u201cCho den lu cho nhan ra co the thoat ra theo loi cua chinh, lua da bao trum toan bo khu vuc phia truoc\u201d, Gatchalian noi."
+   },
+   {
+    "gold": "Cac cong ty lan can hot hoang di chuyen tai san ra ngoai de tranh bi chay lan",
+    "pred": "Cac cong ty lan can ho thoang di chuyen tai san ra ngoai de tranh bi chay lan"
+   },
+   {
+    "gold": "Dung roi , cau be noi ve denver ve mot chu de khac ma toi da o tren do nhu nam lan trong ba tuan vua qua .",
+    "pred": "Dung roi, cau be noi ve den ver ve mot chu de khac ma toi dao tren do nhu nam lan trong ba tuan vua qua."
+   }
+  ]
+ },
+ "seconds": 2.0,
+ "chunks": {
+  "1": {
+   "chunks": 305238,
+   "exact@1": 0.994034,
+   "exact@3": 0.99945,
+   "exact@5": 0.999715
+  },
+  "2": {
+   "chunks": 137784,
+   "exact@1": 0.984084,
+   "exact@3": 0.993548,
+   "exact@5": 0.998352
+  },
+  "3": {
+   "chunks": 82999,
+   "exact@1": 0.97747,
+   "exact@3": 0.990012,
+   "exact@5": 0.996699
+  },
+  "4": {
+   "chunks": 55883,
+   "exact@1": 0.970939,
+   "exact@3": 0.985684,
+   "exact@5": 0.994614
+  },
+  "6": {
+   "chunks": 30097,
+   "exact@1": 0.957803,
+   "exact@3": 0.978137,
+   "exact@5": 0.991029
+  },
+  "8": {
+   "chunks": 17865,
+   "exact@1": 0.944081,
+   "exact@3": 0.971061,
+   "exact@5": 0.98707
+  }
+ }
+}

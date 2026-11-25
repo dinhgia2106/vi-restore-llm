@@ -1,0 +1,222 @@
+{
+ "tag": "bd-large-dev-nolex",
+ "model": "boundary:ds-boundary-large",
+ "test": "/marimo/vi-restore-llm/data/doc_split/dev.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.995473,
+  "recall": 0.993813,
+  "f1": 0.994642,
+  "sentence_exact": 0.869873,
+  "n": 16553
+ },
+ "unknown_logp": null,
+ "breakdown": {
+  "letters_exact": 0.912765,
+  "error_rate_letters": 0.002067,
+  "error_rate_other": 0.01605,
+  "errors_letters": 2345,
+  "errors_other": 1161,
+  "examples": [
+   {
+    "gold": "Trong bao cao nay , ban giam doc lsc rat han hanh cung cap thong tin noi chuyen voi ba hieu truong cua quoc hoi .",
+    "pred": "Trong bao cao nay, ban giam do c lscrathanh anh cung cap thong tin noi chuyen voi ba hieu truong cua quoc hoi."
+   },
+   {
+    "gold": "Voi anh em nha Russo tu Vu tru Dien anh Marvel trong vai tro san xuat va Sam Hargrave ngoi tren ghe dao dien, Extraction la \u201ccu no\" lon cua Netflix ke tu khi len song tu cuoi thang 4.",
+    "pred": "Voi anh em nha Russo tu Vu tru Dien anh Marvel trong vai tro san xuat va Sam Hargra ve ngoi tren ghe dao dien, Extraction la \u201ccu no\" lon cua Netflix ke tu khi len song tu cuoi thang 4."
+   },
+   {
+    "gold": "Anh cung khong biet ro tinh trang cua co sau lan ve nha cua cha o Dai Bac nhung cong da thay khoa.",
+    "pred": "Anh cung khong biet ro tinh trang cua co sau lan ve nha cua chao Dai Bac nhung cong da thay khoa."
+   },
+   {
+    "gold": "Theo y hoc co truyen, phan hoa co the chua benh bieng an, gay yeu, suy nhuoc, boi duong co the, nang cao tinh trang the chat...",
+    "pred": "Theo y hoc co truyen, phan hoa co the chua benh biengan, gay yeu, suy nhuoc, boi duong co the, nang cao tinh trang the chat..."
+   },
+   {
+    "gold": "Thanh thuc chia buon voi Hung Dung, su nghiep cua anh dang o dinh cao, vay ma ra the nay, day cung la ton that lon lao cho doi tuyen quoc gia, that buon!",
+    "pred": "Thanh thuc chia buon voi Hung Dung, su nghiep cua anh dang o dinh cao, vay mara the nay, day cung la ton that lon lao cho doi tuyen quoc gia, that buon!"
+   },
+   {
+    "gold": "Doc gia Dinh Hoa Binh: \" Xem nhung tran bong da o nuoc ta, hinh nhu la ho da vao chan doi thu gioi hon la da bong.",
+    "pred": "Doc gia Dinh Hoa Binh: \"Xem nhung tran bong dao nuoc ta, hinh nhu la ho da vao chan doi thu gioi hon la da bong."
+   },
+   {
+    "gold": "Thay ma so va ngao ngan.",
+    "pred": "Thay ma so vangao ngan."
+   },
+   {
+    "gold": "Tren mang xa hoi facebook, tai khoan Yo Amon viet: \" Chan bi gap lai, that dang so \".",
+    "pred": "Tren mang xa hoi facebook, tai khoan YoA mon viet: \"Chan bi gap lai, that dang so\"."
+   },
+   {
+    "gold": "Do la dieu dung dan \", tai khoan Jakkraphan Juijek cho biet.",
+    "pred": "Do la dieu dung dan\", tai khoan Jakk ra phan Juijek cho biet."
+   },
+   {
+    "gold": "Tai khoan Thanachai Thammanam nhan xet: \"That chang co chut tinh than the thao, tinh than bong da nao o trong do \".",
+    "pred": "Tai khoan Thanachai Thamma nam nhan xet: \"That chang co chut tinh than the thao, tinh than bong da nao o trong do\"."
+   },
+   {
+    "gold": "Tai khoan Komdach Yindee chia se: \" Toi cam thay ton thuong khi toi nhin thay ca chan thuong nay \".",
+    "pred": "Tai khoan Kom dach Yindee chia se: \"Toi cam thay ton thuong khi toi nhin thay ca chan thuong nay\"."
+   },
+   {
+    "gold": "Boi polyp se can tro tinh trung di vao gap trung va neu polyp lon hon co the gay ra tac co tu cung, bit kin co tu cung.",
+    "pred": "Boi polyp se can tro tinh trung di vao gap trung va neu polyplon hon co the gay ra tac co tu cung, bit kin co tu cung."
+   },
+   {
+    "gold": "- Chu ki kinh khong deu: ngay kinh den bat thuong khong doan truoc duoc, thuong xuyen cham kinh, kinh nguyet xuat hien 2 lan/ thang hoac mat han kinh nguyet.",
+    "pred": "- Chu ki kinh khong deu: ngay kinh den bat thuong khong doan truoc duoc, thuong xuyen cham kinh, kinh nguyet xuat hien 2 lan/thang hoac ma than kinh nguyet."
+   },
+   {
+    "gold": "Day la dau hieu kha ro rang rang ban dang mac 1 benh phu khoa nao do chu khong rieng gi polyp tu cung.",
+    "pred": "Day la dau hieu kha ro rang rang ban dang mac 1 benh phu khoan ao do chu khong rieng gi polyp tu cung."
+   },
+   {
+    "gold": "Tuy nhien tu ngay 17.9, cac chuoi nhu The Gioi Di Dong, FPT Shop hay CellphoneS\u2026",
+    "pred": "Tuy nhien tu ngay 17.9, cac chuoi nhu The Gioi Di Dong, FPT Shop hay Cellphone S\u2026"
+   },
+   {
+    "gold": "Nam 2015, ba Brigitte nghi hoan toan viec day hoc de ho tro chong tren con duong tro thanh Tong thong.",
+    "pred": "Nam 2015, ba Brigitten ghi hoan toan viec day hoc de ho tro chong tren con duong tro thanh Tong thong."
+   },
+   {
+    "gold": "Ho noi voi toi gan nhu 100% san pham bay ban o gian hang Nike ma khong phai mall chinh hang tren san TMDT thi la gia.",
+    "pred": "Ho noi voi toi gan nhu 100% san pham bay ban o gian hang Nikema khong phai mall chinh hang tren san TMDT thi la gia."
+   },
+   {
+    "gold": "Phai xu phat duoc moi co tinh ran de, con neu chi tieu huy thi khong khac nao \"muoi dot inox\", khong an thua\" - ong Minh noi them.",
+    "pred": "Phai xu phat duoc moi co tinh ran de, con neu chi tieu huy thi khong khac nao \"muoi do tinox\", khong an thua\" - ong Minh noi them."
+   },
+   {
+    "gold": "Con dien tich cay trong cai thien o Espirito Santo, Bahia va Rondonia la nhung nhan to chu chot dong gop cho su gia tang cua mua vu ca phe Robusta.",
+    "pred": "Con dien tich cay trong cai thien o Espirito Santo, Bahia va Rondonia la nhung nhan to chuc hot dong gop cho su gia tang cua mua vu ca phe Robusta."
+   },
+   {
+    "gold": "San luong ca phe giam trong nhung thang do la vi luong mua lon, du mua co the cai thien mua vu mitaca.",
+    "pred": "San luong ca phe giam trong nhung thang do la vi luong mua lon, du mua co the cai thien mua vu mita ca."
+   },
+   {
+    "gold": "Dembele dinh chan thuong dau goi trong tran hoa Hungary 1-1 o luot thu hai vong bang.",
+    "pred": "Dem be le dinh chan thuong dau goi trong tran hoa Hungary 1-1 o luot thu hai vong bang."
+   },
+   {
+    "gold": "Voi moi ngay Dembele nghi thi dau, Barca co quyen doi UEFA boi thuong 24.365 USD.",
+    "pred": "Voi moi ngay Dembelenghi thi dau, Barca co quyen doi UEFA boi thuong 24.365 USD."
+   },
+   {
+    "gold": "Cac cong ty vien thong An Do, chang han nhu Reliance Jio va Vodafone Idea, da thu nghiem cong nghe haptic trong cac ung dung cham soc suc khoe 5G.",
+    "pred": "Cac cong ty vien thong An Do, chang han nhu Reliance Jio va Vodafone Idea, da thu nghiem cong nghe hap tic trong cac ung dung cham soc suc khoe 5G."
+   },
+   {
+    "gold": "Cong nghe 6G cung co the cung cap cho ban khuu giac ao.",
+    "pred": "Cong nghe 6G cung co the cung cap cho ban khuu gia cao."
+   },
+   {
+    "gold": "Dung roi , cau be noi ve denver ve mot chu de khac ma toi da o tren do nhu nam lan trong ba tuan vua qua .",
+    "pred": "Dung roi, cau be noi ve denver ve mot chu de khac ma toi dao tren do nhu nam lan trong ba tuan vua qua."
+   },
+   {
+    "gold": "Toi nghe noi denver rat tu te , nhung toi khong co co hoi de den do .",
+    "pred": "Toi nghe noi den ver rat tu te , nhung toi khong co co hoi de den do ."
+   },
+   {
+    "gold": "Ngheo latinh trang mot bo phan dan cu co muc song toi thieu khong",
+    "pred": "Ngheo la tinh trang mot bo phan dan cuc o muc song toi thieu khong"
+   },
+   {
+    "gold": "Ngheo doi la tinh trang mot bo phan dan khong duoc huong va thoa",
+    "pred": "Ngheo doi la tinh trang mot bo phan dan khong duoc huong vathoa"
+   },
+   {
+    "gold": "mot khai niem rong, luon thaydoi theo khong gian va thoi gian.",
+    "pred": "mot khai niem rong, luon thay doi theo khong gian va thoi gian."
+   },
+   {
+    "gold": "Ngheo tuong doi: la tinh trang mot bo phan dan cu co muc song duoi",
+    "pred": "Ngheo tuong doi: la tinh trang mot bo phan dan cuc o muc song duoi"
+   },
+   {
+    "gold": "cin ton tai tinh trang ngheo cung cuc o mot so vung.",
+    "pred": "cin ton tai tinh trang ngheo cung cu co mot so vung."
+   },
+   {
+    "gold": "quan ly bang ho khauda dung bien phap hanh chinh de ngan can nong dan di",
+    "pred": "quan ly bang ho khau da dung bien phap hanh chinh de ngan can nong dan di"
+   },
+   {
+    "gold": "- Benh thuong gap o nguoi gia: lao, tieu duong, ung thu o nam, benh phu",
+    "pred": "- Benh thuong gap o nguoi gia: lao, tieu duong, ung thuon am, benh phu"
+   },
+   {
+    "gold": "Thuc trang,giai phapva kien nghi",
+    "pred": "Thuc trang, giai phap va kien nghi"
+   },
+   {
+    "gold": "cac vung kinh te va giuac cac don vi hanh chinh dang ton tai voi khoang cach",
+    "pred": "cac vung kinh te va giu ac cac don vi hanh chinh dang ton tai voi khoang cach"
+   },
+   {
+    "gold": "Danh mot luong von cho dien ngheo vay qua chuong trinh dau tu vat",
+    "pred": "Danh mot luong von cho dien ngheo vay qua chuong trinh dau tu va t"
+   },
+   {
+    "gold": "(Dan tri) - Tong thong My Joe Biden cung doan thap tung toi dat hoa tai phu dieu co thuong nghi si John McCain nam ven ho Truc Bach (Ha Noi).",
+    "pred": "(Dan tri) - Tong thong My Joe Biden cung doan thap tung toi dat hoa tai phu dieu co thuong nghi si John McCain nam venho Truc Bach (Ha Noi)."
+   },
+   {
+    "gold": "Buc phu dieu co Thuong nghi si John McCain ben ho Truc Bach.",
+    "pred": "Buc phu dieu co Thuong nghi si John McCain benh o Truc Bach."
+   },
+   {
+    "gold": "Tong thong My Joe Biden dat hoa tai buc phu dieu co thuong nghi si John McCain (Anh: Huu Khoa).",
+    "pred": "Tong thong My Joe Biden da thoa tai buc phu dieu co thuong nghi si John McCain (Anh: Huu Khoa)."
+   },
+   {
+    "gold": "Sau cung thi chung se nhan ra rang viec ngoam do choi thu vi hon gam chan cua nguoi chu.",
+    "pred": "Sau cung thich ung se nhan ra rang viec ngo am do choi thu vi ho ngam chan cua nguoi chu."
+   }
+  ]
+ },
+ "seconds": 3.16,
+ "chunks": {
+  "1": {
+   "chunks": 305238,
+   "exact@1": 0.977585,
+   "exact@3": 0.999043,
+   "exact@5": 0.999649
+  },
+  "2": {
+   "chunks": 137784,
+   "exact@1": 0.975607,
+   "exact@3": 0.992742,
+   "exact@5": 0.997946
+  },
+  "3": {
+   "chunks": 82999,
+   "exact@1": 0.974192,
+   "exact@3": 0.990699,
+   "exact@5": 0.996783
+  },
+  "4": {
+   "chunks": 55883,
+   "exact@1": 0.971512,
+   "exact@3": 0.98878,
+   "exact@5": 0.99558
+  },
+  "6": {
+   "chunks": 30097,
+   "exact@1": 0.963385,
+   "exact@3": 0.984085,
+   "exact@5": 0.993255
+  },
+  "8": {
+   "chunks": 17865,
+   "exact@1": 0.957571,
+   "exact@3": 0.979457,
+   "exact@5": 0.990428
+  }
+ }
+}

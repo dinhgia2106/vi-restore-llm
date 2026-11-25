@@ -1,0 +1,222 @@
+{
+ "tag": "bd-boundary-large-lex4-hard",
+ "model": "boundary:ds-boundary-large+lexicon",
+ "test": "/marimo/vi-restore-llm/data/doc_split/test_hard.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.995037,
+  "recall": 0.994681,
+  "f1": 0.994859,
+  "sentence_exact": 0.898568,
+  "n": 2514
+ },
+ "unknown_logp": -4.0,
+ "breakdown": {
+  "letters_exact": 0.931185,
+  "error_rate_letters": 0.00217,
+  "error_rate_other": 0.013353,
+  "errors_letters": 311,
+  "errors_other": 120,
+  "examples": [
+   {
+    "gold": "Costco chan chan khong du tinh duoc truoc kich ban nay.",
+    "pred": "Cost co chan chan khong du tinh duoc truoc kich ban nay."
+   },
+   {
+    "gold": "T chc an ninh tron tu.",
+    "pred": "Tch can ninh tron tu."
+   },
+   {
+    "gold": "Phuong phap bao gom truyen dong dien qua nao, kich thich dong kinh lam thay doi chat hoa hoc trong nao.",
+    "pred": "Phuong phap bao gom truyen dong dien quan ao, kich thich dong kinh lam thay doi chat hoa hoc trong nao."
+   },
+   {
+    "gold": "Cai xoan: Loai cai nay co la mem hon, xoan hon, mau xanh dam va co gan trang.",
+    "pred": "Cai xoan: Loai cai nay co lam em hon, xoa nhon, mau xanh dam va co gan trang."
+   },
+   {
+    "gold": "Bap cai xat nho hoac thai san cung co the duoc du tru trong thoi gian dai nhung se lam mat huong vi cua chung.",
+    "pred": "Bap cai xat nho hoac thai san cung co the duoc du tru trong thoi gian dai nhung se lam ma thuong vi cua chung."
+   },
+   {
+    "gold": "Nap ca po, noi ngon lua boc len",
+    "pred": "Nap cap o, noi ngon lua boc len"
+   },
+   {
+    "gold": "Den khi co khoi lua tu nap capo, ong Duc da voi ra khoi xe de thoat than, khong kip nhin vao dong ho bao nhiet do tren xe.",
+    "pred": "Den khi co khoi lua tu nap cap o, ong Duc da voi ra khoi xe de thoat than, khong kip nhin vao dong ho bao nhiet do tren xe."
+   },
+   {
+    "gold": "Moi nam co 55 ti m3 khi dot duoc Nga bom sang chau Au qua bien Baltic.",
+    "pred": "Moi nam co 55 tim 3 khi dot duoc Nga bom sang chau Au qua bien Baltic."
+   },
+   {
+    "gold": "Nam nay, doi tuyen Viet Nam tham du Olympic Toan quoc te dat hang 14 trong so 107 doi tham gia.",
+    "pred": "Nam nay, doi tuyen Viet Nam tham du Olympic Toan quoc te da thang 14 trong so 107 doi tham gia."
+   },
+   {
+    "gold": "- Nuoc men a xit cicic.- Duong tinh trang- Mau thuc pham",
+    "pred": "- Nuoc men axit cicic.- Duong tinh trang - Mau thuc pham"
+   },
+   {
+    "gold": "gia TT NVL xuat = Gia TT binh quan 1 don vi x So luong xuat dung dung dau ky",
+    "pred": "gia TTN VL xuat = Gia TT binh quan 1 don vi x So luong xuat dung dung dau ky"
+   },
+   {
+    "gold": "Canh sat cuu ho TP HCM cung nhieu chuyen gia dao ham mo o Quang Ninh cung duoc nho chi vien.",
+    "pred": "Canh sat cuu ho TPHCM cung nhieu chuyen gia dao ham mo o Quang Ninh cung duoc nho chi vien."
+   },
+   {
+    "gold": "\u201dTich tru tra\u201d la cach bat dau de nhat.",
+    "pred": "\u201d Tich trut ra\u201d la cach bat dau de nhat."
+   },
+   {
+    "gold": "Lanh dao doanh nghiep can kien quyet khac phuc tu tuong \u201csong lau len lao lang\u201d, tu tuong dang cap, thu bac theo kieu phong kien, khac phuc tinh trang o du, cam tinh, e kip, be phai, cuc bo.",
+    "pred": "Lanh dao doanh nghiep can kien quyet khac phuc tu tuong \u201csong lau len lao lang\u201d, tu tuong dang cap, thu bac theo kieu phong kien, khac phuc tinh trang o du, cam tinh, ekip, be phai, cuc bo."
+   },
+   {
+    "gold": "Nha nao it nguoi thi hai ba cai, nhieu thi chuc cai an dan.",
+    "pred": "Nha nao it nguoi thi hai bac ai, nhieu thi chuc cai an dan."
+   },
+   {
+    "gold": "Thanh thu co banh an hoai toi ra gieng.",
+    "pred": "Thanh thu co ban han hoai toi ra gieng."
+   },
+   {
+    "gold": "Doan nay ton suc chi co dan ong moi lam noi.",
+    "pred": "Do an nay ton suc chi co dan ong moi lam noi."
+   },
+   {
+    "gold": "Nhung hoc com nay dung de cung gia tien va lam qua cho ho hang an Tet.",
+    "pred": "Nhung hoc com nay dung de cung gia tien va lam qua cho ho han gan Tet."
+   },
+   {
+    "gold": "Tuong tuong ban than dang cho nhung con vit hay ngong an banh mi o ho.",
+    "pred": "Tuong tuong ban than dang cho nhung con vi thay ngo ngan banh mi o ho."
+   },
+   {
+    "gold": "Tuong tu ba mau xe duoc hang oto Nhat Ban gioi thieu moi day, muc gia ban le cua bo doi da dung moi nay cung duoc d.anh gia la kha \u201cchat\u201d.",
+    "pred": "Tuong tu ba mau xe duoc hang o to Nhat Ban gioi thieu moi day, muc gia ban le cua bo doi da dung moi nay cung duoc d.anh gia la kha \u201cchat\u201d."
+   },
+   {
+    "gold": "Bay gio neu co the phong van duoc vi tri 2yoe thi em co nen nop 2 yoe khong a(junior/middle) hay van nop vi tri 1 yoe a",
+    "pred": "Bay gio neu co the phong van duoc vi tri 2 yo et hiem co nen nop 2 yo e khong a (junior/middle) hay van nop vi tri 1 yoe a"
+   },
+   {
+    "gold": "Mot vu so tan tuong tu tai duong ham duoc noi xay ra 17 nam truoc.",
+    "pred": "Mot vu sot an tuong tu tai duong ham duoc noi xay ra 17 nam truoc."
+   },
+   {
+    "gold": "Bo canh Huong Giang dien truoc do duoc ngoi sao Dualipa khoac len nguoi.",
+    "pred": "Bo canh Huong Giang dien truoc do duoc ngoi sao Dua lipa khoac len nguoi."
+   },
+   {
+    "gold": "Vi du: \"Chau khong tin ong ay la nguoi giet cha chau\", Mai noi, mat dam le.",
+    "pred": "Vi du: \"Chau khong tin ong ay la nguoi giet chac hau\", Mai noi, mat dam le."
+   },
+   {
+    "gold": "Pha thung luoi cua U23 Viet Nam la do thu mon Van Toan bat khong dinh bong.",
+    "pred": "Phat hung luoi cua U23 Viet Nam la do thu mon Van Toan bat khong dinh bong."
+   },
+   {
+    "gold": "Dac biet hon khi day la mau o to dien dau tien do Viet Nam san xuat.",
+    "pred": "Dac biet hon khi day la mau oto dien dau tien do Viet Nam san xuat."
+   },
+   {
+    "gold": "Neu tra loi dung se duoc chon mot o qua.",
+    "pred": "Neu tra loi dung se duoc chon mo to qua."
+   },
+   {
+    "gold": "Dat in vo hop, huong dan su dung de dua thuoc gia vao tiep tuc dua ra thi truong tieu thu.",
+    "pred": "Da tin vo hop, huong dan su dung de dua thuoc gia vao tiep tuc dua ra thi truong tieu thu."
+   },
+   {
+    "gold": "Den nam 17 tuoi, mot kep hat ma nu nghe si \"ghet cay, ghet dang\" cu tan tinh ba trong khi ong da trai qua sau doi vo.",
+    "pred": "Den nam 17 tuoi, mot ke phat ma nu nghe si \"ghet cay, ghet dang\" cu tan tinh ba trong khi ong da trai qua sau doi vo."
+   },
+   {
+    "gold": "Ba da hat qua nhieu vo tuong, tat ca deu noi tieng va luu dau ten tuoi trong long khan gia mo dieu.",
+    "pred": "Ba da hat qua nhieu vo tuong, tat ca deu noi tieng va luu dau ten tuoi trong long khan giam o dieu."
+   },
+   {
+    "gold": "Hay thu tat han dieu hoa.",
+    "pred": "Hay thu ta than dieu hoa."
+   },
+   {
+    "gold": "Tieu chuan xet Danh hieu thi dua (TCDHTD) dong vai tro tuong tu nhu TCPLHL, la nhung quy tac duoc dung de xet danh hieu thi dua cho hoc sinh trong nha truong.",
+    "pred": "Tieu chuan xet Danh hieu thi dua (TCD HTD) dong vai tro tuong tu nhu TCP L HL, la nhung quy tac duoc dung de xet danh hieu thi dua cho hoc sinh trong nha truong."
+   },
+   {
+    "gold": "Moi TCDHTD se bao gom mot hay nhieu Danh hieu thi dua (Gioi, Tien tien), moi danh hieu thi dua se gan lien voi cac tieu chi tuong ung.",
+    "pred": "Moi TCD HTD se bao gom mot hay nhieu Danh hieu thi dua (Gioi, Tien tien), moi danh hieu thi dua se gan lien voi cac tieu chi tuong ung."
+   },
+   {
+    "gold": "Neu duoc thong qua, he thong huu tri cua Phap se van hao phong hon he thong cua Duc va Anh\u201d, vi chuyen gia ket luan.",
+    "pred": "Neu duoc thong qua, he thong huu tri cua Phap se va nha o phong hon he thong cua Duc va Anh\u201d, vi chuyen gia ket luan."
+   },
+   {
+    "gold": "Do nguoi lai xe nghe dien thoai, dung chat kich thich, chay lan tuyen, do tai xe mo cua xe oto tuy tien, ngu gat...v.v..",
+    "pred": "Do nguoi lai xe nghe dien thoai, dung chat kich thich, chay lan tuyen, do tai xe mo cua xe o to tuy tien, ngu gat...v.v.."
+   },
+   {
+    "gold": "Serum dong vai tro trong viec giup toc mem muot va ong a, dong thoi giam thieu viec lam toc xoan lai.",
+    "pred": "Serum dong vai tro trong viec giup toc mem muot vao nga, dong thoi giam thieu viec lam toc xoan lai."
+   },
+   {
+    "gold": "Tranh boi len phan chan toc; neu khong, toc se co ve nhon dinh.",
+    "pred": "Tranh boi len phan chan toc; neu khong, toc se co ven h on dinh."
+   },
+   {
+    "gold": "Chuyen hoa citrate khong khong 4.",
+    "pred": "Chuyen hoac it rate khong khong 4."
+   },
+   {
+    "gold": "HLV Van Gaal dang rat quan tam toi Coentrao khi ong muon cai thien chat luong hang lang canh trai.",
+    "pred": "HLV Van Gaal dang rat quan tam toi Coen trao khi ong muon cai thien chat luong hang lang canh trai."
+   },
+   {
+    "gold": "Thanh cong trong kinh doanh, nhung doi tu co Tu Hong lai bat hanh, trai qua nhieu doi chong nhung khong co con.",
+    "pred": "Thanh cong trong kinh doanh, nhung doi tu co Tu Hong lai ba thanh, trai qua nhieu doi chong nhung khong co con."
+   }
+  ]
+ },
+ "seconds": 1.82,
+ "chunks": {
+  "1": {
+   "chunks": 39378,
+   "exact@1": 0.979151,
+   "exact@3": 0.999162,
+   "exact@5": 0.999619
+  },
+  "2": {
+   "chunks": 17732,
+   "exact@1": 0.975242,
+   "exact@3": 0.996278,
+   "exact@5": 0.998534
+  },
+  "3": {
+   "chunks": 10650,
+   "exact@1": 0.976526,
+   "exact@3": 0.995681,
+   "exact@5": 0.998122
+  },
+  "4": {
+   "chunks": 7155,
+   "exact@1": 0.973864,
+   "exact@3": 0.99427,
+   "exact@5": 0.996366
+  },
+  "6": {
+   "chunks": 3805,
+   "exact@1": 0.969777,
+   "exact@3": 0.99159,
+   "exact@5": 0.995269
+  },
+  "8": {
+   "chunks": 2241,
+   "exact@1": 0.959393,
+   "exact@3": 0.991075,
+   "exact@5": 0.99286
+  }
+ }
+}

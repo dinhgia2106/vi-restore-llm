@@ -1,0 +1,222 @@
+{
+ "tag": "bd-boundary-lex4-clean",
+ "model": "boundary:ds-boundary+lexicon",
+ "test": "/marimo/vi-restore-llm/data/doc_split/test.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.993112,
+  "recall": 0.992704,
+  "f1": 0.992908,
+  "sentence_exact": 0.845132,
+  "n": 17841
+ },
+ "unknown_logp": -4.0,
+ "breakdown": {
+  "letters_exact": 0.883639,
+  "error_rate_letters": 0.003133,
+  "error_rate_other": 0.015681,
+  "errors_letters": 3849,
+  "errors_other": 1181,
+  "examples": [
+   {
+    "gold": "Day la ly do tai sao doanh nghiep can tinh toi ky thuat luu giu archiving de bo sung cho viec sao luu.",
+    "pred": "Day la ly do tai sao doanh nghiep can tinh toi ky thuat luu giu ar chi ving de bo sung cho viec sao luu."
+   },
+   {
+    "gold": "Khao sat noi tren cua Applied Research cho thay cac doanh nghiep dang to ra nham lan ve khai niem luu tru archiving.",
+    "pred": "Khao sat noi tren cua Applied Research cho thay cac doanh nghiep dang to ra nham lan ve khai niem luu truarchiving."
+   },
+   {
+    "gold": "Chi luu cac ban sao luu du lieu trong vong 30-60 ngay roi xoa bo: Sao luu khong phai la luu tru thong tin lau dai va khong dung sao luu cho luu tru archiving va luu tru phap ly.",
+    "pred": "Chi luu cac ban sao luu du lieu trong vong 30-60 ngay roi xoa bo: Sao luu khong phai la luu tru thong tin lau dai va khong dung sao luu cho luu trua rchiving va luu tru phap ly."
+   },
+   {
+    "gold": "Ceres giap cac do thi : Groscavallo, Chialamberto, Cantoira, Monastero di Lanzo, Ala di Stura, Mezzenile, va Pessinetto.",
+    "pred": "Ceres giap cac do thi : Groscavallo, Chialamberto, Can toi ra, Monastero di Lanzo, Ala di Stura, Mezzenile, va Pessinetto."
+   },
+   {
+    "gold": "TONG QUAN VE CONG NGHE HOA HOC Cong nghe (Technology), co nguon goc la tu technologia, trong tieng Hy Lap; techne co nghia la \u201cnghe thuat, thu cong\u201d va logia co nghia la \u201ckhoa hoc\u201d.",
+    "pred": "TONG QUAN VE CONG NGHE HOA HOC Cong nghe (Technology), co nguon goc la tu tech no lo gia, trong tieng Hy Lap; techne co nghia la \u201cnghe thuat, thu cong\u201d va lo gia co nghia la \u201ckhoa hoc\u201d."
+   },
+   {
+    "gold": "Cung giong nhu phan he xu ly chat phu gia co kha nang khoi phuc tinh chat cua nuoc va dua no tro lai qua trinh san xuat.",
+    "pred": "Cung giong nhu phan he xu ly chat phu gia co kha nang khoi phuc tinh chat cua nuoc va du ano tro lai qua trinh san xuat."
+   },
+   {
+    "gold": "Hieu xuat san pham (\u03b7) \u2013 la ti le luong san pham thuc te nhan duoc (G sp ) tren luong san pham toi da thu duoc G max theo tinh toan ly thuyet.",
+    "pred": "Hieu xuat san pham (\u03b7) \u2013 la ti le luong san pham thuc te nhan duoc (Gsp) tren luong san pham toi da thu duoc Gmax theo tinh toan ly thuyet."
+   },
+   {
+    "gold": "max G G sp Do chuyen hoa (x) \u2013 la ti le so luong vat chat duoc chuyen hoa thanh san pham tren so luong ban dau.",
+    "pred": "max GG sp Do chuyen hoa (x) \u2013 la ti le so luong vat chat duoc chuyen hoa thanh san pham tren so luong ban dau."
+   },
+   {
+    "gold": "QaR ; trong do a la: he so phu thuoc vao tinh chat cua qua trinh san xuat.",
+    "pred": "Qa R; trong doa la: he so phu thuoc vao tinh chat cua qua trinh san xuat."
+   },
+   {
+    "gold": "Neu S la gia thanh san pham tinh theo don vi Dong/Tan thi: n QmS .",
+    "pred": "Neu S la gia thanh san pham tinh theo don vi Dong/Tan thi: nQ mS."
+   },
+   {
+    "gold": "Hap thu: la qua trinh thu hut khi hoac hoi tu hon hop bang chat hap thu long.",
+    "pred": "Hap thu: la qua trinh thu hut khi hoac hoi tu hon hop bang cha thap thu long."
+   },
+   {
+    "gold": "Hap phu: Qua trinh thu hut chat khi hoac hoi bang chat hap thu ran.",
+    "pred": "Hap phu: Qua trinh thu hut chat khi hoac hoi bang cha thap thu ran."
+   },
+   {
+    "gold": "nang de nhanh va co the gay ra bien dong lon ve chin dong deu cua cac bong",
+    "pred": "nang den hanh va co the gay ra bien dong lon ve chin dong deu cua cac bong"
+   },
+   {
+    "gold": "nang de nhanh va so nhanh huu hieu/ khom, kha nang chong chiu sau benh...",
+    "pred": "nang den hanh va so nhanh huu hieu/khom, kha nang chong chiu sau benh..."
+   },
+   {
+    "gold": "tudo ma anh huong manh meden nang suat lua.",
+    "pred": "tu do ma anh huong manh me den nang suat lua."
+   },
+   {
+    "gold": "uu ma van khong lam cho bong nho di, so hat chac va do chac hat tren bong khong thay doi.",
+    "pred": "uu ma van khong lam cho bong nho di, so hat chac va do cha chat tren bong khong thay doi."
+   },
+   {
+    "gold": "Nhan xet moi quan he dien tich dinh duong va su de nhanh, theo Pham Van Cuong (2002), su de nhanh cua cay lua co quan he chat che voi dien tich",
+    "pred": "Nhan xet moi quan he dien tich dinh duong va su den hanh, theo Pham Van Cuong (2002), su den hanh cua cay lua co quan he chat che voi dien tich"
+   },
+   {
+    "gold": "Neu dien tich dinh duong cang lon thoi gian de nhanh de cang dai va nguoc lai, dien tich dinh duong cang nho thi thoi gian de nhanh cang ngan.",
+    "pred": "Neu dien tich dinh duong cang lon thoi gian den hanh de cang dai va nguoc lai, dien tich dinh duong cang nho thi thoi gian den hanh cang ngan."
+   },
+   {
+    "gold": "Cay day o mat do cao thi lua se khong de nhanh va mot so cay me se lui dan.",
+    "pred": "Cay day o mat do cao thi lua se khong den hanh va mot so cay me se lui dan."
+   },
+   {
+    "gold": "Thoi gian de nhanh huu hieu tap trung khoang 8 - 15 ngay sau cay.",
+    "pred": "Thoi gian den hanh huu hieu tap trung khoang 8-15 ngay sau cay."
+   },
+   {
+    "gold": "Khi nghien cuu ve mat do, cach cay cua cac ruong lua nang suat cao tac giaDao The Tuan (1980) cho biet: mat do la mot trong nhung bien phap",
+    "pred": "Khi nghien cuu ve mat do, cach cay cua cac ruong lua nang suat cao tac gia Dao The Tuan (1980) cho biet: mat do la mot trong nhung bien phap"
+   },
+   {
+    "gold": "Mat do thich hop con han che duoc qua trinh de nhanh lai rai, han che duoc thoi gian de nhanh vo hieu, lang phi chat dinh duong.",
+    "pred": "Mat do thich hop con han che duoc qua trinh den hanh lai rai, han che duoc thoi gian den hanh vo hieu, lang phi chat dinh duong."
+   },
+   {
+    "gold": "Hat chin khong deu, mam mong sau benh tren hat co the tang do do am hat tang nhanh trong qua trinh bao quan\u2026",
+    "pred": "Hat chin khong deu, mam mong sau benh tre nhat co the tang do do am hat tang nhanh trong qua trinh bao quan\u2026"
+   },
+   {
+    "gold": "anh huong khong nhoden chat luong hat giong.",
+    "pred": "anh huong khong nho den chat luong hat giong."
+   },
+   {
+    "gold": "Chu tich VCCI cung hy vong sau khi VKO mo van phong dai dien tai Viet Nam thi se co nhieu doanh nghiep Ao dau tu vao Viet Nam.",
+    "pred": "Chu tich VCCI cung hy vong sau khi VK O mo van phong dai dien tai Viet Nam thi se co nhieu doanh nghiep Ao dau tu vao Viet Nam."
+   },
+   {
+    "gold": "Thu tuong cho biet, ca Thu tuong Ao va Viet Nam deu danh gia so luong gan 40 doanh nghiep Ao dang dau tu tai Viet Nam con qua nho trong khi tiem nang hai nuoc rat lon.",
+    "pred": "Thu tuong cho biet, ca Thu tuong Ao va Viet Nam deu danh gia so luong gan 40 doanh nghiep Ao dang dau tu tai Viet Nam con quan ho trong khi tiem nang hai nuoc rat lon."
+   },
+   {
+    "gold": "Bac Hoang Van Nghi, nha ngay mat t.ien duong Cong Hoa cho biet: \u201cSang som va chieu toi xe di qua day con cham hon di bo.",
+    "pred": "Bac Hoang Van Nghi, nhan gay mat t.ien duong Cong Hoa cho biet: \u201cSang som va chieu toi xe di qua day con cham hon di bo."
+   },
+   {
+    "gold": "Tuy nhien, cau vuot nay cam luu thong bo hanh, cam xe tho so, cam xe 3 banh, cam xe oto tai co tong trong luong (trong luong xe cong hang) tu 10 tan tro len.",
+    "pred": "Tuy nhien, cau vuot nay cam luu thong bo hanh, cam xet ho so, cam xe 3 banh, cam xe o to tai co tong trong luong (trong luong xe cong hang) tu 10 tan tro len."
+   },
+   {
+    "gold": "Cau vuot Lang Cha Ca cam luu thong bo hanh, xe tho so, xe 3 banh, oto tai co tong trong luong tren 10 tan",
+    "pred": "Cau vuot Lang Cha Ca c am luu thong bo hanh, xet ho so, xe 3 banh, o to tai co tong trong luong tren 10 tan"
+   },
+   {
+    "gold": "Mot dao, du nho, co gia tri vi the cang tang khi no cang xa dat lien, cang bao quat d oc mot vung bien rong lon hon, cang gan hon voi cac tuyen hang hai quoc te, .",
+    "pred": "Mot dao, du nho, co gia tri vi the cang tang khi no cang xa dat lien, cang bao quat doc mot vung bien rong lon hon, cang gan hon voi cac tuyen hang hai quoc te,."
+   },
+   {
+    "gold": "Ngoai ra, loi suat ghi nhan tren danh muc cho vay co su phan hoa va hoi phuc manh o nhom ngan hang co chat luong tai san tot.",
+    "pred": "Ngoai ra, loi suat ghi nhan tren danh muc cho vay co su phan hoa va hoi phuc man ho nhom ngan hang co chat luong tai san tot."
+   },
+   {
+    "gold": "Cong ty da thue cac cong nhan cho nong trai olathe va nguoi nong dan ma ho dang lam viec da tu choi bat ky vai tro nao trong viec lam cho cong nhan bi benh .",
+    "pred": "Cong ty da thue cac cong nhan cho nong trai o la the va nguoi nong dan ma ho dang lam viec da tu choi bat ky vai tro nao trong viec lam cho cong nhan bi benh."
+   },
+   {
+    "gold": "Khi Costco ruc rich thong bao ke hoach khai truong sieu thi dau tien o Thuong Hai, khong it nguoi cho rang tap doan da quoc gia My dang choi voi lua.",
+    "pred": "Khi Cost co ruc rich thong bao ke hoach khai truong sieu thi dau tien o Thuong Hai, khong it nguoi cho rang tap doan da quoc gia My dang choi voi lua."
+   },
+   {
+    "gold": "Nhung nhung gi dien ra tai mot goc pho sam uat o Thuong Hai hom 27/8 di nguoc lai voi cac du doan nay.",
+    "pred": "Nhung nhung gi dien ra tai mot goc pho sa m ua to Thuong Hai hom 27/8 di nguoc lai voi cac du doan nay."
+   },
+   {
+    "gold": "Dong nguoi dong vuot moi du kien khien Costco phai dong cua truoc 8 tieng so voi ke hoach ban dau.",
+    "pred": "Dong nguoi dong vuot moi du kien khien Cost co phai dong cua truoc 8 tieng so voi ke hoach ban dau."
+   },
+   {
+    "gold": "Hang dai cac phuong tien noi duoi nhau tren duong toi Costco lam tac nghen cac con duong trong thanh pho.",
+    "pred": "Hang dai cac phuong tien noi duoi nhau tren duong toi Cost co lam tac nghen cac con duong trong thanh pho."
+   },
+   {
+    "gold": "Costco chan chan khong du tinh duoc truoc kich ban nay.",
+    "pred": "Cost co chan chan khong du tinh duoc truoc kich ban nay."
+   },
+   {
+    "gold": "Ong tu choi tra loi khi duoc hoi ve chien tranh thuong mai trong khi vo ong cho rang van de nay qua nhay cam.",
+    "pred": "Ong tu choi tra loi khi duoc hoi ve chien tranh thuong mai trong khi vo ong cho rang van de nay quan hay cam."
+   },
+   {
+    "gold": "Truoc ngay khai truong, tap doan nay quang cao ve sieu thi moi o hang loat cac hoi cho thuong mai va la liet rai cac thong bao tren mang xa hoi.",
+    "pred": "Truoc ngay khai truong, tap doan nay quang cao ve sieu thi moi o hang loat cac hoi cho thuong mai va la lie t rai cac thong bao tren mang xa hoi."
+   },
+   {
+    "gold": "Costco co chut danh tieng nhat dinh o Trung Quoc vi kinh doanh truc tuyen o quoc gia ty dan trong 5 nam qua.",
+    "pred": "Cost co co chut danh tieng nhat dinh o Trung Quoc vi kinh doanh truc tuyen o quoc gia ty dan trong 5 nam qua."
+   }
+  ]
+ },
+ "seconds": 13.06,
+ "chunks": {
+  "1": {
+   "chunks": 331548,
+   "exact@1": 0.979098,
+   "exact@3": 0.998582,
+   "exact@5": 0.999297
+  },
+  "2": {
+   "chunks": 150198,
+   "exact@1": 0.97438,
+   "exact@3": 0.995599,
+   "exact@5": 0.997869
+  },
+  "3": {
+   "chunks": 90716,
+   "exact@1": 0.972287,
+   "exact@3": 0.994025,
+   "exact@5": 0.996594
+  },
+  "4": {
+   "chunks": 61408,
+   "exact@1": 0.968717,
+   "exact@3": 0.991662,
+   "exact@5": 0.995196
+  },
+  "6": {
+   "chunks": 33263,
+   "exact@1": 0.957761,
+   "exact@3": 0.987193,
+   "exact@5": 0.991763
+  },
+  "8": {
+   "chunks": 19970,
+   "exact@1": 0.947922,
+   "exact@3": 0.982974,
+   "exact@5": 0.988883
+  }
+ }
+}

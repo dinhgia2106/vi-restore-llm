@@ -1,0 +1,222 @@
+{
+ "tag": "bd-boundary-large-lex8-external",
+ "model": "boundary:ds-boundary-large+lexicon",
+ "test": "/marimo/vi-restore-llm/data/doc_split/external.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.990823,
+  "recall": 0.99506,
+  "f1": 0.992937,
+  "sentence_exact": 0.843357,
+  "n": 14000
+ },
+ "unknown_logp": -8.0,
+ "breakdown": {
+  "letters_exact": 0.877786,
+  "error_rate_letters": 0.00313,
+  "error_rate_other": 0.013787,
+  "errors_letters": 3007,
+  "errors_other": 890,
+  "examples": [
+   {
+    "gold": "Can phong bep tuyet voi khong phai o dien tich rong hay hep ma o chinh thiet ke cua no.",
+    "pred": "Can phong bep tuyet voi khong phai o dien tich rong hay hep mao chinh thiet ke cua no."
+   },
+   {
+    "gold": "Vua xem xong Lan Nhan Bich Nguyet, tam trang rat vi dieu lah.",
+    "pred": "Vua xem xong Lan Nhan Bich Nguyet, tam trang rat vi dieu la h."
+   },
+   {
+    "gold": "Giong nhu tam thoi khong muon xem tiep truyen khac, ma im lang hoi tuong ve nhung tinh tiet trong truyen, tu tu ngam.",
+    "pred": "Giong nhu tam thoi khong muon xem tiep truyen khac, ma im lang hoi tuong ve nhung tinh tiet trong truyen, tu tung am."
+   },
+   {
+    "gold": "Nha nhiep anh Dang Minh Tung.",
+    "pred": "Nhan hiep anh Dang Minh Tung."
+   },
+   {
+    "gold": "Nhu da biet sau khi tuyen bo nghi huu hoi cuoi mua giai 2014, HLV Sira da tien cu David Moyes hau boi dong huong nguoi Scotland len dan dat M.U.",
+    "pred": "Nhu da biet sau khi tuyen bo nghi huu hoi cuoi mua giai 2014, HLV Si ra da tien cu David Moyes hau boi dong huong nguoi Scotland len dan dat M.U."
+   },
+   {
+    "gold": "Ca hai mau Tetragode va Trigode deu the hien nhung duong net co dien, chiu anh huong cua kien truc.",
+    "pred": "Ca hai mau Tetra go de va Tri go de deu the hien nhung duong net co dien, chiu anh huong cua kien truc."
+   },
+   {
+    "gold": "Ermin Bicakcic, Munas Dabbur va Andrej Kramaric (cu dup) da thay nhau \"pha luoi\" Manuel Neuer de mang chien thang ve cho doi chu san Prezero Arena.",
+    "pred": "ErminBicakcic, MunasDabbur va Andrej Kramaric (cu dup) da thay nhau \"pha luoi\" Manuel Neuer de mang chien thang ve cho doi chu san Prezer o Arena."
+   },
+   {
+    "gold": "Nhac den cap doi BiBi - Hong Anh, rat nhieu nguoi cho rang o thoi diem hien tai kho co...",
+    "pred": "Nhac den cap doi Bi Bi - Hong Anh, rat nhieu nguoi cho rang o thoi diem hien tai kho co..."
+   },
+   {
+    "gold": "De bien nhung vien da tuong chung vo tri vo giac thanh nhung vien da co tinh nang ky dieu, mang den binh an va tai phu cho gia dinh ban nen chu y vai nguyen tac sau:",
+    "pred": "De bien nhung vien da tuong chung vo tri vo giac thanh nhung vien da co tinh nang ky dieu, mang den binh an va tai phuc ho gia dinh ban nen chu y vai nguyen tac sau:"
+   },
+   {
+    "gold": "Trong do noi bat la dan ngoai binh gom nhung cai ten nhu hau ve Le Tallec, 2 tien ve Jevtovic, Marcao, 2 tien dao Caion va Tagueu.",
+    "pred": "Trong do noi bat la dan ngoai binh gom nhung cai ten nhu hau ve Le Tallec, 2 tien ve Jevtovic, Marca o, 2 tien dao Cai on va Tagueu."
+   },
+   {
+    "gold": "HT.Thich Gia Quang dai dien trao tien ung ho den UBMTQVN tinh Tuyen Quang",
+    "pred": "HT.Thich Gia Quang dai dien trao tien ung ho den UB MTQ VN tinh Tuyen Quang"
+   },
+   {
+    "gold": "PGMOL cung cung cap bang ghi am cuoc trao doi cua to trong tai trong tran dau de giai thich ve cac quyet dinh lien quan.",
+    "pred": "PG MOL cung cung cap bang ghi am cuoc trao doi cua to trong tai trong tran dau de giai thich ve cac quyet dinh lien quan."
+   },
+   {
+    "gold": "Sang 22/10, tai TP HCM da dien ra buoi ra mat sach my thuat va gioi thieu truoc ve trien lam \u201cVong\u201d cua hoa si Tran The Vinh.",
+    "pred": "Sang 22/10, tai TPHCM da dien ra buoi ra mat sach my thuat va gioi thieu truoc ve trien lam \u201cVong\u201d cua hoa si Tran The Vinh."
+   },
+   {
+    "gold": "Trong khi Real Madrid cung chua the chot ha thuong vu tren boi cho rang yeu cau ma phia doi tac dua ra la qua suc phi ly cho mot nhan to chi con 9 thang hop dong nua.",
+    "pred": "Trong khi Real Madrid cung chua the cho tha thuong vu tren boi cho rang yeu cau ma phia doi tac dua ra la qua suc phi ly cho mot nhan to chi con 9 thang hop dong nua."
+   },
+   {
+    "gold": "Tuy nhien, vi duc cong bang va su bac ai, xin quy vi vui long ghi day du nguon nhu sau: \u201cTheo Bao Cong giao va Dan toc, website: cgvdt.vn\u201d.",
+    "pred": "Tuy nhien, vi duc cong bang va su ba cai, xin quy vi vui long ghi day du nguon nhu sau: \u201cTheo Bao Cong giao va Dan toc, website: cg vdt.vn\u201d."
+   },
+   {
+    "gold": "Mau xe tay ga FreeGo vua duoc Yamaha gioi thieu ra thi truong so huu nhieu loi the de canh tranh.",
+    "pred": "Mau xe tay ga Free Go vua duoc Yamaha gioi thieu ra thi truong so huu nhieu loi the de canh tranh."
+   },
+   {
+    "gold": "Cac duong net goc canh dem lai dang ve khoe khoan va nam tinh nhung cung day tinh thuc dung cho FreeGo.",
+    "pred": "Cac duong net goc canh dem lai dang ve khoe khoan va nam tinh nhung cung day tinh thuc dung cho Free Go."
+   },
+   {
+    "gold": "Duoi day Hanoireview mach ban 8 cach khu mui tu lanh hieu qua khong phai ai cung biet.",
+    "pred": "Duoi day Hanoi review mach ban 8 cach khu mui tu lanh hieu qua khong phai ai cung biet."
+   },
+   {
+    "gold": "Ban to chuc BTV \u2013 Number One Cup 2015 da quyet dinh xu Yadanerbon thua Sinh vien Han Quoc 0-3.",
+    "pred": "Ban to chuc BTV \u2013 Number One Cup 2015 da quyet dinh xu Yadaner bon thua Sinh vien Han Quoc 0-3."
+   },
+   {
+    "gold": "Toi 20/3 vua qua, tuong dai duoc vi la \"Vua Muay Thai\" Saenchai co tran thuong dai gap nha vo dich nguoi Israel Max Branis o su kien Thai Fight Lampang, dien ra tai Thai Lan.",
+    "pred": "Toi 20/3 vua qua, tuong dai duoc vi la \"Vua Muay Thai\" Saenchai co tran thuong dai gap nha vo dich nguoi Israel Max Braniso su kien Thai Fight Lam pang, dien ra tai Thai Lan."
+   },
+   {
+    "gold": "cua duc Gioan Phaolo II",
+    "pred": "cua duc Gioan Phao lo II"
+   },
+   {
+    "gold": "Tuong niem 5 nam ngay qua doi cua duc Gioan Phaolo II.",
+    "pred": "Tuong niem 5 nam ngay qua doi cua duc Gioan Phao lo II."
+   },
+   {
+    "gold": "Doi bong cua HLV Phillip Cocu cung tao ra duoc vai co hoi truoc khung thanh David De Gea nhung deu khong the tan dung thanh cong.",
+    "pred": "Doi bong cua HLV Phillip Co cu cung tao ra duoc vai co hoi truoc khung thanh David De Gea nhung deu khong the tan dung thanh cong."
+   },
+   {
+    "gold": "Theo Guinness World Record, hang tram nguoi da xuong duong tai TP Tenby, Xu Wales (Vuong quoc Anh) tham gia cuoc thi marathon thuong nien de quyen...",
+    "pred": "Theo Guinness World Record, hang tram nguoi da xuong duong tai TP Ten by, Xu Wales (Vuong quoc Anh) tham gia cuoc thi marathon thuong nien de quyen..."
+   },
+   {
+    "gold": "Nhan vat Silco trong Arcane se duoc ra mat tai DTCL mua 6.5, va cung la cai ten dau tien gop mat tai DTCL truoc khi xuat hien trong LMHT.",
+    "pred": "Nhan vat Sil co trong Arcane se duoc ra mat tai DT CL mua 6.5, va cung la cai ten dau tien gop mat tai DT CL truoc khi xuat hien trong LMHT."
+   },
+   {
+    "gold": "HLV Ferre hieu ro doi bong cua minh vi ong da tung dan dat nhieu doi bong lon tren the gioi.",
+    "pred": "HLV Fer re hieu ro doi bong cua minh vi ong da tung dan dat nhieu doi bong lon tren the gioi."
+   },
+   {
+    "gold": "UDT la gi?",
+    "pred": "U DT la gi?"
+   },
+   {
+    "gold": "Nghia cua tu udt",
+    "pred": "Nghia cua tu u d t"
+   },
+   {
+    "gold": "UDT la \u201cUnderwater Demolition Team\u201d trong tieng Anh.",
+    "pred": "U DT la \u201cUnder water Demolition Team\u201d trong tieng Anh."
+   },
+   {
+    "gold": "Rose da duoc dua den Westfalenstadion vao mua he nam ngoai sau hai nam voi Borussia Monchengladbach va Red Bull Salzburg.",
+    "pred": "Rose da duoc dua den Westfalen stadion vao mua he nam ngoai sau hai nam voi Borussia Monchengladbach va Red Bull Salzburg."
+   },
+   {
+    "gold": "Manga Musubaru Yakeato cua tac gia Shiori Amase ra mat phan 3",
+    "pred": "Manga MusubaruYakeato cua tac gia Shiori Ama se ra mat phan 3"
+   },
+   {
+    "gold": "So 2778 cua Nihonbungeisha, tap chi Weekly Manga Goraku se ra mat phan thu ba vao ngay thu Sau manga lich su cua Shiori Amase la Musubaru Yakeato (The Fire Ruins That Bind).",
+    "pred": "So 2778 cua Nihonbungeisha, tap chi Weekly Manga Goraku se ra mat phan thu ba vao ngay thu Sau manga lich su cua Shiori Ama se la MusubaruYakeato (The Fire Ru ins That Bind)."
+   },
+   {
+    "gold": "Ding Juhui da dot nhap vao ban ket cua cac bac thay lan dau tien sau 8 nam",
+    "pred": "Ding Ju hui da dot nhap vao ban ket cua cac bac thay lan dau tien sau 8 nam"
+   },
+   {
+    "gold": "Ke tu khi gianh chuc vo dich Masters nam 2011, Ding Junhui da di du lich trong nam nam lien tiep.",
+    "pred": "Ke tu khi gianh chuc vo dich Masters nam 2011, Ding Jun hui da di du lich trong nam nam lien tiep."
+   },
+   {
+    "gold": "(Bongda24h.vn) - HLV Pep Guardiola khang dinh vi tri thu 2 trong khung go cua Man City chua chac da thuoc ve thu mon Joe Hart.",
+    "pred": "(Bong da 24h.vn) - HLV Pep Guardiola khang dinh vi tri thu 2 trong khung go cua Man City chua chac da thuoc ve thu mon Joe Hart."
+   },
+   {
+    "gold": "Tay Ban NhaHLV Xavi nhac lai chien thang 4-0 ngay tren san cua Real mua truoc, khi duoc hoi ve cuoc tai ngo sap toi o La Liga.",
+    "pred": "Tay Ban Nha HLV Xavi nhac lai chien thang 4-0 ngay tren san cua Real mua truoc, khi duoc hoi ve cuoc tai ngo sap toi o La Liga."
+   },
+   {
+    "gold": "Hay cung BlogAnChoi tim hieu xem dau moi la chiec xe tot hon va co nhieu uu diem hon nhe.",
+    "pred": "Hay cung Blog An Choi tim hieu xem dau moi la chiec xe tot hon va co nhieu uu diem hon nhe."
+   },
+   {
+    "gold": "\u201cAnh biet day, em khong thich an do an thanh dam the nay ma.\u201d",
+    "pred": "\u201cAnh biet day, em khong thich an doan thanh dam the nay ma.\u201d"
+   },
+   {
+    "gold": "Theo doi iThethao.vn tren",
+    "pred": "Theo doi i The thao.vn tren"
+   },
+   {
+    "gold": "Vay ma o duoi tu quang bat dau khoi dong, cai thuong the nay lap tuc khoi han.",
+    "pred": "Vay mao duoi tu quang bat dau khoi dong, cai thuong the nay lap tuc khoi han."
+   }
+  ]
+ },
+ "seconds": 10.32,
+ "chunks": {
+  "1": {
+   "chunks": 256406,
+   "exact@1": 0.974002,
+   "exact@3": 0.996689,
+   "exact@5": 0.997933
+  },
+  "2": {
+   "chunks": 115424,
+   "exact@1": 0.97303,
+   "exact@3": 0.993407,
+   "exact@5": 0.99637
+  },
+  "3": {
+   "chunks": 69381,
+   "exact@1": 0.971246,
+   "exact@3": 0.99128,
+   "exact@5": 0.994984
+  },
+  "4": {
+   "chunks": 46706,
+   "exact@1": 0.968013,
+   "exact@3": 0.98998,
+   "exact@5": 0.994005
+  },
+  "6": {
+   "chunks": 25082,
+   "exact@1": 0.959931,
+   "exact@3": 0.985727,
+   "exact@5": 0.991588
+  },
+  "8": {
+   "chunks": 14777,
+   "exact@1": 0.951276,
+   "exact@3": 0.981864,
+   "exact@5": 0.988293
+  }
+ }
+}

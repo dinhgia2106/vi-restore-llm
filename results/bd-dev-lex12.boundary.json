@@ -1,0 +1,222 @@
+{
+ "tag": "bd-dev-lex12",
+ "model": "boundary:ds-boundary+lexicon",
+ "test": "/marimo/vi-restore-llm/data/doc_split/dev.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.990099,
+  "recall": 0.99363,
+  "f1": 0.991861,
+  "sentence_exact": 0.824141,
+  "n": 16553
+ },
+ "unknown_logp": -12.0,
+ "breakdown": {
+  "letters_exact": 0.865462,
+  "error_rate_letters": 0.003582,
+  "error_rate_other": 0.017654,
+  "errors_letters": 4063,
+  "errors_other": 1277,
+  "examples": [
+   {
+    "gold": "Trong bao cao nay , ban giam doc lsc rat han hanh cung cap thong tin noi chuyen voi ba hieu truong cua quoc hoi .",
+    "pred": "Trong bao cao nay, ban giam doc lsc rat hanh anh cung cap thong tin noi chuyen voi ba hieu truong cua quoc hoi."
+   },
+   {
+    "gold": "Voi anh em nha Russo tu Vu tru Dien anh Marvel trong vai tro san xuat va Sam Hargrave ngoi tren ghe dao dien, Extraction la \u201ccu no\" lon cua Netflix ke tu khi len song tu cuoi thang 4.",
+    "pred": "Voi anh em nha Russ o tu Vu tru Dien anh Marvel trong vai tro san xuat va Sam Har grave ngoi tren ghe dao dien, Extraction la \u201ccu no\" lon cua Netflix ke tu khi len song tu cuoi thang 4."
+   },
+   {
+    "gold": "Ho chu dong de nghi cuu dien vien dong the kiem dao dien Sam Hargrave va \u201cThan Sam\u201d Chris Hemsworth hop tac.",
+    "pred": "Ho chu dong de nghi cuu dien vien dong the kiem dao dien Sam Har grave va \u201cThan Sam\u201d Chris Hemsworth hop tac."
+   },
+   {
+    "gold": "Trong phim, Hemsworth vao vai Tyler Rake, mot linh danh thue nguoi Australia dang trai qua noi dau mat con.",
+    "pred": "Trong phim, Hemsworth vao vai Tyler Ra ke, mot linh danh thue nguoi Australia dang trai qua noi dau mat con."
+   },
+   {
+    "gold": "Anh nhan nhiem vu giai cuu con tin la cau con trai chi moi 14 tuoi (Rudhraksh Jaiswal) cua mot ong trum ma tuy An Do.",
+    "pred": "Anh nhan nhiem vu giai cuu con tin la cau con trai chi moi 14 tuoi (RudhrakshJaiswal) cua mot ong trum ma tuy An Do."
+   },
+   {
+    "gold": "Sam Hargrave va Chris Hemsworth tren phim truong Extraction.",
+    "pred": "Sam Har grave va Chris Hemsworth tren phim truong Extraction."
+   },
+   {
+    "gold": "Anh cung khong biet ro tinh trang cua co sau lan ve nha cua cha o Dai Bac nhung cong da thay khoa.",
+    "pred": "Anh cung khong biet ro tinh trang cua co sau lan ve nha cua chao Dai Bac nhung cong da thay khoa."
+   },
+   {
+    "gold": "\"Toi von khong co y dinh tranh gianh tai san, tat ca do Lam Tinh An that hua.",
+    "pred": "\"Toi von khong co y dinh tranh gianh tai san, tat ca do Lam Tinh An tha thua."
+   },
+   {
+    "gold": "Con trai lon cua Ly Khon Thanh cho biet anh thay bat man khi gia dinh bi Lam Tinh An chen ep.",
+    "pred": "Con trai lon cua Ly Khon Thanh cho biet anh thay bat man khi gia dinh bi Lam Tinh An che n ep."
+   },
+   {
+    "gold": "Theo y hoc co truyen, phan hoa co the chua benh bieng an, gay yeu, suy nhuoc, boi duong co the, nang cao tinh trang the chat...",
+    "pred": "Theo y hoc co truyen, phan hoa co the chua benh bien gan, gay yeu, suy nhuoc, boi duong co the, nang cao tinh trang the chat..."
+   },
+   {
+    "gold": "Tai Viet Nam, moi nguoi co the tham khao san pham cua cong ty TNHH Ong Mat Tracybee - doanh nghiep thanh lap tu nam 2012, boi gia dinh co nghe nuoi ong truyen thong lau nam.",
+    "pred": "Tai Viet Nam, moi nguoi co the tham khao san pham cua cong ty TNHH Ong Mat Tracy bee - doanh nghiep thanh lap tu nam 2012, boi gia dinh co nghe nuoi ong truyen thong lau nam."
+   },
+   {
+    "gold": "Quy trinh san xuat cua Tracybee rat khat khe, kiem soat tu khau nuoi trong, cham soc, thu hoach den dong goi, phan phoi ra thi truong.",
+    "pred": "Quy trinh san xuat cua Tracy bee rat khat khe, kiem soat tu khau nuoi trong, cham soc, thu hoach den dong goi, phan phoi ra thi truong."
+   },
+   {
+    "gold": "Phan hoa Tracybee duoc thu thap tu hoa ca phe, hoa tra, trinh nu va co dai.",
+    "pred": "Phan hoa Tracy bee duoc thu thap tu hoa ca phe, hoat ra, trinh nu va co dai."
+   },
+   {
+    "gold": "San pham hien duoc phan phoi truc tiep boi Tracybee va giao hang toan quoc.",
+    "pred": "San pham hien duoc phan phoi truc tiep boi Tracy bee va giao hang toan quoc."
+   },
+   {
+    "gold": "Doc gia Toan Le: \" Khong nem da, nhung VFF hay ra an phat la dinh chi da bong 2 nam voi Hoang thinh, vi hanh vi vao bong ac y voi Hung Dung \".",
+    "pred": "Doc gia Toan Le: \"Khong nem da, nhung VFF hay ra an phat la dinh chi da bong 2 nam voi Hoang thinh, vi hanh vi vao bo ngac y voi Hung Dung\"."
+   },
+   {
+    "gold": "Doc gia Dinh Hoa Binh: \" Xem nhung tran bong da o nuoc ta, hinh nhu la ho da vao chan doi thu gioi hon la da bong.",
+    "pred": "Doc gia Dinh Hoa Binh: \"Xem nhung tran bong dao nuoc ta, hinh nhu la ho da vao chan doi thu gioi hon la da bong."
+   },
+   {
+    "gold": "Tren mang xa hoi facebook, tai khoan Yo Amon viet: \" Chan bi gap lai, that dang so \".",
+    "pred": "Tren mang xa hoi facebook, tai khoan Yo A mon viet: \"Chan bi gap lai, that dang so\"."
+   },
+   {
+    "gold": "Do la dieu dung dan \", tai khoan Jakkraphan Juijek cho biet.",
+    "pred": "Do la dieu dung dan\", tai khoan Jakk ra phan Juijek cho biet."
+   },
+   {
+    "gold": "Tai khoan Thanachai Thammanam nhan xet: \"That chang co chut tinh than the thao, tinh than bong da nao o trong do \".",
+    "pred": "Tai khoan Than a chai Tham ma nam nhan xet: \"That chang co chut tinh than the thao, tinh than bong da nao o trong do\"."
+   },
+   {
+    "gold": "Nguoi ham mo Thai Lan cung danh loi cau chuc cho Hung Dung som binh phuc, tai khoan Sakon Yuyongsin viet: \" That dang so.",
+    "pred": "Nguoi ham mo Thai Lan cung danh loi cau chuc cho Hung Dung som binh phuc, tai khoan Sakon Yu yong sin viet: \"That dang so."
+   },
+   {
+    "gold": "Tai khoan Leo Leopopo: \" Mau chong binh phuc nhe \".",
+    "pred": "Tai khoan Leo Leo pop o: \"Mau chong binh phuc nhe\"."
+   },
+   {
+    "gold": "Tai khoan Komdach Yindee chia se: \" Toi cam thay ton thuong khi toi nhin thay ca chan thuong nay \".",
+    "pred": "Tai khoan Kom dach Yin dee chia se: \"Toi cam thay ton thuong khi toi nhin thay cach an thuong nay\"."
+   },
+   {
+    "gold": "Toi thay thuong \", tai khoan Chanathip Sudsanoa viet.",
+    "pred": "Toi thay thuong\", tai khoan Chanathip Sud san oa viet."
+   },
+   {
+    "gold": "\" Toi khong muon nhung cau thu nhu vay thi dau o giai Thai Lan cua chung ta \", tai khoan B'lee Southep thang than nhan xet.",
+    "pred": "\"Toi khong muon nhung cau thu nhu vay thi dau o giai Thai Lan cua chung ta\", tai khoan B'lee Sou thep thang than nhan xet."
+   },
+   {
+    "gold": "Mot bioethicist da tao ra mot thuat ngu cho loai moi nay cua sperminator .",
+    "pred": "Mot bi oe thic ist da tao ra mot thuat ngu cho loai moi nay cua sperminator."
+   },
+   {
+    "gold": "- Chu ki kinh khong deu: ngay kinh den bat thuong khong doan truoc duoc, thuong xuyen cham kinh, kinh nguyet xuat hien 2 lan/ thang hoac mat han kinh nguyet.",
+    "pred": "- Chu ki kinh khong deu: ngay kinh den bat thuong khong doan truoc duoc, thuong xuyen cham kinh, kinh nguyet xuat hien 2 lan/thang hoac ma than kinh nguyet."
+   },
+   {
+    "gold": "Tuy nhien tu ngay 17.9, cac chuoi nhu The Gioi Di Dong, FPT Shop hay CellphoneS\u2026",
+    "pred": "Tuy nhien tu ngay 17.9, cac chuoi nhu The Gioi Di Dong, FPT Shop hay Cellphone S\u2026"
+   },
+   {
+    "gold": "Nguoi chuyen viet tieu su, Candice Nedelec mo ta tren to Sunday Times: \u201cBa ay se tap trung vao viec dap ung quyen loi cua tre em bi benh tu ky, tre em khuyet tat.",
+    "pred": "Nguoi chuyen viet tieu su, Candice Ned elec mo ta tren to Sunday Times: \u201cBa ay se tap trung vao viec dap ung quyen loi cua tre em bi benh tu ky, tre em khuyet tat."
+   },
+   {
+    "gold": "\"Hoi thao hom nay co chi Nguyen Ngoc Tuyet Trinh - dai dien L\u2019Oreal.",
+    "pred": "\"Hoi thao hom nay co chi Nguyen Ngoc Tuyet Trinh - dai dien L\u2019O real."
+   },
+   {
+    "gold": "Chi Trinh rat nhieu lan buc xuc dat cau hoi tai sao o thi truong Viet Nam, cac san pham cua L\u2019Oreal duoc bay ban tren mang va hang gia tran lan nhu vay?",
+    "pred": "Chi Trinh rat nhieu lan buc xuc dat cau hoi tai sao o thi truong Viet Nam, cac san pham cua L\u2019O real duoc bay ban tren mang va hang gia tran lan nhu vay?"
+   },
+   {
+    "gold": "Gan nhu tuan nao chung toi cung nhan duoc van ban cua L\u2019Oreal gui co quan QLTT ve viec cho nay ban hang gia, website kia ban hang dom.",
+    "pred": "Gan nhu tuan nao chung toi cung nhan duoc van ban cua L\u2019O real gui co quan QLTT ve viec cho nay ban hang gia, website kia ban hang dom."
+   },
+   {
+    "gold": "Phai xu phat duoc moi co tinh ran de, con neu chi tieu huy thi khong khac nao \"muoi dot inox\", khong an thua\" - ong Minh noi them.",
+    "pred": "Phai xu phat duoc moi co tinh ran de, con neu chi tieu huy thi khong khac nao \"muoi do tin ox\", khong an thua\" - ong Minh noi them."
+   },
+   {
+    "gold": "Uoc tinh cua Conab da bao gom su tang len cua ca san luong ca phe Robusta va Arabica.",
+    "pred": "Uoc tinh cua Co nab da bao gom su tang len cua ca san luong ca phe Robusta va Arabica."
+   },
+   {
+    "gold": "Con dien tich cay trong cai thien o Espirito Santo, Bahia va Rondonia la nhung nhan to chu chot dong gop cho su gia tang cua mua vu ca phe Robusta.",
+    "pred": "Con dien tich cay trong cai thien o Espirito Santo, Bahia va Rondo nia la nhung nhan to chu chot dong gop cho su gia tang cua mua vu ca phe Robusta."
+   },
+   {
+    "gold": "San luong ca phe giam trong nhung thang do la vi luong mua lon, du mua co the cai thien mua vu mitaca.",
+    "pred": "San luong ca phe giam trong nhung thang do la vi luong mua lon, du mua co the cai thien mua vu mi ta ca."
+   },
+   {
+    "gold": "Theo thoa thuan giua Hiep hoi cac CLB chau Au ECA va Lien doan Bong da chau Au UEFA, moi CLB se nhan duoc 10.650 USD moi ngay cho moi cau thu thi dau tai Euro.",
+    "pred": "Theo thoa thuan giua Hiep hoi cac CLB chau Au E CA va Lien doan Bong da chau Au UEFA, moi CLB se nhan duoc 10.650 USD moi ngay cho moi cau thu thi dau tai Euro."
+   },
+   {
+    "gold": "Dembele dinh chan thuong dau goi trong tran hoa Hungary 1-1 o luot thu hai vong bang.",
+    "pred": "Dem be le dinh chan thuong dau goi trong tran hoa Hungary 1-1 o luot thu hai vong bang."
+   },
+   {
+    "gold": "Voi moi ngay Dembele nghi thi dau, Barca co quyen doi UEFA boi thuong 24.365 USD.",
+    "pred": "Voi moi ngay Dembele n ghi thi dau, Barca co quyen doi UEFA boi thuong 24.365 USD."
+   },
+   {
+    "gold": "De giam luong, Chu tich Joan Laporta da ban Todibo, Junior Firpo, giai phong Juan Miranda va Matheus Fernandes.",
+    "pred": "De giam luong, Chu tich Joan Laporta da ban Todibo, Junior Fir po, giai phong Juan Miranda va Matheus Fernandes."
+   },
+   {
+    "gold": "Mot yeu to quan trong cua dieu nay la haptics, hay chinh la cong nghe co the tao ra cam giac cham.",
+    "pred": "Mot yeu to quan trong cua dieu nay la hap tic s, hay chinh la cong nghe co the tao ra cam giac cham."
+   }
+  ]
+ },
+ "seconds": 11.78,
+ "chunks": {
+  "1": {
+   "chunks": 305238,
+   "exact@1": 0.978358,
+   "exact@3": 0.996462,
+   "exact@5": 0.997287
+  },
+  "2": {
+   "chunks": 137784,
+   "exact@1": 0.973567,
+   "exact@3": 0.992916,
+   "exact@5": 0.995551
+  },
+  "3": {
+   "chunks": 82999,
+   "exact@1": 0.970457,
+   "exact@3": 0.990361,
+   "exact@5": 0.993687
+  },
+  "4": {
+   "chunks": 55883,
+   "exact@1": 0.965589,
+   "exact@3": 0.988243,
+   "exact@5": 0.992073
+  },
+  "6": {
+   "chunks": 30097,
+   "exact@1": 0.953417,
+   "exact@3": 0.982723,
+   "exact@5": 0.988404
+  },
+  "8": {
+   "chunks": 17865,
+   "exact@1": 0.943633,
+   "exact@3": 0.977442,
+   "exact@5": 0.984439
+  }
+ }
+}

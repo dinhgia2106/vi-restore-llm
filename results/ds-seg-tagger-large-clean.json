@@ -1,0 +1,27 @@
+{
+  "tag": "ds-seg-tagger-large-clean",
+  "model": "segment-tagger:ds-boundary+ds-tagger-large",
+  "test_file": "/marimo/vi-restore-llm/data/doc_split/test.jsonl",
+  "quality": {
+    "n": 17841,
+    "cer": 0.01209,
+    "wer": 0.0499,
+    "word_acc": 0.96505,
+    "sent_acc": 0.57004,
+    "em@1": 0.57004,
+    "em@3": 0.66801,
+    "em@5": 0.69985
+  },
+  "latency": {},
+  "throughput_sent_per_s": 1791.3,
+  "rss_mb": 3842.6,
+  "machine": {
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.41",
+    "python": "3.13.11",
+    "cpu": "unknown",
+    "cpu_count": 20,
+    "device": "cpu",
+    "threads": null
+  },
+  "timestamp": "2026-11-25T12:43:09+00:00"
+}
