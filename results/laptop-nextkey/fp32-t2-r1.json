@@ -1,0 +1,47 @@
+{
+ "model": "nextkey-student-fp32",
+ "round": 1,
+ "threads": 2,
+ "n": 200,
+ "power": {
+  "battery_status": "2",
+  "on_ac": true
+ },
+ "machine": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.11",
+  "torch": "2.14.0+cpu",
+  "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "quantized_engine": "onednn",
+  "logical_cpus": 32
+ },
+ "input_chars_mean": 73.7,
+ "latency": {
+  "encode": {
+   "p50_ms": 0.126,
+   "p95_ms": 0.173,
+   "mean_ms": 0.127,
+   "max_ms": 0.35
+  },
+  "forward": {
+   "p50_ms": 8.231,
+   "p95_ms": 13.557,
+   "mean_ms": 8.523,
+   "max_ms": 16.715
+  },
+  "decode": {
+   "p50_ms": 0.845,
+   "p95_ms": 1.246,
+   "mean_ms": 0.866,
+   "max_ms": 2.22
+  },
+  "end_to_end": {
+   "p50_ms": 9.191,
+   "p95_ms": 14.959,
+   "mean_ms": 9.516,
+   "max_ms": 19.028
+  }
+ },
+ "checkpoint_sha256": "28580c4f62e7baba5b839996352ee5e06dc352168a6eec056b120873525be33f",
+ "quantization": "fp32"
+}

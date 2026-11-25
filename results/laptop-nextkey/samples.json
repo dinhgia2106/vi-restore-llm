@@ -1,0 +1,154 @@
+{
+ "checkpoint": "artifacts\\laptop-latency\\checkpoints\\gch-stu-006-graph-selective-kd-seed42-r1\\checkpoint_step_359851.pt",
+ "sha256": "28580c4f62e7baba5b839996352ee5e06dc352168a6eec056b120873525be33f",
+ "samples": {
+  "int8": [
+   {
+    "input": "tuynhien,nolamotkhuonmatkhongdedangquenlang,motlannhinthay.",
+    "reference": "Tuy nhiên , nó là một khuôn mặt không dễ dàng quên lãng , một lần nhìn thấy .",
+    "top3": [
+     "Tuy nhiên, nó là một khuôn mặt không dễ dàng quên lãng, một lần nhìn thấy.",
+     "Tuy nhiên, nó là một khuôn mặt không dễ dàng quên làng, một lần nhìn thấy.",
+     "Tuy nhiên, nó là một khuôn mặt không dễ dàng quên lảng, một lần nhìn thấy."
+    ]
+   },
+   {
+    "input": "truoccauhoicuachuyengiatienganhrang\"bancothekechotoivequehuongban.",
+    "reference": "Trước câu hỏi của chuyên gia tiếng Anh rằng \"Bạn có thể kể cho tôi về quê hương bạn.",
+    "top3": [
+     "Trước câu hỏi của chuyên gia tiếng Anh rằng \"Bạn có thể kể cho tôi về quê hương bạn.",
+     "Trước câu hỏi của chuyên gia tiếng Anh rằng\"Bạn có thể kể cho tôi về quê hương bạn.",
+     "Trước câu hỏi của chuyên gia tiếng Anh rằng \"bạn có thể kể cho tôi về quê hương bạn."
+    ]
+   },
+   {
+    "input": "cacthisinhlientucboiroivinoitienganhkhongtotvakhongngherocauhoigiaotiepcuachuyengia.",
+    "reference": "Các thí sinh liên tục bối rối vì nói tiếng Anh không tốt và không nghe rõ câu hỏi giao tiếp của chuyên gia.",
+    "top3": [
+     "Các thí sinh liên tục bối rối vì nói tiếng Anh không tốt và không nghe rõ câu hỏi giao tiếp của chuyên gia.",
+     "Các thí sinh liên tục bối rối vì nói tiếng anh không tốt và không nghe rõ câu hỏi giao tiếp của chuyên gia.",
+     "Các thí sinh liên tục bối rối Vì nói tiếng Anh không tốt và không nghe rõ câu hỏi giao tiếp của chuyên gia."
+    ]
+   },
+   {
+    "input": "truocvietnam,ongabesethamlanluotphilippines,australiavaindonesia,nhamthucdayhoptacgiuacacquocgiaquantrongochaua-thaibinhduong.",
+    "reference": "Trước Việt Nam, ông Abe sẽ thăm lần lượt Philippines, Australia và Indonesia, nhằm thúc đẩy hợp tác giữa các quốc gia quan trọng ở châu Á-Thái Bình Dương.",
+    "top3": [
+     "Trước Việt Nam, ông Abe sẽ thăm lần lượt Philippines, Australia và Indonesia, nhằm thúc đẩy hợp tác giữa các quốc gia quan trọng ở châu Á - Thái Bình Dương.",
+     "Trước Việt Nam, ông Abe sẽ thăm lần lượt Philippines, Australia và Indonesia, nhằm thúc đẩy hợp tác giữa các quốc gia quan trọng ở châu Á -Thái Bình Dương.",
+     "Trước Việt Nam, ông Abe sẽ thăm lần lượt Philippines, Australia và Indonesia, nhằm thúc đẩy hợp tác giữa các quốc gia quan trọng ở Châu Á - Thái Bình Dương."
+    ]
+   },
+   {
+    "input": "dinhkyhangthangnganhangthuongmaibaocaotiendoxulythanhtoannovebanchidaotongthanhtoannotrunguong,botaichinh.",
+    "reference": "Định kỳ hàng tháng Ngân hàng Thương mại báo cáo tiến độ xử lý thanh toán nợ về Ban chỉ đạo tổng thanh toán nợ Trung ương, Bộ Tài chính.",
+    "top3": [
+     "Định kỳ hàng tháng ngân hàng thương mại báo cáo tiến độ xử lý thanh toán nợ về Ban chỉ đạo tổng thanh toán nợ Trung ương, Bộ Tài chính.",
+     "Định kỳ hàng tháng Ngân hàng thương mại báo cáo tiến độ xử lý thanh toán nợ về Ban chỉ đạo tổng thanh toán nợ Trung ương, Bộ Tài chính.",
+     "Định kỳ hàng tháng ngân hàng thương mại Báo cáo tiến độ xử lý thanh toán nợ về Ban chỉ đạo tổng thanh toán nợ Trung ương, Bộ Tài chính."
+    ]
+   },
+   {
+    "input": "chungtoigioithieubaivietcuaongdavidliao,dongtonggiamdocdieuhanhcuahsbcchaua-thaibinhduongduoiday.",
+    "reference": "Chúng tôi giới thiệu bài viết của ông David Liao, đồng Tổng Giám đốc Điều hành của HSBC châu Á - Thái Bình Dương dưới đây.",
+    "top3": [
+     "Chúng tôi giới thiệu bài viết của ông David Liao, Đồng Tổng Giám đốc điều hành của HSBC châu Á - Thái Bình Dương dưới đây.",
+     "Chúng tôi giới thiệu bài viết của ông David Liao, Đồng Tổng Giám đốc điều hành của HSBC Châu Á - Thái Bình Dương dưới đây.",
+     "Chúng tôi giới thiệu bài viết của ông David Liao, Đồng Tổng giám đốc điều hành của HSBC châu Á - Thái Bình Dương dưới đây."
+    ]
+   },
+   {
+    "input": "chungcothelaytruyenquakhongkhi,changhannhukhihatxihoacho.",
+    "reference": "Chúng có thể lây truyền qua không khí, chẳng hạn như khi hắt xì hoặc ho.",
+    "top3": [
+     "Chúng có thể lây truyền qua không khí, chẳng hạn như khi hắt xì hoa cho.",
+     "Chúng có thể lây truyền qua không khí, chẳng hạn như khi hắt xì hóa cho.",
+     "Chúng có thể lây truyền qua không khí, chẳng hạn như khi hắt xì hoă cho."
+    ]
+   },
+   {
+    "input": "xacdinhkhanangloaibooxalatestrongbotcacaothocuacacloairemamhatngucoc",
+    "reference": "Xác định khả năng loại bỏ oxalates trong bột cacao thô của các loại rễ mầm hạt ngũ cốc",
+    "top3": [
+     "Xác định khả năng loại bỏ Oxalates trong bột ca cao thô của các loại rễ mâm hạt ngũ cốc",
+     "Xác định khả năng loại bỏ Oxalates trong bột ca cao thô của các loại rẽ mâm hạt ngũ cốc",
+     "Xác định khả năng loại bỏ oxalates trong bột ca cao thô của các loại rễ mâm hạt ngũ cốc"
+    ]
+   }
+  ],
+  "fp32": [
+   {
+    "input": "tuynhien,nolamotkhuonmatkhongdedangquenlang,motlannhinthay.",
+    "reference": "Tuy nhiên , nó là một khuôn mặt không dễ dàng quên lãng , một lần nhìn thấy .",
+    "top3": [
+     "Tuy nhiên, nó là một khuôn mặt không dễ dàng quên lãng, một lần nhìn thấy.",
+     "Tuy nhiên, nó là một khuôn mặt không dễ dàng quên làng, một lần nhìn thấy.",
+     "Tuy nhiên, nó là một khuôn mặt không dễ dàng quên lảng, một lần nhìn thấy."
+    ]
+   },
+   {
+    "input": "truoccauhoicuachuyengiatienganhrang\"bancothekechotoivequehuongban.",
+    "reference": "Trước câu hỏi của chuyên gia tiếng Anh rằng \"Bạn có thể kể cho tôi về quê hương bạn.",
+    "top3": [
+     "Trước câu hỏi của chuyên gia tiếng Anh rằng\" Bạn có thể kể cho tôi về quê hương bạn.",
+     "Trước câu hỏi của chuyên gia tiếng Anh rằng\"Bạn có thể kể cho tôi về quê hương bạn.",
+     "Trước câu hỏi của chuyên gia tiếng Anh rằng\" bạn có thể kể cho tôi về quê hương bạn."
+    ]
+   },
+   {
+    "input": "cacthisinhlientucboiroivinoitienganhkhongtotvakhongngherocauhoigiaotiepcuachuyengia.",
+    "reference": "Các thí sinh liên tục bối rối vì nói tiếng Anh không tốt và không nghe rõ câu hỏi giao tiếp của chuyên gia.",
+    "top3": [
+     "Các thí sinh liên tục bối rối vì nói tiếng Anh không tốt và không nghe rõ câu hỏi giao tiếp của chuyên gia.",
+     "Các thí sinh liên tục bối rối vì nói tiếng anh không tốt và không nghe rõ câu hỏi giao tiếp của chuyên gia.",
+     "Các thí sinh liên tục bối rối vì nói tiếng Anh không tốt và không nghe rõ câu hỏi giao tiếp của Chuyên gia."
+    ]
+   },
+   {
+    "input": "truocvietnam,ongabesethamlanluotphilippines,australiavaindonesia,nhamthucdayhoptacgiuacacquocgiaquantrongochaua-thaibinhduong.",
+    "reference": "Trước Việt Nam, ông Abe sẽ thăm lần lượt Philippines, Australia và Indonesia, nhằm thúc đẩy hợp tác giữa các quốc gia quan trọng ở châu Á-Thái Bình Dương.",
+    "top3": [
+     "Trước Việt Nam, ông Abe sẽ thăm lần lượt Philippines, Australia và Indonesia, nhằm thúc đẩy hợp tác giữa các quốc gia quan trọng ở châu Á - Thái Bình Dương.",
+     "Trước Việt Nam, ông Abe sẽ thăm lần lượt Philippines, Australia và Indonesia, nhằm thúc đẩy hợp tác giữa các quốc gia quan trọng ở châu Á -Thái Bình Dương.",
+     "Trước Việt Nam, ông Abe sẽ thăm lần lượt Philippines, Australia và Indonesia, nhằm thúc đẩy hợp tác giữa các quốc gia quan trọng ở Châu Á - Thái Bình Dương."
+    ]
+   },
+   {
+    "input": "dinhkyhangthangnganhangthuongmaibaocaotiendoxulythanhtoannovebanchidaotongthanhtoannotrunguong,botaichinh.",
+    "reference": "Định kỳ hàng tháng Ngân hàng Thương mại báo cáo tiến độ xử lý thanh toán nợ về Ban chỉ đạo tổng thanh toán nợ Trung ương, Bộ Tài chính.",
+    "top3": [
+     "Định kỳ hàng tháng ngân hàng thương mại báo cáo tiến độ xử lý thanh toán nợ về Ban chỉ đạo tổng thanh toán nợ Trung ương, Bộ Tài chính.",
+     "Định kỳ hàng tháng ngân hàng thương mại Báo cáo tiến độ xử lý thanh toán nợ về Ban chỉ đạo tổng thanh toán nợ Trung ương, Bộ Tài chính.",
+     "Định kỳ hàng tháng Ngân hàng thương mại báo cáo tiến độ xử lý thanh toán nợ về Ban chỉ đạo tổng thanh toán nợ Trung ương, Bộ Tài chính."
+    ]
+   },
+   {
+    "input": "chungtoigioithieubaivietcuaongdavidliao,dongtonggiamdocdieuhanhcuahsbcchaua-thaibinhduongduoiday.",
+    "reference": "Chúng tôi giới thiệu bài viết của ông David Liao, đồng Tổng Giám đốc Điều hành của HSBC châu Á - Thái Bình Dương dưới đây.",
+    "top3": [
+     "Chúng tôi giới thiệu bài viết của ông David Liao, Đồng Tổng Giám đốc điều hành của HSBC châu Á - Thái Bình Dương dưới đây.",
+     "Chúng tôi giới thiệu bài viết của ông DavidLiao, Đồng Tổng Giám đốc điều hành của HSBC châu Á - Thái Bình Dương dưới đây.",
+     "Chúng tôi giới thiệu bài viết của ông David Liao, Đồng Tổng giám đốc điều hành của HSBC châu Á - Thái Bình Dương dưới đây."
+    ]
+   },
+   {
+    "input": "chungcothelaytruyenquakhongkhi,changhannhukhihatxihoacho.",
+    "reference": "Chúng có thể lây truyền qua không khí, chẳng hạn như khi hắt xì hoặc ho.",
+    "top3": [
+     "Chúng có thể lây truyền qua không khí, chẳng hạn như khi hắt xì hóa cho.",
+     "Chúng có thể lây truyền qua không khí, chẳng hạn như khi hắt xì hoa cho.",
+     "Chúng có thể lây truyền qua không khí, chẳng hạn như khí hắt xì hóa cho."
+    ]
+   },
+   {
+    "input": "xacdinhkhanangloaibooxalatestrongbotcacaothocuacacloairemamhatngucoc",
+    "reference": "Xác định khả năng loại bỏ oxalates trong bột cacao thô của các loại rễ mầm hạt ngũ cốc",
+    "top3": [
+     "Xác định khả năng loại bỏ oxalates trong bột ca cao thô của các loại rễmâm hạt ngũ cốc",
+     "Xác định khả năng loại bỏ Oxalates trong bột ca cao thô của các loại rễmâm hạt ngũ cốc",
+     "Xác định khả năng loại bỏ oxalates trong bột ca cao thô của các loại rễ mâm hạt ngũ cốc"
+    ]
+   }
+  ]
+ }
+}
