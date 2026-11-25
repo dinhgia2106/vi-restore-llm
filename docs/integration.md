@@ -32,26 +32,31 @@ affect any number in `results/`.
 
 The recommended graph is `tagger.int8.onnx`. Like every exported tagger it takes **one sentence per call** (`ids` has shape `[1, chars]`). Run one warm-up call at startup: the first call on the laptop took about 1.1 s, later ones a few milliseconds.
 
-## VIMEK prototype (Windows)
+## VIMEK suggestions (Windows)
 
-Branch `ai-candidates` of [VIMEK](https://github.com/dinhgia2106/VIMEK) runs suggestions next to
-Telex, as an experimental option that is off by default (tray: Tùy chọn > Gợi ý dấu bằng AI).
+Shipped in VIMEK 0.1.0-alpha.10 as an experimental option, off by default. Since then, at the
+user's request after real use, suggestions cover **only the word being typed** (from the sentence
+start or the last space). Earlier words are never rewritten, and a word the user marks with Telex
+gets no suggestion.
 
 - VIMEK keeps a copy of the text it has put on screen since the last break (Enter, arrows, a click,
   a focus change, `.` `!` `?`). It sends that text to `POST /candidates` on `127.0.0.1:8765` from a
-  worker thread, so the keyboard hook never waits on the network for more than 100 ms.
-- Only the **last three words** may change, as recommended in `docs/streaming.md`. They are sent as
-  the user typed them, even if an earlier suggestion already changed them on screen, so a later word
-  can still correct them. Earlier text is sent as shown.
-- A window near the caret lists up to five distinct versions of those words. **Space** applies the
-  first and types the space. **1-5** apply one and fix everything typed so far. **Esc** keeps the
-  typed text, and a digit typed after it is a digit. A digit right after a space is always a digit,
-  because the window closes when a word ends.
-- Words the user marked with Telex are kept by the server (`lock_typed_words`). Without a server,
-  VIMEK types Telex as before.
+  worker thread. The keyboard hook waits at most 100 ms, and only on Space or a digit.
+- A window under the caret lists up to five forms of the current word. **Space** applies the first
+  and types the space. **1-5** apply one. **Esc** keeps the typed word, and a digit typed after it
+  is a digit. A digit right after a space is always a digit.
+- The caret is found on the worker thread: UI Automation first, then the Win32 caret, then MSAA,
+  then the mouse position.
+- **Model for this mode: `ds-tagger-prefix`**
+  (`virestore.serve --model tagger --tagger runs/ds-tagger-prefix --threads 4`). With only the
+  current word changeable, the model never sees the words after it. `docs/streaming.md` measures
+  exactly this as "word correct when first shown": 0.8688 for the prefix-trained tagger, 0.8494 for
+  the lexicon and 0.8226 for the large tagger on clean test text. So about one word in eight is
+  still wrong when Space applies it. The large tagger is the better model only when later words may
+  revise earlier ones.
 
-On the target laptop, an automated run (`VIMEK.exe --test-input`, tagged synthetic keys into a test
-window) gave these results with the large int8 tagger:
+An automated run (`VIMEK.exe --test-input`, tagged synthetic keys into a Tk test window) with the
+prefix tagger:
 
 | keys | text on screen |
 |---|---|
@@ -61,8 +66,10 @@ window) gave these results with the large int8 tagger:
 | `co 2 con meo ` | `có 2 con mèo ` |
 | `tieengs vieetj hay ` | `tiếng việt hay ` |
 | `toi di hocc`, Backspace, ` ` | `tôi đi học ` |
-| `Ha Noi mua thu ` | `Hà Nội mùa thu ` |
+| `Ha Noi mua thu ` | `Hà Nội mua thu ` |
+| `Tooi ddi hocj owr truwowngf ` | `Tôi đi học ở trường ` |
+| `dduwowcj roi tot qua ` | `được rồi tốt quá ` |
 
-With the server stopped, the same keys gave the Telex text unchanged. This checks the mechanics
-only. It is not a quality measurement, and it does not cover real applications yet (browsers,
-Word, games), where caret position and text replacement can behave differently.
+`mua thu` shows the limit of current-word suggestions: `mùa` needs the next word. These runs check
+the mechanics only. They are not a quality measurement, and caret placement in browsers and Office
+has not been verified.
