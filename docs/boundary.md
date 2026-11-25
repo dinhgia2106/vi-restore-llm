@@ -42,7 +42,8 @@ at −4** (`runs/ds-boundary-large-span` + `lexicon.json`, in the private Huggin
 `dinhgia2106/vi-restore-llm-docsplit` under `ds-boundary-large-span/`). On clean test chunks its
 first candidate is exact for 99.4 % (1 word), 98.6 % (2), 98.2 % (3), 97.8 % (4) and 96.1 % (8
 words); the right segmentation is among the first three for at least 98.6 % at every length up to
-eight words. Laptop latency has not been measured yet.
+eight words. Served with the int8 prefix tagger it answers in a median p95 of 29.79 ms at 4
+threads on the target laptop (section at the end).
 
 ## Results
 
@@ -119,3 +120,28 @@ With the true spaces the large tagger reaches sentence accuracy 0.6634 (clean), 
 | large | −4 | 87.3 | 97.7 | 97.4 | 96.0 |
 | large | −8 | 85.8 | 97.6 | 97.1 | 95.5 |
 
+## Serving: `POST /chunk` and laptop latency
+
+`virestore.serve --boundary DIR` adds `POST /chunk` (`ChunkSuggester`): the input method sends the
+context before the chunk, the chunk as shown and the keys pressed. The server segments the keys
+(the Telex engine can show `anhsang` as `ánhang`), keeps a single syllable the user marked with
+Telex as typed, tags every segmentation in one pass with the last six context words, and returns up
+to five candidates: three readings of the best segmentation, then other segmentations made only of
+common tokens, then more readings.
+
+Latency of one suggestion on the target laptop on AC power: 200 chunks of one to four words from
+`data/processed/test.jsonl` (mean 8.2 characters), each with its sentence context, five rounds,
+int8 prefix tagger (`ds-tagger-prefix/tagger.int8.onnx`, exported on the laptop), lexicon −4. Files:
+`results/laptop-chunk/`.
+
+| boundary model | threads | median p95 ms | p95 per round | median p50 ms |
+|---|---|---|---|---|
+| large, chunks | 4 | 29.79 | 26.40 / 28.40 / 29.79 / 30.49 / 30.70 | 15.35 |
+| large, chunks | 2 | 45.40 | 39.06 / 40.05 / 45.40 / 47.00 / 56.22 | 22.61 |
+| small, chunks | 4 | 26.97 | 26.04 / 26.15 / 26.97 / 27.31 / 30.69 | 12.39 |
+| small, chunks | 2 | 33.97 | 32.97 / 33.91 / 33.97 / 34.85 / 34.87 | 15.04 |
+
+The boundary model takes about 3 ms; the rest is the tagger. A first version that ran the PyTorch
+tagger three times per suggestion over the whole sentence context had a p95 of about 130 ms at
+4 threads and was replaced. The quality of the int8 prefix tagger and of the full deployed pipeline
+on the test sets is being measured (job `prefix_int8b`).
