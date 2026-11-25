@@ -42,8 +42,9 @@ gets no suggestion.
 - VIMEK keeps a copy of the text it has put on screen since the last break (Enter, arrows, a click,
   a focus change, `.` `!` `?`). It sends that text to `POST /candidates` on `127.0.0.1:8765` from a
   worker thread. The keyboard hook waits at most 100 ms, and only on Space or a digit.
-- A window under the caret lists up to five forms of the current word. **Space** applies the first
-  and types the space. **1-5** apply one. **Esc** keeps the typed word, and a digit typed after it
+- A window under the caret lists up to five forms of the current word. **1-5** apply one;
+  **Space** is an ordinary space (since 2026-11-25, at the user's request it no longer applies the
+  first candidate). **Esc** keeps the typed word, and a digit typed after it
   is a digit. A digit right after a space is always a digit.
 - The caret is found on the worker thread: UI Automation first, then the Win32 caret, then MSAA,
   then the mouse position.
