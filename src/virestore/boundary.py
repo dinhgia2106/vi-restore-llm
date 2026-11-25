@@ -181,6 +181,7 @@ class SegmentTagger:
         else:
             self.tagger = TaggerRestorer(tagger_dir, threads=threads, batch_size=batch_size)
         self.name = f"segment-tagger:{Path(boundary_dir).name}+{Path(tagger_dir).name}"
+        self.device = self.boundary.device
 
     def restore(self, inputs: list[str]) -> list[str]:
         spaced = self.boundary.segment(["".join(t.split()) for t in inputs])
@@ -260,14 +261,72 @@ def train(cfg: dict) -> None:
     print(f"best dev boundary F1 {best:.6f}; saved to {out}", flush=True)
 
 
-def evaluate_dir(model_dir: str, test: Path, limit: int | None, tag: str, results: Path) -> dict:
+def error_breakdown(rows: list[tuple[str, list[int]]], preds: list[list[int]], examples: int = 40) -> dict:
+    """Boundary errors between two letters (syllable segmentation) vs. next to digits or punctuation.
+
+    `letters_exact` is the share of sentences whose letter-letter boundaries are all right; an
+    input method splits typed text at punctuation, so these are the boundaries it has to find.
+    """
+    counts = {"letters": [0, 0], "other": [0, 0]}  # [boundary positions, errors]
+    letters_exact, shown = 0, []
+    for (src, gold), pred in zip(rows, preds):
+        ok = True
+        for i in range(len(src) - 1):
+            kind = "letters" if src[i].isalpha() and src[i + 1].isalpha() else "other"
+            counts[kind][0] += 1
+            if pred[i] != gold[i]:
+                counts[kind][1] += 1
+                ok = ok and kind != "letters"
+        letters_exact += ok
+        if not ok and len(shown) < examples:
+            shown.append({"gold": join(src, gold), "pred": join(src, pred)})
+    return {
+        "letters_exact": round(letters_exact / max(len(rows), 1), 6),
+        "error_rate_letters": round(counts["letters"][1] / max(counts["letters"][0], 1), 6),
+        "error_rate_other": round(counts["other"][1] / max(counts["other"][0], 1), 6),
+        "errors_letters": counts["letters"][1],
+        "errors_other": counts["other"][1],
+        "examples": shown,
+    }
+
+
+def chunk_scores(bm: "BoundaryModel", texts: list[str], sizes: list[int]) -> dict:
+    """Exact segmentation of chunks of n consecutive words made only of letters, segmented alone,
+    as an input method sees them when the user types a few words before choosing."""
+    out = {}
+    for n in sizes:
+        chunks = []
+        for t in texts:
+            words = strip_diacritics(t).split()
+            for i in range(0, len(words) - n + 1, n):
+                group = words[i : i + n]
+                if all(w.isalpha() for w in group):
+                    chunks.append(" ".join(group))
+        pairs = [boundary_pair(c) for c in chunks]
+        probs = bm.probs([s for s, _ in pairs])
+        exact = sum(join(s, [int(x > 0.5) for x in p]) == c for (s, _), p, c in zip(pairs, probs, chunks))
+        out[str(n)] = {"chunks": len(chunks), "exact": round(exact / max(len(chunks), 1), 6)}
+    return out
+
+
+def evaluate_dir(model_dir: str, test: Path, limit: int | None, tag: str, results: Path,
+                 chunk_sizes: list[int] | None = None) -> dict:
     rows = load_rows(test, limit)
     bm = BoundaryModel(model_dir)
     t0 = time.perf_counter()
     preds = [[int(x > 0.5) for x in p] for p in bm.probs([s for s, _ in rows])]
     scores = boundary_scores(preds, [g for _, g in rows])
     rec = {"tag": tag, "model": bm.name, "test": str(test), "device": bm.device, "boundary": scores,
-           "seconds": round(time.perf_counter() - t0, 2)}
+           "breakdown": error_breakdown(rows, preds), "seconds": round(time.perf_counter() - t0, 2)}
+    if chunk_sizes:
+        texts = []
+        with test.open(encoding="utf-8") as f:
+            for i, line in enumerate(f):
+                if limit and i >= limit:
+                    break
+                r = json.loads(line)
+                texts.append(r.get("input") or r["target"])
+        rec["chunks"] = chunk_scores(bm, texts, chunk_sizes)
     results.mkdir(parents=True, exist_ok=True)
     (results / f"{tag}.boundary.json").write_text(json.dumps(rec, indent=1), encoding="utf-8")
     return rec
@@ -281,6 +340,7 @@ def main() -> None:
     ap.add_argument("--test", type=Path)
     ap.add_argument("--limit", type=int)
     ap.add_argument("--tag")
+    ap.add_argument("--chunks", help="also score chunks of these word counts, e.g. 1,2,3,4,6,8")
     ap.add_argument("--results", type=Path, default=Path("results"))
     a = ap.parse_args()
     if a.config:
@@ -288,7 +348,9 @@ def main() -> None:
 
         train(yaml.safe_load(a.config.read_text(encoding="utf-8")))
     elif a.eval and a.test:
-        print(json.dumps(evaluate_dir(a.eval, a.test, a.limit, a.tag or f"boundary-{Path(a.eval).name}", a.results), indent=1))
+        sizes = [int(x) for x in a.chunks.split(",")] if a.chunks else None
+        rec = evaluate_dir(a.eval, a.test, a.limit, a.tag or f"boundary-{Path(a.eval).name}", a.results, sizes)
+        print(json.dumps({k: v for k, v in rec.items() if k != "breakdown"} | {"breakdown": {k: v for k, v in rec["breakdown"].items() if k != "examples"}}, indent=1))
     else:
         ap.error("give --config to train, or --eval and --test to evaluate")
 
