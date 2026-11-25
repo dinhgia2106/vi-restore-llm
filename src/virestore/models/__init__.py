@@ -53,4 +53,11 @@ def load(kind: str, **kwargs) -> Restorer:
             kwargs["model"], threads=kwargs.get("threads"), batch_size=kwargs.get("batch_size", 64),
             onnx_file=kwargs.get("onnx_file") or "tagger.onnx",
         )
+    if kind == "segment-tagger":
+        from ..boundary import SegmentTagger
+
+        return SegmentTagger(
+            kwargs["boundary"], kwargs["model"], threads=kwargs.get("threads"), batch_size=kwargs.get("batch_size", 64),
+            onnx_file=kwargs.get("onnx_file"),
+        )
     raise ValueError(f"unknown model kind: {kind}")

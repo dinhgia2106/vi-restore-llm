@@ -77,7 +77,8 @@ def decode(source: str, labels: list[int]) -> str:
 # --------------------------------------------------------------------------- model
 
 
-def build_model(vocab_size: int, d_model: int, layers: int, heads: int, ff: int, max_len: int, dropout: float):
+def build_model(vocab_size: int, d_model: int, layers: int, heads: int, ff: int, max_len: int, dropout: float,
+                n_labels: int = N_LABELS):
     import torch
     from torch import nn
 
@@ -89,7 +90,7 @@ def build_model(vocab_size: int, d_model: int, layers: int, heads: int, ff: int,
             layer = nn.TransformerEncoderLayer(d_model, heads, ff, dropout, batch_first=True, norm_first=True)
             self.encoder = nn.TransformerEncoder(layer, layers)
             self.norm = nn.LayerNorm(d_model)
-            self.head = nn.Linear(d_model, N_LABELS)
+            self.head = nn.Linear(d_model, n_labels)
 
         def forward(self, ids, mask):
             pos = torch.arange(ids.shape[1], device=ids.device)

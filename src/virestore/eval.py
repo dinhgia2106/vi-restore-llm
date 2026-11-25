@@ -80,7 +80,7 @@ def measure_latency(restorer, inputs: list[str], n: int) -> dict:
 def write_summary(results_dir: Path) -> Path:
     rows = []
     for f in sorted(results_dir.glob("*.json")):
-        if f.name.endswith((".analysis.json", ".profile.json", ".stream.json", ".calibration.json")):  # analysis / latency profiles, not eval runs
+        if f.name.endswith((".analysis.json", ".profile.json", ".stream.json", ".calibration.json", ".boundary.json")):  # analyses, profiles, boundary scores: not eval runs
             continue
         r = json.loads(f.read_text(encoding="utf-8"))
         q, lat = r["quality"], r.get("latency", {})
@@ -103,7 +103,7 @@ def write_summary(results_dir: Path) -> Path:
 def main() -> None:
     utf8_stdio()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--model", required=True, choices=["identity", "lexicon", "tcn", "hf", "gguf", "tagger", "tagger-onnx"])
+    ap.add_argument("--model", required=True, choices=["identity", "lexicon", "tcn", "hf", "gguf", "tagger", "tagger-onnx", "segment-tagger"])
     ap.add_argument("--test", type=Path, required=True)
     ap.add_argument("--train", type=Path, help="training JSONL (lexicon baseline)")
     ap.add_argument("--hf-model", help="Hugging Face model id or path")
@@ -111,6 +111,7 @@ def main() -> None:
     ap.add_argument("--gguf", help="path to a .gguf file")
     ap.add_argument("--tagger", help="directory of a trained virestore.tagger model")
     ap.add_argument("--onnx-file", help="ONNX file inside --tagger for tagger-onnx (default: tagger.onnx)")
+    ap.add_argument("--boundary", help="virestore.boundary model directory (segment-tagger: spaces are removed from the input first)")
     ap.add_argument("--tcn-repo", help="path to the Vietnamese-diacritic-restoration repo")
     ap.add_argument("--tcn-weights", help="TCN checkpoint (.pth)")
     ap.add_argument("--batch-size", type=int, default=8)
@@ -144,6 +145,7 @@ def main() -> None:
         tcn_repo=args.tcn_repo,
         tcn_weights=args.tcn_weights,
         onnx_file=args.onnx_file,
+        boundary=args.boundary,
     )
 
     t0 = time.perf_counter()
