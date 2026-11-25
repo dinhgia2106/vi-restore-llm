@@ -59,3 +59,37 @@ def test_word_span_cuts_whole_words():
     for seed in range(20):
         s, l = word_span(src, labels, random.Random(seed))
         assert join(s, l) in "mot hai ba bon nam" and s and not join(s, l).startswith(" ")
+
+
+class _FakeBoundary:
+    lexicon = {"tieng", "anh", "sang"}
+
+    def plausible(self, segmentation):
+        return "hsang" not in segmentation
+
+    def segment_nbest(self, text, k):
+        return {"anhsang": ["anh sang", "an hsang"], "homnay": ["hom nay"]}.get(text, [text])[:k]
+
+
+class _FakeRestorer:
+    def restore_nbest(self, inputs, k):
+        return [[t.replace("anh sang", "ánh sáng").replace("hom nay", "hôm nay"), t] for t in inputs]
+
+    def restore(self, inputs):
+        return list(inputs)
+
+
+def test_chunk_suggester_segments_the_raw_keys():
+    from virestore.boundary import ChunkSuggester
+
+    cs = ChunkSuggester(_FakeBoundary(), _FakeRestorer())
+    out = cs.suggest("Hôm qua ", "ánhang", "anhsang", 5)  # Telex turned the "s" into a mark on screen
+    assert out == {"candidates": ["ánh sáng", "anh sang"], "telex": False}  # "an hsang" is not plausible
+
+
+def test_chunk_suggester_leaves_telex_words_alone():
+    from virestore.boundary import ChunkSuggester
+
+    cs = ChunkSuggester(_FakeBoundary(), _FakeRestorer())
+    assert cs.suggest("", "tiếng", "tieengs")["telex"] is True
+    assert cs.suggest("", "homnay", "homnay")["candidates"][0] == "hôm nay"

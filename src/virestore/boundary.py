@@ -218,7 +218,7 @@ class BoundaryModel:
         self.model.to(self.device).eval()
         self.max_len, self.batch_size = m["max_len"], batch_size
         lex = p / "lexicon.json"
-        self.lexicon = set(json.loads(lex.read_text(encoding="utf-8"))) if use_lexicon and lex.exists() else None
+        self.lexicon = json.loads(lex.read_text(encoding="utf-8")) if use_lexicon and lex.exists() else None  # token -> count
         self.unknown_logp = unknown_logp
         self.name = f"boundary:{p.name}" + ("+lexicon" if self.lexicon else "")
 
@@ -254,6 +254,16 @@ class BoundaryModel:
     def segment_nbest(self, text: str, k: int) -> list[str]:
         """Top-k segmentations of one text."""
         return self.candidates(text, self.probs([text])[0], k)
+
+    def plausible(self, segmentation: str, min_count: int = 50) -> bool:
+        """Every letter token is a common known token of two letters or more with a vowel: used to
+        keep alternative segmentations from offering fragments such as `trớ i` or `để p`."""
+        if not self.lexicon:
+            return True
+        for w in segmentation.lower().split():
+            if w.isalpha() and (len(w) < 2 or self.lexicon.get(w, 0) < min_count or not any(v in w for v in "aeiouy")):
+                return False
+        return True
 
     def candidates(self, text: str, p: list[float], k: int) -> list[str]:
         """Top-k segmentations from given probabilities: lexicon decoding, or a beam over
@@ -305,6 +315,84 @@ class SegmentTagger:
             cands = self.tagger.restore_nbest([segs[0]], k)[0] + self.tagger.restore(segs[1:])
             out.append(list(dict.fromkeys(cands))[:k])
         return out
+
+
+class ChunkSuggester:
+    """Candidates for the chunk an input method is typing: the text since the last space, which may
+    hold several words typed without spaces (`homnaytroidepqua`).
+
+    `raw` is what the user actually pressed. The screen can differ because the Telex engine reads
+    some letters of an unspaced chunk as marks (`anhsang` shows as `ánhang`), so segmentation works
+    on `raw`. If the screen shows one known syllable that Telex marked from the keys (`tieengs` ->
+    `tiếng`), the user is typing Telex and no candidate is offered.
+    """
+
+    def __init__(self, boundary: "BoundaryModel", restorer, segmentations: int = 3, context_words: int = 6):
+        self.boundary, self.restorer, self.segmentations = boundary, restorer, segmentations
+        self.context_words = context_words
+
+    def _near(self, context: str) -> str:
+        """The last few words of the context: the tagger mainly needs the neighbourhood, and the
+        n-best search cost grows with the text length."""
+        words = context.split(" ")
+        tail = " ".join(words[-(self.context_words + 1) :])
+        return tail
+
+    def is_telex_word(self, screen: str, raw: str) -> bool:
+        plain = strip_diacritics(screen)
+        return (
+            plain != screen
+            and " " not in screen.strip()
+            and plain.lower() != raw.lower()
+            and self.boundary.lexicon is not None
+            and plain.lower() in self.boundary.lexicon
+        )
+
+    def suggest(self, context: str, screen: str, raw: str = "", k: int = 5) -> dict:
+        raw = "".join((raw or strip_diacritics(screen)).split())
+        if not raw or self.is_telex_word(screen, raw):
+            return {"candidates": [], "telex": bool(raw)}
+        context = self._near(context)
+        segs = self.boundary.segment_nbest(raw, 4 * self.segmentations)
+        segs = (segs[:1] + [s for s in segs[1:] if self.boundary.plausible(s)])[: self.segmentations]
+        tagger = getattr(self.restorer, "inner", self.restorer)
+        if not hasattr(tagger, "_log_probs"):  # not a character tagger: go through its public interface
+            texts = [context + seg for seg in segs]
+            cands = self.restorer.restore_nbest(texts[:1], k * 2)[0] + self.restorer.restore(texts[1:])
+            out = [c[len(context) :] for c in cands if len(c) - len(context) in {len(s) for s in segs}]
+            return {"candidates": list(dict.fromkeys(out))[:k], "telex": False}
+        return {"candidates": self._tag(tagger, strip_diacritics(context), segs, k), "telex": False}
+
+    @staticmethod
+    def _tag(tagger, context: str, segs: list[str], k: int) -> list[str]:
+        """One tagger pass over every segmentation (marks removed from the context); top-k tails of
+        the best one by beam search over the chunk's characters only, the best tail of the others."""
+        from .ime import has_stacked_tones
+        from .models.tagger import resolve_stacked_tones
+        from .tagger import TAGGABLE, apply_label, decode
+
+        texts = [context + s for s in segs]
+        lp, n = tagger._log_probs(texts)
+        start = len(context)
+        hyps: list[tuple[float, str]] = [(0.0, "")]
+        src = texts[0]
+        for j in range(start, min(len(src), n)):
+            c = src[j]
+            if c not in TAGGABLE:
+                hyps = [(s, t + c) for s, t in hyps]
+                continue
+            top = lp[0, j].topk(min(3, len(tagger._valid(c))))
+            opts = [(float(v), apply_label(c, int(l))) for v, l in zip(top.values, top.indices)]
+            hyps = heapq.nlargest(max(8 * k, 16), ((s + v, t + ch) for s, t in hyps for v, ch in opts))
+        best = [t + src[n:] for _, t in hyps if not has_stacked_tones(t)]
+        others = []
+        labels = lp.argmax(-1).tolist()
+        for b in range(1, len(texts)):
+            s = texts[b][:n]
+            lab = resolve_stacked_tones(s, labels[b][: len(s)], lp[b], tagger._valid)
+            others.append((decode(s, lab) + texts[b][n:])[start:])
+        # three readings of the best segmentation, then the other segmentations, then the rest
+        return list(dict.fromkeys(best[:3] + others + best[3:]))[:k]
 
 
 def train(cfg: dict) -> None:

@@ -4,9 +4,13 @@
 
 POST /restore    {"text": "hom nay troi dep qua"}       -> {"text": <restored sentence>, "ms": <server time>}
 POST /candidates {"text": "hom nay troi dep qua", "k": 5} -> {"candidates": [<best first>], "ms": <server time>}
+POST /chunk      {"context": "Hôm ", "screen": "naytroi", "raw": "naytroi", "k": 5}
+                 -> {"candidates": ["nay trời", ...], "telex": false, "ms": <server time>}
 GET  /health                                             -> {"ok": true, "model": <name>}
 
-`/candidates` needs a model with n-best output (tagger, lexicon, hf).
+`/candidates` needs a model with n-best output (tagger, lexicon, hf). `/chunk` needs `--boundary`
+(a virestore.boundary model; its lexicon.json is used) and a tagger: it segments the chunk being
+typed, which may hold several words without spaces, then marks it (virestore.boundary.ChunkSuggester).
 """
 
 # No `from __future__ import annotations` here: FastAPI must see the request models defined inside
@@ -17,7 +21,7 @@ import time
 from . import utf8_stdio
 
 
-def create_app(restorer):
+def create_app(restorer, chunks=None):
     from fastapi import FastAPI, HTTPException
     from pydantic import BaseModel
 
@@ -28,6 +32,12 @@ def create_app(restorer):
 
     class NbestReq(BaseModel):
         text: str
+        k: int = 5
+
+    class ChunkReq(BaseModel):
+        context: str = ""
+        screen: str
+        raw: str = ""
         k: int = 5
 
     @app.get("/health")
@@ -51,6 +61,14 @@ def create_app(restorer):
             raise HTTPException(400, str(e)) from e
         return {"candidates": cands, "ms": round((time.perf_counter() - t0) * 1000, 2)}
 
+    @app.post("/chunk")
+    def chunk(req: ChunkReq) -> dict:
+        if chunks is None:
+            raise HTTPException(400, "start the server with --boundary to segment unspaced input")
+        t0 = time.perf_counter()
+        out = chunks.suggest(req.context, req.screen, req.raw, max(1, min(req.k, 10)))
+        return {**out, "ms": round((time.perf_counter() - t0) * 1000, 2)}
+
     return app
 
 
@@ -70,6 +88,8 @@ def main() -> None:
     ap.add_argument("--train", help="training JSONL for the lexicon baseline")
     ap.add_argument("--tcn-repo")
     ap.add_argument("--tcn-weights")
+    ap.add_argument("--boundary", help="virestore.boundary model directory: enables POST /chunk")
+    ap.add_argument("--unknown-logp", type=float, default=-4.0, help="lexicon cost of an unknown token (boundary)")
     ap.add_argument("--threads", type=int, default=None, help="CPU threads (tagger, gguf)")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8765)
@@ -82,8 +102,16 @@ def main() -> None:
         from .ime import ImeRestorer
 
         restorer = ImeRestorer(restorer)
+    chunks = None
+    if a.boundary:
+        from .boundary import BoundaryModel, ChunkSuggester
+
+        if a.model not in ("tagger", "tagger-onnx"):
+            raise SystemExit("--boundary needs --model tagger or tagger-onnx")
+        chunks = ChunkSuggester(BoundaryModel(a.boundary, threads=a.threads, use_lexicon=True, unknown_logp=a.unknown_logp), restorer)
+        chunks.suggest("", "khoidong")
     restorer.restore(["khoi dong"])  # the first call is about 100x slower; do not spend it on the user
-    uvicorn.run(create_app(restorer), host=a.host, port=a.port)
+    uvicorn.run(create_app(restorer, chunks), host=a.host, port=a.port)
 
 
 if __name__ == "__main__":

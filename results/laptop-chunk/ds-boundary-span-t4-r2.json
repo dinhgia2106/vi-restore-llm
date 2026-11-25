@@ -1,0 +1,17 @@
+{
+ "boundary": "ds-boundary-span",
+ "tagger": "ds-tagger-prefix/tagger.int8.onnx",
+ "threads": 4,
+ "round": 2,
+ "n": 200,
+ "on_ac": true,
+ "mean_raw_chars": 8.2,
+ "p50_ms": 12.12,
+ "p95_ms": 26.04,
+ "max_ms": 43.79,
+ "machine": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "device": "cpu"
+ }
+}
