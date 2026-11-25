@@ -48,3 +48,14 @@ def test_lexicon_decode_keeps_model_decisions_next_to_punctuation():
     probs = [0.1, 0.9, 0.1, 0.1, 0.1]
     labels = lexicon_decode(src, probs, {"ab", "cd"}, unknown_logp=-8.0)[0][1]
     assert labels == [0, 1, 0, 0, 0]
+
+
+def test_word_span_cuts_whole_words():
+    import random
+
+    from virestore.boundary import word_span
+
+    src, labels = boundary_pair("mot hai ba bon nam")
+    for seed in range(20):
+        s, l = word_span(src, labels, random.Random(seed))
+        assert join(s, l) in "mot hai ba bon nam" and s and not join(s, l).startswith(" ")

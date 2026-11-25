@@ -59,7 +59,18 @@ def load_rows(path: Path, limit: int | None = None) -> list[tuple[str, list[int]
     return rows
 
 
-def _batches(rows, vocab, batch_size, max_len, shuffle, rng, prefix_prob: float = 0.0):
+def word_span(src: str, labels: list[int], rng, max_words: int = 8) -> tuple[str, list[int]]:
+    """A random run of 1..max_words consecutive words, as an input method sees a chunk typed in the
+    middle of a sentence."""
+    ends = [i for i, l in enumerate(labels[:-1]) if l == 1] + [len(src) - 1]
+    starts = [0] + [e + 1 for e in ends[:-1]]
+    first = rng.randrange(len(starts))
+    last = min(first + rng.randint(1, max_words), len(starts)) - 1
+    a, b = starts[first], ends[last] + 1
+    return src[a:b], labels[a:b]
+
+
+def _batches(rows, vocab, batch_size, max_len, shuffle, rng, prefix_prob: float = 0.0, span_prob: float = 0.0):
     import torch
 
     order = list(range(len(rows)))
@@ -69,6 +80,8 @@ def _batches(rows, vocab, batch_size, max_len, shuffle, rng, prefix_prob: float 
         chunk = []
         for j in order[i : i + batch_size]:
             src, labels = rows[j]
+            if span_prob and rng.random() < span_prob:
+                src, labels = word_span(src, labels, rng)
             if prefix_prob and len(src) > 1 and rng.random() < prefix_prob:
                 cut = rng.randint(1, len(src) - 1)  # the user is still typing, possibly mid-word
                 src, labels = src[:cut], labels[:cut]
@@ -337,7 +350,8 @@ def train(cfg: dict) -> None:
 
     model.train()
     for epoch in range(t["epochs"]):
-        for ids, mask, lab in _batches(rows, vocab, t["batch_size"], m["max_len"], True, rng, d.get("prefix_prob", 0.0)):
+        for ids, mask, lab in _batches(rows, vocab, t["batch_size"], m["max_len"], True, rng, d.get("prefix_prob", 0.0),
+                                       d.get("span_prob", 0.0)):
             ids, mask, lab = ids.to(device), mask.to(device), lab.to(device)
             with torch.autocast(device, dtype=torch.bfloat16, enabled=device == "cuda"):
                 logits = model(ids, mask)
