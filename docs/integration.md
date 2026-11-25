@@ -41,7 +41,7 @@ gets no suggestion.
 
 - VIMEK keeps a copy of the text it has put on screen since the last break (Enter, arrows, a click,
   a focus change, `.` `!` `?`). It sends that text to `POST /candidates` on `127.0.0.1:8765` from a
-  worker thread. The keyboard hook waits at most 100 ms, and only on Space or a digit.
+  worker thread. The keyboard hook waits at most 100 ms, and only on a digit.
 - A window under the caret lists up to five forms of the current word. **1-5** apply one;
   **Space** is an ordinary space (since 2026-11-25, at the user's request it no longer applies the
   first candidate). **Esc** keeps the typed word, and a digit typed after it
@@ -53,7 +53,7 @@ gets no suggestion.
   current word changeable, the model never sees the words after it. `docs/streaming.md` measures
   exactly this as "word correct when first shown": 0.8688 for the prefix-trained tagger, 0.8494 for
   the lexicon and 0.8226 for the large tagger on clean test text. So about one word in eight is
-  still wrong when Space applies it. The large tagger is the better model only when later words may
+  still wrong when the first candidate is taken. The large tagger is the better model only when later words may
   revise earlier ones.
 
 An automated run (`VIMEK.exe --test-input`, tagged synthetic keys into a Tk test window) with the
