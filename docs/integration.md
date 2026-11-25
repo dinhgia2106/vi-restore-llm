@@ -31,3 +31,38 @@ affect any number in `results/`.
 ## Int8 model
 
 The recommended graph is `tagger.int8.onnx`. Like every exported tagger it takes **one sentence per call** (`ids` has shape `[1, chars]`). Run one warm-up call at startup: the first call on the laptop took about 1.1 s, later ones a few milliseconds.
+
+## VIMEK prototype (Windows)
+
+Branch `ai-candidates` of [VIMEK](https://github.com/dinhgia2106/VIMEK) runs suggestions next to
+Telex, as an experimental option that is off by default (tray: Tùy chọn > Gợi ý dấu bằng AI).
+
+- VIMEK keeps a copy of the text it has put on screen since the last break (Enter, arrows, a click,
+  a focus change, `.` `!` `?`). It sends that text to `POST /candidates` on `127.0.0.1:8765` from a
+  worker thread, so the keyboard hook never waits on the network for more than 100 ms.
+- Only the **last three words** may change, as recommended in `docs/streaming.md`. They are sent as
+  the user typed them, even if an earlier suggestion already changed them on screen, so a later word
+  can still correct them. Earlier text is sent as shown.
+- A window near the caret lists up to five distinct versions of those words. **Space** applies the
+  first and types the space. **1-5** apply one and fix everything typed so far. **Esc** keeps the
+  typed text, and a digit typed after it is a digit. A digit right after a space is always a digit,
+  because the window closes when a word ends.
+- Words the user marked with Telex are kept by the server (`lock_typed_words`). Without a server,
+  VIMEK types Telex as before.
+
+On the target laptop, an automated run (`VIMEK.exe --test-input`, tagged synthetic keys into a test
+window) gave these results with the large int8 tagger:
+
+| keys | text on screen |
+|---|---|
+| `hom nay troi dep qua ` | `hôm nay trời đẹp quá ` |
+| `hom nay troi dep qua2` | `hôm nay trời đẹp qua` |
+| `co`, Esc, `2 con` | `co2 con` |
+| `co 2 con meo ` | `có 2 con mèo ` |
+| `tieengs vieetj hay ` | `tiếng việt hay ` |
+| `toi di hocc`, Backspace, ` ` | `tôi đi học ` |
+| `Ha Noi mua thu ` | `Hà Nội mùa thu ` |
+
+With the server stopped, the same keys gave the Telex text unchanged. This checks the mechanics
+only. It is not a quality measurement, and it does not cover real applications yet (browsers,
+Word, games), where caret position and text replacement can behave differently.
