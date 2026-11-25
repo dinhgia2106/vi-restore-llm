@@ -37,8 +37,12 @@ tables below measure what an input method needs: short chunks, first candidate a
 
 ## Status
 
-Pending: the large model trained on mid-sentence chunks (`configs/boundary_large_span_ds.yaml`,
-job `bd_large_span`).
+Best for an input method so far: the **large model trained on mid-sentence chunks, with the lexicon
+at −4** (`runs/ds-boundary-large-span` + `lexicon.json`, in the private Hugging Face repo
+`dinhgia2106/vi-restore-llm-docsplit` under `ds-boundary-large-span/`). On clean test chunks its
+first candidate is exact for 99.4 % (1 word), 98.6 % (2), 98.2 % (3), 97.8 % (4) and 96.1 % (8
+words); the right segmentation is among the first three for at least 98.6 % at every length up to
+eight words. Laptop latency has not been measured yet.
 
 ## Results
 
@@ -61,6 +65,8 @@ first three (top 3):
 | large (14M), sentences + prefixes | lexicon −4 | 97.7 / 99.9 | 97.6 / 99.6 | 97.6 / 99.5 | 97.2 / 99.3 | 96.5 / 98.9 | 95.8 / 98.6 |
 | small, + mid-sentence chunks | model only | 99.4 / 99.9 | 98.3 / 99.3 | 97.7 / 98.9 | 97.0 / 98.5 | 95.7 / 97.6 | 94.4 / 96.8 |
 | small, + mid-sentence chunks | lexicon −4 | 99.4 / 99.9 | 98.5 / 99.7 | 98.0 / 99.5 | 97.3 / 99.2 | 96.1 / 98.7 | 95.0 / 98.2 |
+| large, + mid-sentence chunks | model only | 99.5 / 99.9 | 98.5 / 99.4 | 98.1 / 99.1 | 97.6 / 98.8 | 96.6 / 98.1 | 95.8 / 97.6 |
+| large, + mid-sentence chunks | lexicon −4 | 99.4 / 99.9 | 98.6 / 99.7 | 98.2 / 99.5 | 97.8 / 99.4 | 96.9 / 99.0 | 96.1 / 98.6 |
 
 Cells are top 1 / top 3, in %.
 
@@ -75,7 +81,9 @@ Cells are top 1 / top 3, in %.
 | large (14M), sentences + prefixes | lexicon −4 | 0.9945 | 87.5 | 91.3 | 0.9941 | 86.6 | 89.9 |
 | large (14M), sentences + prefixes | lexicon −8 | 0.9937 | 85.9 | 89.5 | 0.9929 | 84.3 | 88.9 |
 | small, + mid-sentence chunks | model only | 0.9917 | 81.6 | 85.4 | 0.9917 | 80.8 | 86.5 |
-| small, + mid-sentence chunks | lexicon −4 | 0.9921 | 83.0 | 87.0 | – | – | – |
+| small, + mid-sentence chunks | lexicon −4 | 0.9921 | 83.0 | 87.0 | 0.9920 | 82.2 | 87.5 |
+| large, + mid-sentence chunks | model only | 0.9936 | 85.3 | 89.1 | 0.9935 | 84.5 | 88.5 |
+| large, + mid-sentence chunks | lexicon −4 | 0.9937 | 86.1 | 90.0 | 0.9935 | 85.2 | 89.0 |
 
 *exact*: every boundary of the sentence right, in %. *letters only*: ignoring boundaries next to
 digits or punctuation, which an input method does not have to find (it splits typed text there).

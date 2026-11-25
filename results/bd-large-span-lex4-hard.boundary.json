@@ -1,0 +1,222 @@
+{
+ "tag": "bd-large-span-lex4-hard",
+ "model": "boundary:ds-boundary-large-span+lexicon",
+ "test": "/marimo/vi-restore-llm/data/doc_split/test_hard.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.994727,
+  "recall": 0.994323,
+  "f1": 0.994525,
+  "sentence_exact": 0.890215,
+  "n": 2514
+ },
+ "unknown_logp": -4.0,
+ "breakdown": {
+  "letters_exact": 0.922832,
+  "error_rate_letters": 0.002359,
+  "error_rate_other": 0.013464,
+  "errors_letters": 338,
+  "errors_other": 121,
+  "examples": [
+   {
+    "gold": "Hap thu: la qua trinh thu hut khi hoac hoi tu hon hop bang chat hap thu long.",
+    "pred": "Hap thu: la qua trinh thu hut khi hoac hoi tu hon hop bang cha thap thu long."
+   },
+   {
+    "gold": "Costco chan chan khong du tinh duoc truoc kich ban nay.",
+    "pred": "Cost co chan chan khong du tinh duoc truoc kich ban nay."
+   },
+   {
+    "gold": "Ve noi dung khieu nai boi thuong gia dat o thap hon so voi gia thi truong",
+    "pred": "Ve noi dung khieu nai boi thuong gia da to thap hon so voi gia thi truong"
+   },
+   {
+    "gold": "Cho den nay, \"giac lua\" da thieu rui tren dien tich 8.400ha, tuong duong hon 4% tong dien tich be mat dao Tenerife.",
+    "pred": "Cho den nay, \"giac lua\" da t hieu rui tren dien tich 8.400ha, tuong duong hon 4% tong dien tich be mat dao Tenerife."
+   },
+   {
+    "gold": "T chc an ninh tron tu.",
+    "pred": "Tch can ninh tron tu."
+   },
+   {
+    "gold": "Phuong phap bao gom truyen dong dien qua nao, kich thich dong kinh lam thay doi chat hoa hoc trong nao.",
+    "pred": "Phuong phap bao gom truyen dong dien quan ao, kich thich dong kinh lam thay doi chat hoa hoc trong nao."
+   },
+   {
+    "gold": "Cai xoan: Loai cai nay co la mem hon, xoan hon, mau xanh dam va co gan trang.",
+    "pred": "Cai xoan: Loai cai nay co lam em hon, xoan hon, mau xanh dam va co gan trang."
+   },
+   {
+    "gold": "\"Mikoshi\", mot ngoi den di dong dung de van chuyen cac vi than Shinto duoc kieu qua duong pho Yokosuka, phia nam Tokyo sau khi khoanh khac giao thua troi qua",
+    "pred": "\"Mikoshi\", mot ngoi den di dong dung de van chuyen cac vi than Shinto duoc kieu qua duong pho Yokosuka, phia nam Tokyo sau khi khoanh khac giao thuat roi qua"
+   },
+   {
+    "gold": "Nap ca po, noi ngon lua boc len",
+    "pred": "Nap cap o, noi ngon lua boc len"
+   },
+   {
+    "gold": "Den khi co khoi lua tu nap capo, ong Duc da voi ra khoi xe de thoat than, khong kip nhin vao dong ho bao nhiet do tren xe.",
+    "pred": "Den khi co khoi lua tu nap cap o, ong Duc da voi ra khoi xe de thoat than, khong kip nhin vao dong ho bao nhiet do tren xe."
+   },
+   {
+    "gold": "Nha dau tu than trong voi thoa thuan hau Brexit, chung khoan chau A dien bien trai nguoc",
+    "pred": "Nha dau tu than trong voi thoa thua nhau Brexit, chung khoan chau A dien bien trai nguoc"
+   },
+   {
+    "gold": "Moi nam co 55 ti m3 khi dot duoc Nga bom sang chau Au qua bien Baltic.",
+    "pred": "Moi nam co 55 tim 3 khi dot duoc Nga bom sang chau Au qua bien Baltic."
+   },
+   {
+    "gold": "Nam nay, doi tuyen Viet Nam tham du Olympic Toan quoc te dat hang 14 trong so 107 doi tham gia.",
+    "pred": "Nam nay, doi tuyen Viet Nam tham du Olympic Toan quoc te da thang 14 trong so 107 doi tham gia."
+   },
+   {
+    "gold": "chinh phu an do",
+    "pred": "chinh phuan do"
+   },
+   {
+    "gold": "It nhat hai chiec moto canh sat chay vao doan duong moi do be tong tren pho Hofweg o The Hague.",
+    "pred": "It nhat hai chiec moto canh sat chay vao doan duong moi do be tong tren pho Hofwego The Hague."
+   },
+   {
+    "gold": "- Nuoc men a xit cicic.- Duong tinh trang- Mau thuc pham",
+    "pred": "- Nuoc men axit cicic.- Duong tinh trang - Mau thuc pham"
+   },
+   {
+    "gold": "gia TT NVL xuat = Gia TT binh quan 1 don vi x So luong xuat dung dung dau ky",
+    "pred": "gia TTN VL xuat = Gia TT binh quan 1 don vi x So luong xuat dung dung dau ky"
+   },
+   {
+    "gold": "Canh sat cuu ho TP HCM cung nhieu chuyen gia dao ham mo o Quang Ninh cung duoc nho chi vien.",
+    "pred": "Canh sat cuu ho TPHCM cung nhieu chuyen gia dao ham mo o Quang Ninh cung duoc nho chi vien."
+   },
+   {
+    "gold": "\u201dTich tru tra\u201d la cach bat dau de nhat.",
+    "pred": "\u201d Tich trut ra\u201d la cach bat dau de nhat."
+   },
+   {
+    "gold": "Lanh dao doanh nghiep can kien quyet khac phuc tu tuong \u201csong lau len lao lang\u201d, tu tuong dang cap, thu bac theo kieu phong kien, khac phuc tinh trang o du, cam tinh, e kip, be phai, cuc bo.",
+    "pred": "Lanh dao doanh nghiep can kien quyet khac phuc tu tuong \u201csong lau len lao lang\u201d, tu tuong dang cap, thu bac theo kieu phong kien, khac phuc tinh trang o du, cam tinh, ekip, be phai, cuc bo."
+   },
+   {
+    "gold": "Nha nao it nguoi thi hai ba cai, nhieu thi chuc cai an dan.",
+    "pred": "Nha nao it nguoi thi hai bac ai, nhieu thi chuc cai an dan."
+   },
+   {
+    "gold": "Thanh thu co banh an hoai toi ra gieng.",
+    "pred": "Thanh thu co ban han hoai toi ra gieng."
+   },
+   {
+    "gold": "Dem ay, toi khong ngu, ngoi thuc canh noi banh.",
+    "pred": "De may, toi khong ngu, ngoi thuc canh noi banh."
+   },
+   {
+    "gold": "Doan nay ton suc chi co dan ong moi lam noi.",
+    "pred": "Do an nay ton suc chi co dan ong moi lam noi."
+   },
+   {
+    "gold": "Tuong tuong ban than dang cho nhung con vit hay ngong an banh mi o ho.",
+    "pred": "Tuong tuong ban than dang cho nhung con vi thay ngo ngan banh mi o ho."
+   },
+   {
+    "gold": "Tuong tu ba mau xe duoc hang oto Nhat Ban gioi thieu moi day, muc gia ban le cua bo doi da dung moi nay cung duoc d.anh gia la kha \u201cchat\u201d.",
+    "pred": "Tuong tu ba mau xe duoc hang o to Nhat Ban gioi thieu moi day, muc gia ban le cua bo doi da dung moi nay cung duoc d.anh gia la kha \u201cchat\u201d."
+   },
+   {
+    "gold": "Bay gio neu co the phong van duoc vi tri 2yoe thi em co nen nop 2 yoe khong a(junior/middle) hay van nop vi tri 1 yoe a",
+    "pred": "Bay gio neu co the phong van duoc vi tri 2 yo et hiem co nen nop 2 y oe khong a (junior/middle) hay van nop vi tri 1 yo ea"
+   },
+   {
+    "gold": "De vuot qua su tu huy diet, chung ta can mot he chuan moi ve gia tri.",
+    "pred": "De vuot qua su tu huy diet, chung ta can mo the chuan moi ve gia tri."
+   },
+   {
+    "gold": "Mot vu so tan tuong tu tai duong ham duoc noi xay ra 17 nam truoc.",
+    "pred": "Mot vu sot an tuong tu tai duong ham duoc noi xay ra 17 nam truoc."
+   },
+   {
+    "gold": "Bo canh Huong Giang dien truoc do duoc ngoi sao Dualipa khoac len nguoi.",
+    "pred": "Bo canh Huong Giang dien truoc do duoc ngoi sao Dua lipa k hoac len nguoi."
+   },
+   {
+    "gold": "Vi du: \"Chau khong tin ong ay la nguoi giet cha chau\", Mai noi, mat dam le.",
+    "pred": "Vi du: \"Chau khong tin o ngay la nguoi giet chac hau\", Mai noi, mat dam le."
+   },
+   {
+    "gold": "Pha thung luoi cua U23 Viet Nam la do thu mon Van Toan bat khong dinh bong.",
+    "pred": "Phat hung luoi cua U23 Viet Nam la do thu mon Van Toan bat khong dinh bong."
+   },
+   {
+    "gold": "Chay mui, nghet mui va hat hoi.",
+    "pred": "Chay mui, nghet mui va ha thoi."
+   },
+   {
+    "gold": "Neu tra loi dung se duoc chon mot o qua.",
+    "pred": "Neu tra loi dung se duoc chon moto qua."
+   },
+   {
+    "gold": "Dat in vo hop, huong dan su dung de dua thuoc gia vao tiep tuc dua ra thi truong tieu thu.",
+    "pred": "Da tin vo hop, huong dan su dung de dua thuoc gia vao tiep tuc dua ra thi truong tieu thu."
+   },
+   {
+    "gold": "Den nam 17 tuoi, mot kep hat ma nu nghe si \"ghet cay, ghet dang\" cu tan tinh ba trong khi ong da trai qua sau doi vo.",
+    "pred": "Den nam 17 tuoi, mot ke phat ma nu nghe si \"ghet cay, ghet dang\" cu tan tinh ba trong khi ong da trai qua sau doi vo."
+   },
+   {
+    "gold": "Hay thu tat han dieu hoa.",
+    "pred": "Hay thu ta than dieu hoa."
+   },
+   {
+    "gold": "Moi TCDHTD se bao gom mot hay nhieu Danh hieu thi dua (Gioi, Tien tien), moi danh hieu thi dua se gan lien voi cac tieu chi tuong ung.",
+    "pred": "Moi TCD HTD se bao gom mot hay nhieu Danh hieu thi dua (Gioi, Tien tien), moi danh hieu thi dua se gan lien voi cac tieu chi tuong ung."
+   },
+   {
+    "gold": "Neu duoc thong qua, he thong huu tri cua Phap se van hao phong hon he thong cua Duc va Anh\u201d, vi chuyen gia ket luan.",
+    "pred": "Neu duoc thong qua, he thong huu tri cua Phap se va nha o phong hon he thong cua Duc va Anh\u201d, vi chuyen gia ket luan."
+   },
+   {
+    "gold": "Do nguoi lai xe nghe dien thoai, dung chat kich thich, chay lan tuyen, do tai xe mo cua xe oto tuy tien, ngu gat...v.v..",
+    "pred": "Do nguoi lai xe nghe dien thoai, dung chat kich thich, chay lan tuyen, do tai xe mo cua xe o to tuy tien, ngu gat...v.v.."
+   }
+  ]
+ },
+ "seconds": 1.87,
+ "chunks": {
+  "1": {
+   "chunks": 39378,
+   "exact@1": 0.995429,
+   "exact@3": 0.999517,
+   "exact@5": 0.999797
+  },
+  "2": {
+   "chunks": 17732,
+   "exact@1": 0.98624,
+   "exact@3": 0.997857,
+   "exact@5": 0.998985
+  },
+  "3": {
+   "chunks": 10650,
+   "exact@1": 0.985164,
+   "exact@3": 0.996432,
+   "exact@5": 0.998216
+  },
+  "4": {
+   "chunks": 7155,
+   "exact@1": 0.980154,
+   "exact@3": 0.994829,
+   "exact@5": 0.996785
+  },
+  "6": {
+   "chunks": 3805,
+   "exact@1": 0.973456,
+   "exact@3": 0.993167,
+   "exact@5": 0.996058
+  },
+  "8": {
+   "chunks": 2241,
+   "exact@1": 0.967425,
+   "exact@3": 0.988844,
+   "exact@5": 0.992414
+  }
+ }
+}

@@ -1,0 +1,222 @@
+{
+ "tag": "bd-span-lex4-external",
+ "model": "boundary:ds-boundary-span+lexicon",
+ "test": "/marimo/vi-restore-llm/data/doc_split/external.jsonl",
+ "device": "cuda",
+ "boundary": {
+  "precision": 0.990817,
+  "recall": 0.99316,
+  "f1": 0.991987,
+  "sentence_exact": 0.822143,
+  "n": 14000
+ },
+ "unknown_logp": -4.0,
+ "breakdown": {
+  "letters_exact": 0.860286,
+  "error_rate_letters": 0.003624,
+  "error_rate_other": 0.014484,
+  "errors_letters": 3482,
+  "errors_other": 935,
+  "examples": [
+   {
+    "gold": "Can phong bep tuyet voi khong phai o dien tich rong hay hep ma o chinh thiet ke cua no.",
+    "pred": "Can phong bep tuyet voi khong phai o dien tich rong hay hep mao chinh thiet ke cua no."
+   },
+   {
+    "gold": "Vua xem xong Lan Nhan Bich Nguyet, tam trang rat vi dieu lah.",
+    "pred": "Vua xem xong Lan Nhan Bich Nguyet, tam trang rat vi dieu la h."
+   },
+   {
+    "gold": "Argentina ket thuc chien dich vong loai khu vuc Nam My o vi tri thu 2 voi 11 chien thang, 6 tran hoa va cung Brazil la hai doi bong khong nhan that bai nao.",
+    "pred": "Argentina ket thuc chien dich vong loai khu vuc Nam Myo vi tri thu 2 voi 11 chien thang, 6 tran hoa va cung Brazil la hai doi bong khong nhan that bai nao."
+   },
+   {
+    "gold": "Nha nhiep anh Dang Minh Tung.",
+    "pred": "Nhan hiep anh Dang Minh Tung."
+   },
+   {
+    "gold": "Tru Tuan Anh, Xuan Truong va Ngoc Hai, tuyen Viet Nam cung da ra san voi doi hinh manh nhat co the o tran dau cuoi cung tai Han Quoc.",
+    "pred": "Tru Tuan Anh, Xuan Truong va Ngoc Hai, tuyen Viet Nam cung da ra san voi doi hinh manh nhat co theo tran dau cuoi cung tai Han Quoc."
+   },
+   {
+    "gold": "Ca hai mau Tetragode va Trigode deu the hien nhung duong net co dien, chiu anh huong cua kien truc.",
+    "pred": "Ca hai mau Tetra go de va Trigo de deu the hien nhung duong net co dien, chiu anh huong cua kien truc."
+   },
+   {
+    "gold": "Ermin Bicakcic, Munas Dabbur va Andrej Kramaric (cu dup) da thay nhau \"pha luoi\" Manuel Neuer de mang chien thang ve cho doi chu san Prezero Arena.",
+    "pred": "ErminBicakcic, MunasDabbur va Andrej Kramaric (cu dup) da thay nhau \"pha luoi\" Manuel Neuer de mang chien thang ve cho doi chu san Prezero Arena."
+   },
+   {
+    "gold": "Nhac den cap doi BiBi - Hong Anh, rat nhieu nguoi cho rang o thoi diem hien tai kho co...",
+    "pred": "Nhac den cap doi Bi Bi - Hong Anh, rat nhieu nguoi cho rang o thoi diem hien tai kho co..."
+   },
+   {
+    "gold": "De bien nhung vien da tuong chung vo tri vo giac thanh nhung vien da co tinh nang ky dieu, mang den binh an va tai phu cho gia dinh ban nen chu y vai nguyen tac sau:",
+    "pred": "De bien nhung vien da tuong chung vo tri vo giac thanh nhung vien da co tinh nang ky dieu, mang den bi nhan va tai phu cho gia dinh ban nen chu y vai nguyen tac sau:"
+   },
+   {
+    "gold": "Mot ho boi an tuong khong chi co lan nuoc trong xanh ma canh quan xung quan...",
+    "pred": "Mot ho boi an tuong khong chi co lan nuoc trong xanh ma c anh quan xung quan..."
+   },
+   {
+    "gold": "Bai viet nay khong co tu khoa nao",
+    "pred": "Bai viet nay khong co tu khoan ao"
+   },
+   {
+    "gold": "Mot cu swing on dinh xuat phat tu mot nhip swing golf on dinh.",
+    "pred": "Mot cu swing on dinh xuat phat tu mot nhip s wing golf on dinh."
+   },
+   {
+    "gold": "PGMOL cung cung cap bang ghi am cuoc trao doi cua to trong tai trong tran dau de giai thich ve cac quyet dinh lien quan.",
+    "pred": "PG MOL cung cung cap bang ghi am cuoc trao doi cua to trong tai trong tran dau de giai thich ve cac quyet dinh lien quan."
+   },
+   {
+    "gold": "Sang 22/10, tai TP HCM da dien ra buoi ra mat sach my thuat va gioi thieu truoc ve trien lam \u201cVong\u201d cua hoa si Tran The Vinh.",
+    "pred": "Sang 22/10, tai TPHCM da dien ra buoi ra mat sach my thuat va gioi thieu truoc ve trien lam \u201cVong\u201d cua hoa si Tran The Vinh."
+   },
+   {
+    "gold": "Trong khi Real Madrid cung chua the chot ha thuong vu tren boi cho rang yeu cau ma phia doi tac dua ra la qua suc phi ly cho mot nhan to chi con 9 thang hop dong nua.",
+    "pred": "Trong khi Real Madrid cung chua the cho tha thuong vu tren boi cho rang yeu cau ma phia doi tac dua ra la qua suc phi ly cho mot nhan to chi con 9 thang hop dong nua."
+   },
+   {
+    "gold": "Thanh le be mac se do Duc Giao Hoang Phanxico chu te vao ngay 12.9.",
+    "pred": "Thanh le be mac se do Duc Giao Hoang Phan xi co chu te vao ngay 12.9."
+   },
+   {
+    "gold": "Tuy nhien, vi duc cong bang va su bac ai, xin quy vi vui long ghi day du nguon nhu sau: \u201cTheo Bao Cong giao va Dan toc, website: cgvdt.vn\u201d.",
+    "pred": "Tuy nhien, vi duc cong bang va su ba cai, xin quy vi vui long ghi day du nguon nhu sau: \u201cTheo Bao Cong giao va Dan toc, website: cg vdt.vn\u201d."
+   },
+   {
+    "gold": "Mau xe tay ga FreeGo vua duoc Yamaha gioi thieu ra thi truong so huu nhieu loi the de canh tranh.",
+    "pred": "Mau xe tay ga Free Go vua duoc Yamaha gioi thieu ra thi truong so huu nhieu loi the de canh tranh."
+   },
+   {
+    "gold": "Khac voi phong cach thoi trang cua Grande, thiet ke cua FreeGo mang dam dau an DNA cua cac dong xe the thao Yamaha.",
+    "pred": "Khac voi phong cach thoi trang cua Grande, thiet ke cua Free Go mang dam dau an DNA cua cac dong xe the thao Yamaha."
+   },
+   {
+    "gold": "Cac duong net goc canh dem lai dang ve khoe khoan va nam tinh nhung cung day tinh thuc dung cho FreeGo.",
+    "pred": "Cac duong net goc canh dem lai dang ve khoe khoan va nam tinh nhung cung day tinh thuc dung cho Free Go."
+   },
+   {
+    "gold": "Khong ngai kho, ngai kho, hang ngan bac si, y ta va cac nhan vien trong nganh y luon co gang het minh vi suc khoe cua nguoi dan.",
+    "pred": "Khong ngai kho, ngai kho, hang ngan bac si, y ta va cac nhan vien trong ngan h y luon co gang het minh vi suc khoe cua nguoi dan."
+   },
+   {
+    "gold": "CRISTIANO RONALDO BUOC SANG TUOI 32",
+    "pred": "CRISTIANO RON AL DO BUOC SANG TUOI 32"
+   },
+   {
+    "gold": "Duoi day Hanoireview mach ban 8 cach khu mui tu lanh hieu qua khong phai ai cung biet.",
+    "pred": "Duoi day Hanoi review mach ban 8 cach khu mui tu lanh hieu qua khong phai ai cung biet."
+   },
+   {
+    "gold": "Cau thu Quang Hai viet \u2018Tien len chi em oi\u2019 trong nhung phut cuoi cung cua tran dau cung buc hinh chup man hinh cho thay anh dang theo doi va mong doi phut giay chien thang cua doi nha.",
+    "pred": "Cau thu Quang Hai viet \u2018Tien len chiem oi\u2019 trong nhung phut cuoi cung cua tran dau cung buc hinh chup man hinh cho thay anh dang theo doi va mong doi phut giay chien thang cua doi nha."
+   },
+   {
+    "gold": "Ban to chuc BTV \u2013 Number One Cup 2015 da quyet dinh xu Yadanerbon thua Sinh vien Han Quoc 0-3.",
+    "pred": "Ban to chuc BTV \u2013 Number One Cup 2015 da quyet dinh xu Yadaner bon thua Sinh vien Han Quoc 0-3."
+   },
+   {
+    "gold": "Saenchai khien nguoi ham mo vo thuat them phan than phuc sau chien thang truoc doi thu nang ky nguoi Israel.",
+    "pred": "Sa en chai khien nguoi ham mo vo thuat them phan than phuc sau chien thang truoc doi thu nang ky nguoi Israel."
+   },
+   {
+    "gold": "Toi 20/3 vua qua, tuong dai duoc vi la \"Vua Muay Thai\" Saenchai co tran thuong dai gap nha vo dich nguoi Israel Max Branis o su kien Thai Fight Lampang, dien ra tai Thai Lan.",
+    "pred": "Toi 20/3 vua qua, tuong dai duoc vi la \"Vua Muay Thai\" Saenchai co tran thuong dai gap nha vo dich nguoi Israel Max Braniso su kien Thai Fight Lampang, dien ra tai Thai Lan."
+   },
+   {
+    "gold": "Bai Huan Du cua DTC Phan-xi-co trong buoi Doc Kinh Lay Nu Vuong Thien Dang tai quang truong Thanh Phe-ro trua Chua Nhat 12.04.2015: \u201eChiem nguong Long Thuong Xot cua Thien Chua trong nhung vet thuong cua Dang Phuc Sinh\u201c",
+    "pred": "Bai Huan Du cua DTC Phan-xi- co trong buoi Doc Kinh Lay Nu Vuong Thien Dang tai quang truong Thanh Phe-ro trua Chua Nhat 12.04.2015: \u201e Chiem nguong Long Thuong Xot cua Thien Chua trong nhung ve t thuong c ua Dan g Phuc Sinh\u201c"
+   },
+   {
+    "gold": "Tu hoc Phat de nuoi duong tam cao quy, dat hanh phuc trong doi",
+    "pred": "Tu hoc Phat de nuoi duong tam cao quy, da thanh phuc trong doi"
+   },
+   {
+    "gold": "Mac du phai chiu dung mot hoan canh thieu thon va khac ngiet nhu vay.",
+    "pred": "Mac du phai chiu dung mot hoan canh thieu thon va khac n giet nhu vay."
+   },
+   {
+    "gold": "cua duc Gioan Phaolo II",
+    "pred": "cua duc Gioan Phao lo II"
+   },
+   {
+    "gold": "Tuong niem 5 nam ngay qua doi cua duc Gioan Phaolo II.",
+    "pred": "Tuong niem 5 nam ngay qua doi cua duc Gioan Phao lo II."
+   },
+   {
+    "gold": "Doi bong cua HLV Phillip Cocu cung tao ra duoc vai co hoi truoc khung thanh David De Gea nhung deu khong the tan dung thanh cong.",
+    "pred": "Doi bong cua HLV Phillip Co cu cung tao ra duoc vai co hoi truoc khung thanh David De Gea nhung deu khong the tan dung thanh cong."
+   },
+   {
+    "gold": "An tuong ngay tu background hung vi",
+    "pred": "An tuong ngay tu back ground hung vi"
+   },
+   {
+    "gold": "Theo Guinness World Record, hang tram nguoi da xuong duong tai TP Tenby, Xu Wales (Vuong quoc Anh) tham gia cuoc thi marathon thuong nien de quyen...",
+    "pred": "Theo Guinness World Record, hang tram nguoi da xuong duong tai TP Tenby, Xu Wales (Vuong quoc Anh) tham gia cuoc thi ma rat hon thuong nien de quyen..."
+   },
+   {
+    "gold": "Nhan vat Silco trong Arcane se duoc ra mat tai DTCL mua 6.5, va cung la cai ten dau tien gop mat tai DTCL truoc khi xuat hien trong LMHT.",
+    "pred": "Nhan vat Sil co trong Arcane se duoc ra mat tai DTCL mua 6.5, va cung la cai ten dau tien gop mat tai DTCL truoc khi xuat hien trong LMHT."
+   },
+   {
+    "gold": "BMW ERR chiec sieu mo to dien vua duoc he lo",
+    "pred": "BMW ERR chiec sieu moto dien vua duoc he lo"
+   },
+   {
+    "gold": "Nghia cua tu udt",
+    "pred": "Nghia cua tuu dt"
+   },
+   {
+    "gold": "UDT la \u201cUnderwater Demolition Team\u201d trong tieng Anh.",
+    "pred": "UDT la \u201cUnder water Demolition Team\u201d trong tieng Anh."
+   },
+   {
+    "gold": "Rose da duoc dua den Westfalenstadion vao mua he nam ngoai sau hai nam voi Borussia Monchengladbach va Red Bull Salzburg.",
+    "pred": "Rose da duoc dua den Westfalen stadion vao mua he nam ngoai sau hai nam voi Borussia Monchengladbach va Red Bull Salzburg."
+   }
+  ]
+ },
+ "seconds": 9.33,
+ "chunks": {
+  "1": {
+   "chunks": 256406,
+   "exact@1": 0.992344,
+   "exact@3": 0.99853,
+   "exact@5": 0.999146
+  },
+  "2": {
+   "chunks": 115424,
+   "exact@1": 0.983574,
+   "exact@3": 0.995807,
+   "exact@5": 0.998016
+  },
+  "3": {
+   "chunks": 69381,
+   "exact@1": 0.977141,
+   "exact@3": 0.993514,
+   "exact@5": 0.996642
+  },
+  "4": {
+   "chunks": 46706,
+   "exact@1": 0.971503,
+   "exact@3": 0.991457,
+   "exact@5": 0.994947
+  },
+  "6": {
+   "chunks": 25082,
+   "exact@1": 0.959812,
+   "exact@3": 0.986564,
+   "exact@5": 0.991867
+  },
+  "8": {
+   "chunks": 14777,
+   "exact@1": 0.94796,
+   "exact@3": 0.981728,
+   "exact@5": 0.989037
+  }
+ }
+}
