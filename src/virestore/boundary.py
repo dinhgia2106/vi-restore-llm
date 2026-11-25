@@ -293,10 +293,11 @@ class SegmentTagger:
     """
 
     def __init__(self, boundary_dir: str, tagger_dir: str, threads: int | None = None, batch_size: int = 64,
-                 onnx_file: str | None = None):
+                 onnx_file: str | None = None, unknown_logp: float | None = None):
         from .models.tagger import OnnxTaggerRestorer, TaggerRestorer
 
-        self.boundary = BoundaryModel(boundary_dir, threads=threads, batch_size=batch_size)
+        self.boundary = BoundaryModel(boundary_dir, threads=threads, batch_size=batch_size,
+                                      use_lexicon=unknown_logp is not None, unknown_logp=unknown_logp or -4.0)
         if onnx_file:
             self.tagger = OnnxTaggerRestorer(tagger_dir, threads=threads, batch_size=batch_size, onnx_file=onnx_file)
         else:
