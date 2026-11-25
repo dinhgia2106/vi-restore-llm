@@ -112,6 +112,7 @@ def main() -> None:
     ap.add_argument("--tagger", help="directory of a trained virestore.tagger model")
     ap.add_argument("--onnx-file", help="ONNX file inside --tagger for tagger-onnx (default: tagger.onnx)")
     ap.add_argument("--boundary", help="virestore.boundary model directory (segment-tagger: spaces are removed from the input first)")
+    ap.add_argument("--boundary-unknown-logp", type=float, help="segment-tagger: decode boundaries with the model's lexicon at this cost")
     ap.add_argument("--tcn-repo", help="path to the Vietnamese-diacritic-restoration repo")
     ap.add_argument("--tcn-weights", help="TCN checkpoint (.pth)")
     ap.add_argument("--batch-size", type=int, default=8)
@@ -146,6 +147,7 @@ def main() -> None:
         tcn_weights=args.tcn_weights,
         onnx_file=args.onnx_file,
         boundary=args.boundary,
+        boundary_unknown_logp=args.boundary_unknown_logp,
     )
 
     t0 = time.perf_counter()
