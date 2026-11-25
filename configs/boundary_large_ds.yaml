@@ -1,0 +1,28 @@
+# Larger word-boundary model (virestore.boundary) for input typed without spaces: same character
+# Transformer as the tagger, two labels (a space follows / does not).
+output_dir: runs/ds-boundary-large
+seed: 13
+
+data:
+  train: data/doc_split/train.jsonl
+  dev: data/doc_split/dev.jsonl
+  dev_limit: 5000
+  min_char_count: 20
+  prefix_prob: 0.3   # cut 30 % of training sentences at a random character: the user is still typing
+
+model:
+  d_model: 384
+  layers: 8
+  heads: 6
+  ff: 1536
+  max_len: 384
+  dropout: 0.1
+
+train:
+  batch_size: 256
+  lr: 4.0e-4
+  weight_decay: 0.01
+  epochs: 3
+  warmup_ratio: 0.02
+  log_steps: 200
+  eval_steps: 2000

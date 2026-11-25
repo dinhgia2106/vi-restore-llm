@@ -102,10 +102,93 @@ def boundary_scores(pred_rows: list[list[int]], gold_rows: list[list[int]]) -> d
     }
 
 
-class BoundaryModel:
-    """A trained boundary model: per-character probability that a space follows."""
+MAX_TOKEN = 24  # longest letter token the lexicon decoder considers
 
-    def __init__(self, path: str, threads: int | None = None, batch_size: int = 64):
+
+def build_lexicon(train: Path, min_count: int = 3, limit: int | None = None) -> dict[str, int]:
+    """Lower-case letter tokens of the training inputs (marks removed) seen at least min_count times."""
+    counts: dict[str, int] = {}
+    with train.open(encoding="utf-8") as f:
+        for i, line in enumerate(f):
+            if limit and i >= limit:
+                break
+            r = json.loads(line)
+            for w in strip_diacritics(r.get("input") or r["target"]).lower().split():
+                if w.isalpha() and len(w) <= MAX_TOKEN:
+                    counts[w] = counts.get(w, 0) + 1
+    return {w: n for w, n in counts.items() if n >= min_count}
+
+
+def _letter_runs(src: str) -> list[tuple[int, int]]:
+    runs, i = [], 0
+    while i < len(src):
+        if src[i].isalpha():
+            j = i
+            while j < len(src) and src[j].isalpha():
+                j += 1
+            runs.append((i, j))
+            i = j
+        else:
+            i += 1
+    return runs
+
+
+def lexicon_decode(src: str, probs: list[float], lexicon, unknown_logp: float, k: int = 1) -> list[tuple[float, list[int]]]:
+    """Top-k label sequences where every letter token is a known token or pays `unknown_logp`.
+
+    Inside each run of letters the cut points are chosen by dynamic programming over the model's
+    log-probabilities; boundaries next to digits or punctuation keep the model's own decision.
+    """
+    n = len(probs)
+    if n == 0:
+        return [(0.0, [])]
+    p = [min(max(x, 1e-9), 1 - 1e-9) for x in probs]
+    base = [int(x > 0.5) for x in p]
+    base[-1] = 0
+    keep = [math.log(1 - x) for x in p]
+    cut = [math.log(x) for x in p]
+    pre = [0.0]
+    for v in keep:
+        pre.append(pre[-1] + v)
+    beam: list[tuple[float, list[int]]] = [(0.0, base)]
+    for a, b in _letter_runs(src[:n]):
+        # best[j]: top-k (score, cut positions) for src[a:j] cut after position j-1 (if j < b)
+        best: list[list[tuple[float, tuple[int, ...]]]] = [[] for _ in range(b + 1)]
+        best[a] = [(0.0, ())]
+        for j in range(a + 1, b + 1):
+            options = []
+            for s in range(max(a, j - MAX_TOKEN), j):
+                if not best[s]:
+                    continue
+                seg = src[s:j].lower()
+                score = pre[j - 1] - pre[s] + (cut[j - 1] if j < b else 0.0) + (0.0 if seg in lexicon else unknown_logp)
+                for sc, cuts in best[s]:
+                    options.append((sc + score, cuts + ((j - 1,) if j < b else ())))
+            best[j] = heapq.nlargest(k, options, key=lambda o: o[0])
+        if not best[b]:
+            continue
+        merged = []
+        for sc, labels in beam:
+            for run_sc, cuts in best[b]:
+                lab = list(labels)
+                for i in range(a, b - 1):
+                    lab[i] = 0
+                for i in cuts:
+                    lab[i] = 1
+                merged.append((sc + run_sc, lab))
+        beam = heapq.nlargest(k, merged, key=lambda o: o[0])
+    return beam
+
+
+class BoundaryModel:
+    """A trained boundary model: per-character probability that a space follows.
+
+    With use_lexicon and a `lexicon.json` next to the model (from `--build-lexicon`), each run of letters
+    is cut so that its tokens are known ones where the model allows it (`lexicon_decode`).
+    """
+
+    def __init__(self, path: str, threads: int | None = None, batch_size: int = 64, use_lexicon: bool = False,
+                 unknown_logp: float = -8.0):
         import torch
 
         from .tagger import Vocab, build_model
@@ -121,7 +204,15 @@ class BoundaryModel:
         self.model.load_state_dict(torch.load(p / "model.pt", map_location=self.device))
         self.model.to(self.device).eval()
         self.max_len, self.batch_size = m["max_len"], batch_size
-        self.name = f"boundary:{p.name}"
+        lex = p / "lexicon.json"
+        self.lexicon = set(json.loads(lex.read_text(encoding="utf-8"))) if use_lexicon and lex.exists() else None
+        self.unknown_logp = unknown_logp
+        self.name = f"boundary:{p.name}" + ("+lexicon" if self.lexicon else "")
+
+    def labels(self, text: str, probs: list[float], k: int = 1) -> list[list[int]]:
+        if self.lexicon:
+            return [lab for _, lab in lexicon_decode(text, probs, self.lexicon, self.unknown_logp, k)]
+        return [[int(x > 0.5) for x in probs]]
 
     def probs(self, texts: list[str]) -> list[list[float]]:
         import torch
@@ -145,13 +236,20 @@ class BoundaryModel:
 
     def segment(self, texts: list[str]) -> list[str]:
         """Best segmentation of each text; characters beyond max_len are appended unsplit."""
-        return [join(t, [int(x > 0.5) for x in p]) + t[len(p) :] for t, p in zip(texts, self.probs(texts))]
+        return [join(t, self.labels(t, p)[0]) + t[len(p) :] for t, p in zip(texts, self.probs(texts))]
 
     def segment_nbest(self, text: str, k: int) -> list[str]:
-        """Top-k segmentations by beam search over independent per-character decisions."""
-        p = self.probs([text])[0]
+        """Top-k segmentations of one text."""
+        return self.candidates(text, self.probs([text])[0], k)
+
+    def candidates(self, text: str, p: list[float], k: int) -> list[str]:
+        """Top-k segmentations from given probabilities: lexicon decoding, or a beam over
+        independent per-character decisions."""
         if not p:
             return [text]
+        if self.lexicon:
+            segs = [join(text[: len(p)], lab) + text[len(p) :] for lab in self.labels(text, p, max(4 * k, 16))]
+            return list(dict.fromkeys(segs))[:k]
         beam: list[tuple[float, list[int]]] = [(0.0, [])]
         for x in p[:-1]:
             x = min(max(x, 1e-9), 1 - 1e-9)
@@ -304,19 +402,24 @@ def chunk_scores(bm: "BoundaryModel", texts: list[str], sizes: list[int]) -> dic
                     chunks.append(" ".join(group))
         pairs = [boundary_pair(c) for c in chunks]
         probs = bm.probs([s for s, _ in pairs])
-        exact = sum(join(s, [int(x > 0.5) for x in p]) == c for (s, _), p, c in zip(pairs, probs, chunks))
-        out[str(n)] = {"chunks": len(chunks), "exact": round(exact / max(len(chunks), 1), 6)}
+        hits = {1: 0, 3: 0, 5: 0}
+        for (s, _), p, c in zip(pairs, probs, chunks):
+            cands = bm.candidates(s, p, 5)
+            for k in hits:
+                hits[k] += c in cands[:k]
+        out[str(n)] = {"chunks": len(chunks), **{f"exact@{k}": round(v / max(len(chunks), 1), 6) for k, v in hits.items()}}
     return out
 
 
 def evaluate_dir(model_dir: str, test: Path, limit: int | None, tag: str, results: Path,
-                 chunk_sizes: list[int] | None = None) -> dict:
+                 chunk_sizes: list[int] | None = None, use_lexicon: bool = False, unknown_logp: float = -8.0) -> dict:
     rows = load_rows(test, limit)
-    bm = BoundaryModel(model_dir)
+    bm = BoundaryModel(model_dir, use_lexicon=use_lexicon, unknown_logp=unknown_logp)
     t0 = time.perf_counter()
-    preds = [[int(x > 0.5) for x in p] for p in bm.probs([s for s, _ in rows])]
+    preds = [bm.labels(s, p)[0] for (s, _), p in zip(rows, bm.probs([s for s, _ in rows]))]
     scores = boundary_scores(preds, [g for _, g in rows])
     rec = {"tag": tag, "model": bm.name, "test": str(test), "device": bm.device, "boundary": scores,
+           "unknown_logp": unknown_logp if bm.lexicon else None,
            "breakdown": error_breakdown(rows, preds), "seconds": round(time.perf_counter() - t0, 2)}
     if chunk_sizes:
         texts = []
@@ -341,15 +444,24 @@ def main() -> None:
     ap.add_argument("--limit", type=int)
     ap.add_argument("--tag")
     ap.add_argument("--chunks", help="also score chunks of these word counts, e.g. 1,2,3,4,6,8")
+    ap.add_argument("--build-lexicon", type=Path, help="write <--eval dir>/lexicon.json from this training JSONL")
+    ap.add_argument("--min-count", type=int, default=3)
+    ap.add_argument("--lexicon", action="store_true", help="decode with <--eval dir>/lexicon.json")
+    ap.add_argument("--unknown-logp", type=float, default=-8.0, help="cost of a letter token not in the lexicon")
     ap.add_argument("--results", type=Path, default=Path("results"))
     a = ap.parse_args()
     if a.config:
         import yaml
 
         train(yaml.safe_load(a.config.read_text(encoding="utf-8")))
+    elif a.eval and a.build_lexicon:
+        lex = build_lexicon(a.build_lexicon, a.min_count)
+        (Path(a.eval) / "lexicon.json").write_text(json.dumps(lex, ensure_ascii=False), encoding="utf-8")
+        print(f"{len(lex)} tokens with count >= {a.min_count} -> {Path(a.eval) / 'lexicon.json'}")
     elif a.eval and a.test:
         sizes = [int(x) for x in a.chunks.split(",")] if a.chunks else None
-        rec = evaluate_dir(a.eval, a.test, a.limit, a.tag or f"boundary-{Path(a.eval).name}", a.results, sizes)
+        rec = evaluate_dir(a.eval, a.test, a.limit, a.tag or f"boundary-{Path(a.eval).name}", a.results, sizes,
+                           use_lexicon=a.lexicon, unknown_logp=a.unknown_logp)
         print(json.dumps({k: v for k, v in rec.items() if k != "breakdown"} | {"breakdown": {k: v for k, v in rec["breakdown"].items() if k != "examples"}}, indent=1))
     else:
         ap.error("give --config to train, or --eval and --test to evaluate")

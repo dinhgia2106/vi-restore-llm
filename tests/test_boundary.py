@@ -28,3 +28,23 @@ def test_error_breakdown_separates_letter_boundaries():
     preds[1][1] = 0  # miss the space between "gh" and "ij"
     b = error_breakdown(rows, preds)
     assert b["errors_other"] == 1 and b["errors_letters"] == 1 and b["letters_exact"] == 0.5
+
+
+def test_lexicon_decode_prefers_known_tokens():
+    from virestore.boundary import lexicon_decode
+
+    src = "thuongmai"
+    probs = [0.1] * len(src)  # the model sees no boundary
+    probs[4] = 0.3            # weak evidence after "thuon"
+    probs[5] = 0.2            # weaker after "thuong"
+    best = lexicon_decode(src, probs, {"thuong", "mai"}, unknown_logp=-8.0)[0][1]
+    assert best[5] == 1 and sum(best) == 1
+
+
+def test_lexicon_decode_keeps_model_decisions_next_to_punctuation():
+    from virestore.boundary import lexicon_decode
+
+    src = "ab,cd"
+    probs = [0.1, 0.9, 0.1, 0.1, 0.1]
+    labels = lexicon_decode(src, probs, {"ab", "cd"}, unknown_logp=-8.0)[0][1]
+    assert labels == [0, 1, 0, 0, 0]
