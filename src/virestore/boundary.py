@@ -285,6 +285,47 @@ class BoundaryModel:
         return list(dict.fromkeys(segs))[:k]
 
 
+class OnnxBoundaryModel(BoundaryModel):
+    """The same boundary model exported with `virestore.export_onnx --boundary`, run by onnxruntime
+    (no PyTorch at run time). Each text runs at its own length, as OnnxTaggerRestorer does."""
+
+    def __init__(self, path: str, onnx_file: str = "boundary.onnx", threads: int | None = None, batch_size: int = 64,
+                 use_lexicon: bool = False, unknown_logp: float = -8.0):
+        import onnxruntime as ort
+
+        from .tagger import Vocab
+
+        p = Path(path)
+        self.cfg = json.loads((p / "config.json").read_text(encoding="utf-8"))
+        self.vocab = Vocab(self.cfg["vocab"])
+        self.max_len, self.batch_size = self.cfg["model"]["max_len"], batch_size
+        opts = ort.SessionOptions()
+        if threads:
+            opts.intra_op_num_threads = threads
+            opts.inter_op_num_threads = 1
+        self.sess = ort.InferenceSession(str(p / onnx_file), opts, providers=["CPUExecutionProvider"])
+        self.device = "cpu"
+        lex = p / "lexicon.json"
+        self.lexicon = json.loads(lex.read_text(encoding="utf-8")) if use_lexicon and lex.exists() else None
+        self.unknown_logp = unknown_logp
+        self.name = f"boundary-onnx:{p.name}/{onnx_file}" + ("+lexicon" if self.lexicon else "")
+
+    def probs(self, texts: list[str]) -> list[list[float]]:
+        import numpy as np
+
+        out: list[list[float]] = []
+        for t in texts:
+            t = t[: self.max_len]
+            if not t:
+                out.append([])
+                continue
+            ids = np.array([self.vocab.encode(t) + [0] * (len(t) < 2)], dtype=np.int64)  # the graph needs 2 positions
+            logits = self.sess.run(["logits"], {"ids": ids})[0][0, : len(t)].astype(np.float64)
+            # softmax over two classes: probability of class 1
+            out.append((1.0 / (1.0 + np.exp(logits[:, 0] - logits[:, 1]))).tolist())
+        return out
+
+
 class SegmentTagger:
     """Restorer for unspaced input: boundaries first, then the diacritic tagger.
 
@@ -369,7 +410,7 @@ class ChunkSuggester:
         """One tagger pass over every segmentation (marks removed from the context); top-k tails of
         the best one by beam search over the chunk's characters only, the best tail of the others."""
         from .ime import has_stacked_tones
-        from .models.tagger import resolve_stacked_tones
+        from .models.tagger import resolve_stacked_tones, topk
         from .tagger import TAGGABLE, apply_label, decode
 
         texts = [context + s for s in segs]
@@ -382,8 +423,7 @@ class ChunkSuggester:
             if c not in TAGGABLE:
                 hyps = [(s, t + c) for s, t in hyps]
                 continue
-            top = lp[0, j].topk(min(3, len(tagger._valid(c))))
-            opts = [(float(v), apply_label(c, int(l))) for v, l in zip(top.values, top.indices)]
+            opts = [(v, apply_label(c, l)) for v, l in topk(lp[0, j], min(3, len(tagger._valid(c))))]
             hyps = heapq.nlargest(max(8 * k, 16), ((s + v, t + ch) for s, t in hyps for v, ch in opts))
         best = [t + src[n:] for _, t in hyps if not has_stacked_tones(t)]
         others = []

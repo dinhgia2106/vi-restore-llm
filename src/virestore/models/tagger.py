@@ -7,6 +7,17 @@ import re
 from pathlib import Path
 
 
+def topk(row, k: int) -> list[tuple[float, int]]:
+    """The k best (log-probability, label) of one character's row, best first: torch or numpy."""
+    if hasattr(row, "topk"):
+        top = row.topk(k)
+        return [(float(v), int(l)) for v, l in zip(top.values, top.indices)]
+    import numpy as np
+
+    idx = np.argsort(-row, kind="stable")[:k]
+    return [(float(row[l]), int(l)) for l in idx]
+
+
 def resolve_stacked_tones(source: str, labels: list[int], log_probs, valid) -> list[int]:
     """Keep one tone per run of adjacent vowels: the choice with the best total log-probability."""
     from ..tagger import TONES
@@ -121,8 +132,7 @@ class TaggerRestorer:
                     if c not in TAGGABLE:
                         hyps = [(score, text + c) for score, text in hyps]
                         continue
-                    top = lp[b, j].topk(min(per_char, len(self._valid(c))))
-                    opts = [(float(v), apply_label(c, int(l))) for v, l in zip(top.values, top.indices)]
+                    opts = [(v, apply_label(c, l)) for v, l in topk(lp[b, j], min(per_char, len(self._valid(c))))]
                     hyps = heapq.nlargest(beam, ((score + v, text + ch) for score, text in hyps for v, ch in opts))
                 tail = s[n:]
                 results.append(list(dict.fromkeys(text + tail for _, text in hyps))[:k])
@@ -154,20 +164,30 @@ class OnnxTaggerRestorer(TaggerRestorer):
         self._mask_cache = {}
         self._n_labels, self._valid = N_LABELS, valid_labels
 
-    def _log_probs(self, batch: list[str]):
+    def _mask(self, ch: str):
         import numpy as np
-        import torch
+
+        m = self._mask_cache.get(ch)
+        if m is None:
+            m = np.full((self._n_labels,), -np.inf, dtype=np.float32)
+            m[self._valid(ch)] = 0.0
+            self._mask_cache[ch] = m
+        return m
+
+    def _log_probs(self, batch: list[str]):
+        """As TaggerRestorer._log_probs, as numpy arrays: no PyTorch at run time."""
+        import numpy as np
 
         n = min(max(len(s) for s in batch), self.max_len)
         if n == 0:  # all sentences empty: onnxruntime cannot run a zero-length sequence
-            return torch.zeros((len(batch), 0, self._n_labels)), 0
+            return np.zeros((len(batch), 0, self._n_labels), dtype=np.float32), 0
         ids = np.zeros((len(batch), n), dtype=np.int64)
-        mask = torch.zeros((len(batch), n, self._n_labels))
+        mask = np.zeros((len(batch), n, self._n_labels), dtype=np.float32)
         for k, s in enumerate(batch):
             s = s[:n]
             ids[k, : len(s)] = self.vocab.encode(s)
             if s:
-                mask[k, : len(s)] = torch.stack([self._mask(c) for c in s])
+                mask[k, : len(s)] = np.stack([self._mask(c) for c in s])
         # Run every sentence at its own length, as the server does. Padding a sentence up to the
         # longest in the batch changes the int8 graph's output: dynamic quantisation computes its
         # activation scales over the whole tensor, padded positions included.
@@ -177,5 +197,6 @@ class OnnxTaggerRestorer(TaggerRestorer):
             if L:
                 run = max(L, 2)  # the exported graph needs at least 2 positions
                 logits[k, :L] = self.sess.run(["logits"], {"ids": ids[[k], :run]})[0][0, :L]
-        logits = torch.from_numpy(logits)
-        return torch.log_softmax(logits + mask, dim=-1), n
+        x = logits + mask
+        x = x - x.max(-1, keepdims=True)
+        return x - np.log(np.exp(x).sum(-1, keepdims=True)), n
